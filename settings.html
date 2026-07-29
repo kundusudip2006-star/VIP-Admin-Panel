@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+
+<link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+
+<h2>Admin Settings</h2>
+
+<div class="settings-box">
+
+<label>Website Name</label>
+<input type="text" id="siteName">
+
+<label>UPI ID</label>
+<input type="text" id="upiId">
+
+<label>WhatsApp Number</label>
+<input type="text" id="whatsapp">
+
+<label>Telegram ID</label>
+<input type="text" id="telegramId" placeholder="@yourusername">
+
+<label>Support Email</label>
+<input type="email" id="supportEmail">
+
+<label>QR Code Image URL</label>
+<input type="text" id="qrCode">
+
+<br><br>
+
+<button id="saveSettings">
+    Save Settings
+</button>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+<script src="js/settings.js"></script>
+
+</body>
+</html>

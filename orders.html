@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Orders - VIP Admin Panel</title>
+
+<link rel="stylesheet" href="css/orders.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <h2>VIP PANEL</h2>
+
+    </div>
+
+    <ul>
+
+        <li>
+            <a href="dashboard.html">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="products.html">
+                <i class="fa-solid fa-box"></i>
+                Products
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="orders.html">
+                <i class="fa-solid fa-cart-shopping"></i>
+                Orders
+            </a>
+        </li>
+
+        <li>
+            <a href="customers.html">
+                <i class="fa-solid fa-users"></i>
+                Customers
+            </a>
+        </li>
+
+        <li>
+            <a href="profile.html">
+                <i class="fa-solid fa-user"></i>
+                Profile
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </a>
+        </li>
+
+        <li id="logoutBtn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main">
+
+<header>
+
+<h1>Orders Management</h1>
+
+<div class="top-bar">
+
+<input
+type="text"
+id="searchOrder"
+placeholder="Search customer, product..."
+>
+
+<select id="statusFilter">
+
+<option value="All">All Status</option>
+
+<option value="Pending">Pending</option>
+
+<option value="Delivered">Delivered</option>
+
+<option value="Cancelled">Cancelled</option>
+
+</select>
+
+<select id="paymentFilter">
+
+<option value="All">All Payments</option>
+
+<option value="Pending">Pending</option>
+
+<option value="Paid">Paid</option>
+
+<option value="Rejected">Rejected</option>
+
+</select>
+
+</div>
+
+</header>
+
+<section class="table-section">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Order ID</th>
+
+<th>Customer</th>
+
+<th>Product</th>
+
+<th>Price</th>
+
+<th>Status</th>
+
+<th>Payment</th>
+
+<th>Date</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="orderTable">
+
+<tr>
+
+<td colspan="8" style="text-align:center">
+
+Loading Orders...
+
+</td>
+
+</tr>
+</tbody>
+
+</table>
+
+</section>
+
+<!-- View Order Modal -->
+
+<div id="orderModal" class="modal">
+
+    <div class="modal-content">
+
+        <span id="closeModal" class="close">&times;</span>
+
+        <h2>Order Details</h2>
+
+        <hr>
+
+<p><b>Order ID :</b> <span id="orderId"></span></p>
+
+<p><b>Order Date :</b> <span id="orderDate"></span></p>
+
+<p><b>Customer Name :</b> <span id="customerName"></span></p>
+
+<p><b>Email :</b> <span id="customerEmail"></span></p>
+
+<p><b>Phone :</b> <span id="customerPhone"></span></p>
+
+<p><b>Product :</b> <span id="productName"></span></p>
+
+<p><b>Plan :</b> <span id="productPlan"></span></p>
+
+<p><b>Price :</b> ₹<span id="productPrice"></span></p>
+
+<p><b>Payment :</b> <span id="paymentStatus"></span></p>
+
+<p><b>Status :</b> <span id="orderStatus"></span></p>
+
+<p><b>Delivered At :</b> <span id="deliveredDate"></span></p>
+
+<hr>
+
+<h3>Payment Screenshot</h3>
+
+<img
+id="paymentScreenshotImg"
+src=""
+style="
+width:100%;
+max-height:300px;
+object-fit:contain;
+border:1px solid #ddd;
+border-radius:10px;
+display:none;
+margin-bottom:10px;
+">
+
+<br>
+
+<a
+id="viewScreenshotBtn"
+href="#"
+target="_blank"
+style="display:none;">
+
+<button type="button">
+    <i class="fa-solid fa-image"></i>
+    View Full Screenshot
+</button>
+
+</a>
+
+<br><br>
+
+<br>
+
+<label><b>Product Key</b></label>
+
+<textarea
+id="productKey"
+rows="5"
+placeholder="Enter Product Key Here...">
+</textarea>
+
+<br><br>
+
+<button id="rejectPaymentBtn" class="cancel-btn">
+    <i class="fa-solid fa-xmark"></i>
+    Reject Payment
+</button>
+
+<br><br>
+
+<button
+id="sendKeyBtn"
+class="send-btn"
+disabled>
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Send Product Key
+
+</button>
+
+    </div>
+
+</div>
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Config -->
+
+<script src="js/firebase.js"></script>
+
+<!-- Orders Script -->
+
+<script src="js/orders.js"></script>
+
+</div>
+
+</body>
+
+</html>

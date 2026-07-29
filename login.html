@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Admin Panel - Login</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="background">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<div class="login-container">
+
+    <div class="logo">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h2>VIP PANEL</h2>
+        <p>Admin Dashboard Login</p>
+    </div>
+
+    <form id="loginForm">
+
+        <div class="input-box">
+            <i class="fa-solid fa-envelope"></i>
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                required>
+        </div>
+
+        <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required>
+
+            <i class="fa-solid fa-eye" id="togglePassword"></i>
+
+        </div>
+
+        <div class="options">
+
+            <label>
+
+                <input type="checkbox">
+
+                Remember Me
+
+            </label>
+
+            <a href="#">Forgot Password?</a>
+
+        </div>
+
+        <button type="submit" class="login-btn">
+
+            Login
+
+        </button>
+
+        <button type="button" id="googleLogin" class="google-btn">
+
+            <i class="fab fa-google"></i>
+
+            Continue with Google
+
+        </button>
+
+        <p class="register">
+
+            Don't have an account?
+
+            <a href="register.html">
+
+                Register
+
+            </a>
+
+        </p>
+        <p class="register">
+    Admin?
+    <a href="admin-login.html">Admin Login</a>
+</p>
+
+    </form>
+
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Config -->
+<script src="js/firebase.js"></script>
+
+<!-- Login Script -->
+<script src="js/auth.js"></script>
+
+</body>
+</html>

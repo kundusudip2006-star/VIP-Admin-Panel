@@ -1,0 +1,181 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    display:flex;
+    background:#0f172a;
+    color:#fff;
+}
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:#111827;
+    padding:25px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.logo i{
+    font-size:55px;
+    color:#00e5ff;
+}
+
+.logo h2{
+    margin-top:10px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:12px 0;
+}
+
+.sidebar ul li a,
+.sidebar ul li{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#fff;
+    text-decoration:none;
+    padding:14px;
+    border-radius:10px;
+    transition:.3s;
+    cursor:pointer;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active{
+    background:#00e5ff;
+    color:#000;
+}
+
+.main{
+    flex:1;
+    padding:30px;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+}
+
+.search-box input{
+    width:260px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    outline:none;
+}
+
+.search-box button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    background:#00e5ff;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.table-box{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:15px;
+    text-align:left;
+}
+
+thead{
+    background:#334155;
+}
+
+tbody tr{
+    border-bottom:1px solid #334155;
+}
+
+tbody tr:hover{
+    background:#263548;
+}
+
+.action-btn{
+    padding:8px 12px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+.edit{
+    background:#facc15;
+}
+
+.delete{
+    background:#ef4444;
+    color:#fff;
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+
+    .main{
+        padding:20px;
+    }
+
+    header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .search-box{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .search-box input,
+    .search-box button{
+        width:100%;
+    }
+
+    table{
+        font-size:14px;
+    }
+
+}

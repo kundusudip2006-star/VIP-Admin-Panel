@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Products - VIP Admin Panel</title>
+
+<link rel="stylesheet" href="css/products.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<h2>VIP PANEL</h2>
+
+</div>
+
+<ul>
+
+<li>
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</a>
+</li>
+
+<li>
+<a href="users.html">
+<i class="fa-solid fa-users"></i>
+Users
+</a>
+</li>
+
+<li>
+<a href="customers.html">
+<i class="fa-solid fa-address-book"></i>
+Customers
+</a>
+</li>
+
+<li class="active">
+<a href="products.html">
+<i class="fa-solid fa-box"></i>
+Products
+</a>
+</li>
+
+<li>
+<a href="orders.html">
+<i class="fa-solid fa-cart-shopping"></i>
+Orders
+</a>
+</li>
+
+<li id="logoutBtn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</li>
+
+</ul>
+
+</div>
+
+<div class="main">
+
+<header>
+
+<h1>Product Management</h1>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchProduct"
+placeholder="Search Product...">
+
+<button id="addProductBtn">
+
+<i class="fa-solid fa-plus"></i>
+
+Add Product
+
+</button>
+
+</div>
+
+</header>
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Image</th>
+<th>Product</th>
+<th>Plans & Prices</th>
+<th>Stock</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="productTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+<!-- Add Product Modal -->
+
+<div id="productModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" id="closeModal">&times;</span>
+
+        <h2>Add Product</h2>
+
+<form id="productForm">
+
+<input
+type="text"
+id="productName"
+placeholder="Product Name"
+required>
+
+<input
+type="text"
+id="productImage"
+placeholder="Image URL">
+
+<textarea
+id="productDescription"
+placeholder="Product Description"
+rows="4"></textarea>
+
+<hr>
+
+<h3>Plans</h3>
+
+<div id="plansContainer">
+
+<div class="plan-card">
+
+<input
+type="text"
+class="planName"
+placeholder="Plan Name (Example: 7 Days)"
+required>
+
+<input
+type="number"
+class="planPrice"
+placeholder="Price ₹"
+required>
+
+<input
+type="number"
+class="planStock"
+placeholder="Stock"
+required>
+
+<textarea
+class="planKeys"
+rows="5"
+placeholder="One Key Per Line&#10;Example:&#10;ABC123&#10;XYZ456"></textarea>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addPlanBtn">
+
+<i class="fa-solid fa-plus"></i>
+
+Add Another Plan
+
+</button>
+
+<br><br>
+
+<button type="submit">
+
+Save Product
+
+</button>
+
+</form>
+
+    </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+<script src="js/products.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VIP Key Store</title>
+
+<link rel="stylesheet" href="css/shop.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-key"></i>
+
+        <span>VIP KEY STORE</span>
+
+    </div>
+
+    <div class="header-buttons">
+
+        <button id="myOrdersBtn" class="header-btn">
+
+            <i class="fa-solid fa-box"></i>
+
+            My Orders
+
+        </button>
+
+        <button class="header-btn support-btn"
+        onclick="window.location.href='contact.html'">
+
+            <i class="fa-brands fa-whatsapp"></i>
+
+            Contact Support
+
+        </button>
+
+        <button id="logoutBtn" class="header-btn logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+<div class="container">
+
+<h2>Available Products</h2>
+
+<div id="productList" class="products"></div>
+
+</div>
+
+<!-- Buy Modal -->
+<div id="buyModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" id="closeModal">&times;</span>
+
+        <h2>Confirm Purchase</h2>
+
+        <p>
+            Product :
+            <b id="buyProductName"></b>
+        </p>
+
+        <p style="margin-top:15px;">
+            Total Price :
+            <b style="color:#00c853;font-size:22px;">
+                ₹<span id="buyProductPrice">0</span>
+            </b>
+        </p>
+
+        <p id="loginUser"></p>
+
+        <button id="confirmBuyBtn">
+            <i class="fa-solid fa-credit-card"></i>
+            Proceed To Payment
+        </button>
+
+    </div>
+
+</div>
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+
+<script src="js/shop.js"></script>
+
+</body>
+</html>

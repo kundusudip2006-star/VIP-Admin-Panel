@@ -1,0 +1,86 @@
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+    background:#f5f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.contact-box{
+    width:90%;
+    max-width:420px;
+    background:#fff;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+    text-align:center;
+}
+
+.contact-box h1{
+    margin-bottom:10px;
+    color:#333;
+}
+
+.contact-box p{
+    color:#666;
+    margin-bottom:25px;
+}
+
+.contact-box a{
+    text-decoration:none;
+}
+
+.whatsapp-btn,
+.telegram-btn,
+.email-btn,
+.back-btn{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border:none;
+    border-radius:10px;
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.whatsapp-btn{
+    background:#25D366;
+}
+
+.whatsapp-btn:hover{
+    background:#1ebe5d;
+}
+
+.telegram-btn{
+    background:#229ED9;
+}
+
+.telegram-btn:hover{
+    background:#1b8cc4;
+}
+
+.email-btn{
+    background:#EA4335;
+}
+
+.email-btn:hover{
+    background:#d63a2c;
+}
+
+.back-btn{
+    background:#555;
+}
+
+.back-btn:hover{
+    background:#333;
+}
+
+i{
+    margin-right:8px;
+}

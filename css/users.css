@@ -1,0 +1,328 @@
+/* ===========================
+   VIP Admin Panel - Users
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    display:flex;
+    background:#0f172a;
+    color:#fff;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:260px;
+    background:#111827;
+    padding:25px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow:auto;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.logo i{
+    font-size:55px;
+    color:#00e5ff;
+    margin-bottom:10px;
+}
+
+.logo h2{
+    font-size:24px;
+    letter-spacing:1px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:12px 0;
+}
+
+.sidebar ul li a,
+.sidebar ul li{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    color:#fff;
+    text-decoration:none;
+    border-radius:12px;
+    transition:.3s;
+    cursor:pointer;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active{
+    background:#00e5ff;
+    color:#000;
+}
+
+.sidebar ul li a:hover{
+    color:#000;
+}
+
+.main{
+    flex:1;
+    margin-left:260px;
+    padding:30px;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+header h1{
+    font-size:32px;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+}
+
+.search-box input{
+    width:280px;
+    padding:12px 15px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    background:#fff;
+}
+
+.search-box button{
+    padding:12px 22px;
+    border:none;
+    border-radius:10px;
+    background:#00e5ff;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.search-box button:hover{
+    transform:translateY(-2px);
+}
+/* ===========================
+   Table Section
+=========================== */
+
+.table-box{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,.3);
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#334155;
+}
+
+th{
+    padding:16px;
+    text-align:left;
+    font-size:15px;
+    color:#00e5ff;
+}
+
+td{
+    padding:16px;
+    border-bottom:1px solid #374151;
+}
+
+tbody tr{
+    transition:.3s;
+}
+
+tbody tr:hover{
+    background:#263548;
+}
+
+.action-btn{
+    border:none;
+    padding:8px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    margin-right:8px;
+    transition:.3s;
+}
+
+.edit{
+    background:#facc15;
+    color:#000;
+}
+
+.edit:hover{
+    background:#eab308;
+}
+
+.delete{
+    background:#ef4444;
+    color:#fff;
+}
+
+.delete:hover{
+    background:#dc2626;
+}
+/* ===========================
+   Add User Modal
+=========================== */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-content{
+    width:420px;
+    max-width:95%;
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    position:relative;
+    animation:popup .3s ease;
+    box-shadow:0 0 30px rgba(0,0,0,.4);
+}
+
+@keyframes popup{
+
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+.close{
+    position:absolute;
+    top:12px;
+    right:18px;
+    font-size:28px;
+    cursor:pointer;
+    color:#fff;
+}
+
+.close:hover{
+    color:#ef4444;
+}
+
+.modal-content h2{
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.modal-content input,
+.modal-content select{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:none;
+    outline:none;
+    border-radius:8px;
+}
+
+.modal-content button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#00e5ff;
+    color:#000;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.modal-content button:hover{
+    transform:translateY(-2px);
+    opacity:.9;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:220px;
+    }
+
+    .main{
+        margin-left:220px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        min-height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+
+    header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .search-box{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .search-box input,
+    .search-box button{
+        width:100%;
+    }
+
+}

@@ -1,0 +1,169 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827,#1e293b);
+    overflow:hidden;
+}
+
+.background span{
+    position:absolute;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    filter:blur(80px);
+    animation:float 8s infinite ease-in-out;
+}
+
+.background span:nth-child(1){
+    background:#00e5ff;
+    top:5%;
+    left:10%;
+}
+
+.background span:nth-child(2){
+    background:#7c3aed;
+    right:10%;
+    top:15%;
+}
+
+.background span:nth-child(3){
+    background:#00ff99;
+    bottom:10%;
+    left:20%;
+}
+
+.background span:nth-child(4){
+    background:#ff0066;
+    bottom:5%;
+    right:15%;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-30px);
+    }
+}
+
+.login-container{
+    width:400px;
+    padding:40px;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 0 40px rgba(0,0,0,.35);
+}
+
+.logo{
+    text-align:center;
+    color:#fff;
+    margin-bottom:30px;
+}
+
+.logo i{
+    font-size:55px;
+    color:#00e5ff;
+    margin-bottom:10px;
+}
+
+.logo h2{
+    margin-bottom:5px;
+}
+
+.logo p{
+    color:#ccc;
+}
+
+.input-box{
+    position:relative;
+    margin:20px 0;
+}
+
+.input-box input{
+    width:100%;
+    padding:15px 45px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    background:rgba(255,255,255,.1);
+    color:#fff;
+}
+
+.input-box i:first-child{
+    position:absolute;
+    left:15px;
+    top:16px;
+    color:#00e5ff;
+}
+
+#togglePassword{
+    position:absolute;
+    right:15px;
+    top:16px;
+    cursor:pointer;
+    color:#ccc;
+}
+
+.options{
+    display:flex;
+    justify-content:space-between;
+    color:#fff;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.options a{
+    color:#00e5ff;
+    text-decoration:none;
+}
+
+.login-btn,
+.google-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    margin-top:12px;
+}
+
+.login-btn{
+    background:#00e5ff;
+    color:#000;
+    font-weight:bold;
+}
+
+.google-btn{
+    background:#fff;
+}
+
+.register{
+    text-align:center;
+    color:#fff;
+    margin-top:20px;
+}
+
+.register a{
+    color:#00e5ff;
+    text-decoration:none;
+}
+
+@media(max-width:450px){
+    .login-container{
+        width:92%;
+        padding:25px;
+    }
+}

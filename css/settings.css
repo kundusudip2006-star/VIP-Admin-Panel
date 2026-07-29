@@ -1,0 +1,145 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    display:flex;
+    background:#0f172a;
+    color:#fff;
+}
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:#111827;
+    padding:25px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.logo i{
+    font-size:55px;
+    color:#00e5ff;
+}
+
+.logo h2{
+    margin-top:10px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:12px 0;
+}
+
+.sidebar ul li,
+.sidebar ul li a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:#fff;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active{
+    background:#00e5ff;
+    color:#000;
+}
+
+.main{
+    flex:1;
+    padding:40px;
+}
+
+.settings-card{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.settings-card h2{
+    margin-bottom:15px;
+}
+
+.settings-card button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    background:#00e5ff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* Toggle */
+
+.switch{
+    position:relative;
+    display:inline-block;
+    width:60px;
+    height:34px;
+    margin-bottom:15px;
+}
+
+.switch input{
+    display:none;
+}
+
+.slider{
+    position:absolute;
+    cursor:pointer;
+    inset:0;
+    background:#555;
+    border-radius:34px;
+    transition:.3s;
+}
+
+.slider:before{
+    content:"";
+    position:absolute;
+    width:26px;
+    height:26px;
+    left:4px;
+    bottom:4px;
+    background:white;
+    border-radius:50%;
+    transition:.3s;
+}
+
+input:checked + .slider{
+    background:#00e5ff;
+}
+
+input:checked + .slider:before{
+    transform:translateX(26px);
+}
+
+@media(max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+
+    .main{
+        padding:20px;
+    }
+
+}

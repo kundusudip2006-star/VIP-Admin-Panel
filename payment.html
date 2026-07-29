@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+
+    <link rel="stylesheet" href="css/payment.css">
+</head>
+
+<body>
+
+    <div class="payment-box">
+
+        <h2>Complete Your Payment</h2>
+
+        <img src="assets/images/gpay-qr.png" class="qr" alt="QR Code">
+
+        <h3>Scan with any UPI App</h3>
+
+        <p>
+            UPI ID:
+            <b id="upi">kundusudip2006@oksbi</b>
+        </p>
+
+        <p>
+            Telegram:
+            <b id="telegram">@sgmodz007</b>
+        </p>
+
+        <button onclick="copyUPI()">
+            Copy UPI ID
+        </button>
+
+        <br><br>
+
+        <button id="paidBtn">
+            I've Paid
+        </button>
+
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="js/firebase.js"></script>
+
+    <!-- Payment JS -->
+    <script src="js/payment.js"></script>
+
+</body>
+
+</html>

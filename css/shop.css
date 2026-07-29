@@ -1,0 +1,348 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:#fff;
+}
+
+
+/* Header */
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 40px;
+    background:#111827;
+}
+
+
+header h1{
+    color:#00e5ff;
+}
+
+
+header button{
+    padding:12px 18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#00e5ff;
+    font-weight:bold;
+    margin-left:10px;
+}
+
+
+/* Container */
+
+.container{
+    padding:30px;
+}
+
+
+.container h2{
+    margin-bottom:25px;
+}
+
+
+/* Products */
+
+.products{
+
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+}
+
+
+.product-card{
+
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    transition:.3s;
+
+}
+
+
+.product-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 0 20px rgba(0,229,255,.3);
+
+}
+
+
+
+.product-card img{
+
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:12px;
+
+}
+
+
+.product-card h3{
+
+    margin:15px 0;
+
+}
+
+
+.price{
+
+    color:#00e5ff;
+    font-size:22px;
+    font-weight:bold;
+
+}
+
+
+
+.buy-btn{
+
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+
+    border:none;
+    border-radius:8px;
+
+    background:#22c55e;
+
+    color:#fff;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+/* Modal */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.7);
+
+    justify-content:center;
+    align-items:center;
+
+}
+
+
+
+.modal-content{
+
+    width:400px;
+    max-width:90%;
+
+    background:#1e293b;
+
+    padding:25px;
+
+    border-radius:15px;
+
+}
+
+
+
+.close{
+
+    float:right;
+
+    font-size:25px;
+
+    cursor:pointer;
+
+}
+
+
+
+.modal-content input{
+
+    width:100%;
+
+    padding:12px;
+
+    margin:10px 0;
+
+    border:none;
+
+    border-radius:8px;
+
+}
+
+
+
+#confirmBuyBtn{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#00e5ff;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+/* Mobile */
+
+@media(max-width:600px){
+
+    header{
+
+        flex-direction:column;
+
+        gap:15px;
+
+    }
+
+
+    .container{
+
+        padding:15px;
+
+    }
+
+}
+/* ===== Professional Header ===== */
+
+.top-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111827;
+    color:#fff;
+    padding:15px 25px;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.logo i{
+    color:#FFD700;
+}
+
+.header-buttons{
+    display:flex;
+    gap:12px;
+}
+
+.header-btn{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition:.3s;
+}
+
+.header-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+.logout{
+    background:#dc2626;
+}
+
+.logout:hover{
+    background:#b91c1c;
+}
+
+/* Mobile Responsive */
+
+@media (max-width:768px){
+
+    .top-header{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .header-buttons{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .header-btn{
+        width:100%;
+        justify-content:center;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+}
+/* ===== Plan Select ===== */
+
+#planSelect{
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+    border:2px solid #4CAF50;
+    border-radius:10px;
+    background:#fff;
+    color:#222;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    outline:none;
+    transition:0.3s;
+}
+
+#planSelect:hover{
+    border-color:#2196F3;
+}
+
+#planSelect:focus{
+    border-color:#00BCD4;
+    box-shadow:0 0 8px rgba(0,188,212,.4);
+}

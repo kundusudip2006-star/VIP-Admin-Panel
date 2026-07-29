@@ -1,0 +1,287 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    display:flex;
+    background:#0f172a;
+    color:#fff;
+}
+
+/* Sidebar */
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:#111827;
+    padding:25px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.logo i{
+    font-size:55px;
+    color:#00e5ff;
+}
+
+.logo h2{
+    margin-top:10px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:12px 0;
+}
+
+.sidebar ul li a,
+.sidebar ul li{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+    color:#fff;
+    text-decoration:none;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active{
+    background:#00e5ff;
+    color:#000;
+}
+
+
+/* Main */
+
+.main{
+    flex:1;
+    padding:30px;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+
+.search-box input{
+    width:280px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    outline:none;
+}
+
+
+/* Table */
+
+.table-box{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:15px;
+    text-align:left;
+}
+
+thead{
+    background:#334155;
+}
+
+tbody tr{
+    border-bottom:1px solid #475569;
+}
+
+tbody tr:hover{
+    background:#263548;
+}
+
+
+/* Status */
+
+.pending{
+    color:#facc15;
+    font-weight:bold;
+}
+
+.delivered{
+    color:#22c55e;
+    font-weight:bold;
+}
+
+.cancelled{
+    color:#ef4444;
+    font-weight:bold;
+}
+
+
+/* Buttons */
+
+.action-btn{
+    padding:8px 12px;
+    border:none;
+    border-radius:7px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+.view{
+    background:#38bdf8;
+}
+
+.send{
+    background:#22c55e;
+}
+
+.cancel{
+    background:#ef4444;
+    color:white;
+}
+
+
+/* Modal */
+
+.modal{
+    display:none;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.7);
+    justify-content:center;
+    align-items:center;
+    overflow-y:auto;
+    z-index:999;
+}
+
+
+.modal-content{
+    width:500px;
+    max-width:95%;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    position:relative;
+}
+
+
+.close{
+    float:right;
+    font-size:25px;
+    cursor:pointer;
+}
+
+
+.modal-content textarea{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border-radius:8px;
+    outline:none;
+}
+
+
+.modal-content button{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#00e5ff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+
+    header{
+        flex-direction:column;
+        gap:15px;
+        align-items:flex-start;
+    }
+
+    .search-box input{
+        width:100%;
+    }
+
+}
+/* Action Buttons */
+
+.paid-btn{
+    background:#22c55e;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.paid-btn:hover{
+    background:#16a34a;
+}
+
+.view-btn{
+    background:#3b82f6;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.view-btn:hover{
+    background:#2563eb;
+}
+
+.cancel-btn{
+    background:#ef4444;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.cancel-btn:hover{
+    background:#dc2626;
+}
