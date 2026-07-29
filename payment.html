@@ -2,49 +2,53 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Payment</title>
 
     <link rel="stylesheet" href="css/payment.css">
+
 </head>
 
 <body>
 
     <div class="payment-box">
 
-    <h2>Complete Your Payment</h2>
+        <h2>Complete Your Payment</h2>
 
-    <h3 id="productName">Product Name</h3>
+        <h3 id="productName">Product Name</h3>
 
-    <h2 id="amount">₹0</h2>
+        <h2 id="amount">₹0</h2>
 
-    <img id="qrImage" class="qr" alt="QR Code">
+        <img id="qrImage" class="qr" alt="QR Code">
 
-    <br><br>
+        <br><br>
 
-    <a id="payNow">
-        <button>Pay with Google Pay</button>
-    </a>
+        <a id="payNow">
+            <button type="button">💳 Pay with Google Pay</button>
+        </a>
 
-    <br><br>
+        <br><br>
 
-    <p>
-        UPI ID:
-        <b id="upi">kundusudip2006@oksbi</b>
-    </p>
+        <p>
+            <strong>UPI ID</strong><br>
+            <b id="upi">kundusudip2006@oksbi</b>
+        </p>
 
-    <button onclick="copyUPI()">
-        Copy UPI ID
-    </button>
+        <button onclick="copyUPI()">
+            📋 Copy UPI ID
+        </button>
 
-    <br><br>
+        <br><br>
 
-    <button id="paidBtn">
-        I've Paid
-    </button>
+        <button id="paidBtn">
+            ✅ I've Paid
+        </button>
 
-</div>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
@@ -53,6 +57,9 @@
 
     <!-- Firebase Config -->
     <script src="js/firebase.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Payment JS -->
     <script src="js/payment.js"></script>

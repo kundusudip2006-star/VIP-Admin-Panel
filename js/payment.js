@@ -127,7 +127,24 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         localStorage.removeItem("orderData");
 
-        alert("Payment Request Submitted!");
+       Swal.fire({
+    icon: "success",
+    title: "Payment Submitted!",
+    html: `
+        <h3 style="color:#28a745;">Thank You ❤️</h3>
+
+        <p>Your payment request has been submitted successfully.</p>
+
+        <p>⏳ Please wait while our admin verifies your payment.</p>
+
+        <p>You will receive your product after approval.</p>
+    `,
+    confirmButtonText: "OK",
+    confirmButtonColor: "#28a745",
+    allowOutsideClick: false
+}).then(() => {
+    window.location.href = "my-order.html";
+});
 
         window.location.href = "my-order.html";
 
