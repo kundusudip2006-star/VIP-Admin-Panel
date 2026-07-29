@@ -56,6 +56,7 @@ VIP Admin Panel
     });
   } catch (err) {
     console.error(err);
+    console.log(err.response?.data);
     res.status(500).json({
       success: false,
       error: err.message,
