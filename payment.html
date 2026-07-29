@@ -13,33 +13,38 @@
 
     <div class="payment-box">
 
-        <h2>Complete Your Payment</h2>
+    <h2>Complete Your Payment</h2>
 
-        <img src="assets/images/gpay-qr.png" class="qr" alt="QR Code">
+    <h3 id="productName">Product Name</h3>
 
-        <h3>Scan with any UPI App</h3>
+    <h2 id="amount">₹0</h2>
 
-        <p>
-            UPI ID:
-            <b id="upi">kundusudip2006@oksbi</b>
-        </p>
+    <img id="qrImage" class="qr" alt="QR Code">
 
-        <p>
-            Telegram:
-            <b id="telegram">@sgmodz007</b>
-        </p>
+    <br><br>
 
-        <button onclick="copyUPI()">
-            Copy UPI ID
-        </button>
+    <a id="payNow">
+        <button>Pay with Google Pay</button>
+    </a>
 
-        <br><br>
+    <br><br>
 
-        <button id="paidBtn">
-            I've Paid
-        </button>
+    <p>
+        UPI ID:
+        <b id="upi">kundusudip2006@oksbi</b>
+    </p>
 
-    </div>
+    <button onclick="copyUPI()">
+        Copy UPI ID
+    </button>
+
+    <br><br>
+
+    <button id="paidBtn">
+        I've Paid
+    </button>
+
+</div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>

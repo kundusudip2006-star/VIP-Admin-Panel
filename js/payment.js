@@ -1,4 +1,46 @@
 // ==========================
+// Copy UPI ID
+// ==========================
+function copyUPI() {
+    const upi = document.getElementById("upi").innerText;
+    navigator.clipboard.writeText(upi);
+    alert("UPI ID Copied");
+}
+
+// ==========================
+// Auth Check
+// ==========================
+firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    }
+});
+
+// ==========================
+// Load Payment Details
+// ==========================
+const data = JSON.parse(localStorage.getItem("orderData"));
+
+if (data) {
+
+    document.getElementById("productName").innerText =
+        data.productName + " - " + data.planName;
+
+    document.getElementById("amount").innerText =
+        "₹" + data.price;
+
+    const upiLink =
+        `upi://pay?pa=kundusudip2006@oksbi&pn=VIP Store&am=${data.price}&cu=INR`;
+
+    document.getElementById("payNow").href = upiLink;
+
+    const qrURL =
+        `https://quickchart.io/qr?text=${encodeURIComponent(upiLink)}`;
+
+    document.getElementById("qrImage").src = qrURL;
+}
+
+// ==========================
 // I've Paid
 // ==========================
 document.getElementById("paidBtn").addEventListener("click", async () => {
@@ -24,7 +66,8 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         uid: user.uid,
         customerName: data.customerName,
         customerEmail: user.email,
-        customerPhone: "",
+        customerPhone: user.phoneNumber || "",
+
         productId: data.productId,
         productName: data.productName,
         planName: data.planName,
@@ -47,31 +90,35 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
     // Telegram Notification
     try {
-    const response = await fetch("https://vip-admin-panel.onrender.com/new-order", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            orderId: orderId,
-            name: data.customerName,
-            email: user.email,
-            phone: "",
-            product: data.productName,
-            plan: data.planName,
-            amount: data.price,
-            paymentMethod: "Google Pay"
-        })
-    });
 
-    console.log("Status:", response.status);
+        await fetch("https://vip-admin-panel.onrender.com/new-order", {
 
-    const result = await response.text();
-    console.log("Response:", result);
+            method: "POST",
 
-} catch (e) {
-    console.error("Telegram Error:", e);
-}
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                orderId: orderId,
+                name: data.customerName,
+                email: user.email,
+                phone: user.phoneNumber || "",
+                product: data.productName,
+                plan: data.planName,
+                amount: data.price,
+                paymentMethod: "Google Pay"
+
+            })
+
+        });
+
+    } catch (e) {
+
+        console.error(e);
+
+    }
 
     localStorage.removeItem("orderData");
 
