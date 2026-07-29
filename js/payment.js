@@ -47,35 +47,31 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
     // Telegram Notification
     try {
+    const response = await fetch("https://vip-admin-panel.onrender.com/new-order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            orderId: orderId,
+            name: data.customerName,
+            email: user.email,
+            phone: "",
+            product: data.productName,
+            plan: data.planName,
+            amount: data.price,
+            paymentMethod: "Google Pay"
+        })
+    });
 
-        await fetch("https://vip-admin-panel.onrender.com/new-order", {
+    console.log("Status:", response.status);
 
-            method: "POST",
+    const result = await response.text();
+    console.log("Response:", result);
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                orderId: orderId,
-                name: data.customerName,
-                email: user.email,
-                phone: "",
-                product: data.productName,
-                plan: data.planName,
-                amount: data.price,
-                paymentMethod: "Google Pay"
-
-            })
-
-        });
-
-    } catch (e) {
-
-        console.log("Telegram Error:", e);
-
-    }
+} catch (e) {
+    console.error("Telegram Error:", e);
+}
 
     localStorage.removeItem("orderData");
 
