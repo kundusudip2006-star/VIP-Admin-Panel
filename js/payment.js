@@ -45,10 +45,20 @@ if (data) {
 // ==========================
 document.getElementById("paidBtn").addEventListener("click", async () => {
 
+    const paidBtn = document.getElementById("paidBtn");
+
+    // Prevent multiple clicks
+    if (paidBtn.disabled) return;
+
+    paidBtn.disabled = true;
+    paidBtn.innerText = "Processing...";
+
     const user = firebase.auth().currentUser;
 
     if (!user) {
         alert("Please Login First!");
+        paidBtn.disabled = false;
+        paidBtn.innerText = "I've Paid";
         return;
     }
 
@@ -56,40 +66,41 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
     if (!data) {
         alert("Order data not found!");
+        paidBtn.disabled = false;
+        paidBtn.innerText = "I've Paid";
         return;
     }
 
-    const orderId = "VIP-" + Date.now();
-
-    await db.collection("orders").add({
-
-        uid: user.uid,
-        customerName: data.customerName,
-        customerEmail: user.email,
-        customerPhone: user.phoneNumber || "",
-
-        productId: data.productId,
-        productName: data.productName,
-        planName: data.planName,
-        planIndex: data.planIndex,
-        price: data.price,
-
-        paymentMethod: "Google Pay",
-        paymentStatus: "Pending",
-        status: "Pending",
-
-        productKey: "",
-
-        orderId: orderId,
-        orderDate: new Date().toLocaleDateString(),
-        orderTime: new Date().toLocaleTimeString(),
-
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-
-    });
-
-    // Telegram Notification
     try {
+
+        const orderId = "VIP-" + Date.now();
+
+        await db.collection("orders").add({
+
+            uid: user.uid,
+            customerName: data.customerName,
+            customerEmail: user.email,
+            customerPhone: user.phoneNumber || "",
+
+            productId: data.productId,
+            productName: data.productName,
+            planName: data.planName,
+            planIndex: data.planIndex,
+            price: data.price,
+
+            paymentMethod: "Google Pay",
+            paymentStatus: "Pending",
+            status: "Pending",
+
+            productKey: "",
+
+            orderId: orderId,
+            orderDate: new Date().toLocaleDateString(),
+            orderTime: new Date().toLocaleTimeString(),
+
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+
+        });
 
         await fetch("https://vip-admin-panel.onrender.com/new-order", {
 
@@ -114,16 +125,21 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         });
 
-    } catch (e) {
+        localStorage.removeItem("orderData");
 
-        console.error(e);
+        alert("Payment Request Submitted!");
+
+        window.location.href = "my-order.html";
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Something went wrong. Please try again.");
+
+        paidBtn.disabled = false;
+        paidBtn.innerText = "I've Paid";
 
     }
-
-    localStorage.removeItem("orderData");
-
-    alert("Payment Request Submitted!");
-
-    window.location.href = "my-order.html";
 
 });
