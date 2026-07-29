@@ -1,13 +1,19 @@
-const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const express = require("express");
 const axios = require("axios");
+
+const app = express();
+app.use(express.json());
 
 const BOT_TOKEN = "8545735365:AAEVzSmQQZiAdznz3FZfyrRXUS5ZPvcqLS4";
 const CHAT_ID = "8152666872";
 
-exports.newOrderNotification = onDocumentCreated(
-  "orders/{orderId}",
-  async (event) => {
-    const data = event.data.data();
+app.get("/", (req, res) => {
+  res.send("Telegram Notification Server Running");
+});
+
+app.post("/new-order", async (req, res) => {
+  try {
+    const data = req.body;
 
     const text = `
 🛒 New Order
@@ -17,14 +23,28 @@ exports.newOrderNotification = onDocumentCreated(
 💰 Amount: ${data.amount || "N/A"}
 `;
 
-    await axios.get(
+    await axios.post(
       `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
       {
-        params: {
-          chat_id: CHAT_ID,
-          text: text,
-        },
+        chat_id: CHAT_ID,
+        text: text,
       }
     );
+
+    res.json({
+      success: true,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
   }
-);
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
