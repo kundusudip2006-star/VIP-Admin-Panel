@@ -18,11 +18,29 @@ app.post("/new-order", async (req, res) => {
     const data = req.body;
 
     const text = `
-🛒 New Order
+🛒 NEW ORDER RECEIVED
 
-👤 Name: ${data.name || "N/A"}
+━━━━━━━━━━━━━━
+
+🆔 Order ID: ${data.orderId || "N/A"}
+
+👤 Customer: ${data.name || "N/A"}
+📧 Email: ${data.email || "N/A"}
 📞 Phone: ${data.phone || "N/A"}
-💰 Amount: ${data.amount || "N/A"}
+
+📦 Product: ${data.product || "N/A"}
+📋 Plan: ${data.plan || "N/A"}
+
+💰 Price: ₹${data.amount || "N/A"}
+
+💳 Payment: ${data.paymentMethod || "Google Pay"}
+📌 Status: Pending
+
+📅 Date: ${new Date().toLocaleDateString()}
+⏰ Time: ${new Date().toLocaleTimeString()}
+
+━━━━━━━━━━━━━━
+VIP Admin Panel
 `;
 
     await axios.post(

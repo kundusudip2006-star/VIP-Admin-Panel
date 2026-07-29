@@ -63,6 +63,26 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
 
     });
+    try {
+    await fetch("https://vip-admin-panel.onrender.com/new-order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            orderId: "VIP-" + Date.now(),
+            name: data.customerName,
+            email: user.email,
+            phone: user.phoneNumber || "Not Provided",
+            product: data.productName,
+            plan: data.planName,
+            amount: data.price,
+            paymentMethod: "Google Pay"
+        })
+    });
+} catch (err) {
+    console.error("Telegram Error:", err);
+}
 
     localStorage.removeItem("orderData");
 
