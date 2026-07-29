@@ -1,27 +1,6 @@
 // ==========================
-// Copy UPI ID
-// ==========================
-
-function copyUPI() {
-    const upi = document.getElementById("upi").innerText;
-    navigator.clipboard.writeText(upi);
-    alert("UPI ID Copied");
-}
-
-// ==========================
-// Auth Check
-// ==========================
-
-firebase.auth().onAuthStateChanged((user) => {
-    if (!user) {
-        window.location.href = "login.html";
-    }
-});
-
-// ==========================
 // I've Paid
 // ==========================
-
 document.getElementById("paidBtn").addEventListener("click", async () => {
 
     const user = firebase.auth().currentUser;
@@ -37,6 +16,8 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         alert("Order data not found!");
         return;
     }
+
+    const orderId = "VIP-" + Date.now();
 
     await db.collection("orders").add({
 
@@ -56,33 +37,45 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         productKey: "",
 
-        orderId: "VIP-" + Date.now(),
+        orderId: orderId,
         orderDate: new Date().toLocaleDateString(),
         orderTime: new Date().toLocaleTimeString(),
 
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
 
     });
+
+    // Telegram Notification
     try {
-    await fetch("https://vip-admin-panel.onrender.com/new-order", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            orderId: "VIP-" + Date.now(),
-            name: data.customerName,
-            email: user.email,
-            phone: user.phoneNumber || "Not Provided",
-            product: data.productName,
-            plan: data.planName,
-            amount: data.price,
-            paymentMethod: "Google Pay"
-        })
-    });
-} catch (err) {
-    console.error("Telegram Error:", err);
-}
+
+        await fetch("https://vip-admin-panel.onrender.com/new-order", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                orderId: orderId,
+                name: data.customerName,
+                email: user.email,
+                phone: "",
+                product: data.productName,
+                plan: data.planName,
+                amount: data.price,
+                paymentMethod: "Google Pay"
+
+            })
+
+        });
+
+    } catch (e) {
+
+        console.log("Telegram Error:", e);
+
+    }
 
     localStorage.removeItem("orderData");
 
