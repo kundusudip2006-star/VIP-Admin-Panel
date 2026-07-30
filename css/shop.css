@@ -1027,3 +1027,34 @@ background:#0f172a;
 }
 
 }
+/* ===== FINAL MOBILE HEADER FIX ===== */
+
+@media (max-width:768px){
+
+.top-header{
+    display:flex !important;
+    flex-direction:row !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+    width:100%;
+}
+
+#myOrdersBtn{
+    margin:0 !important;
+}
+
+.right-buttons{
+    display:flex !important;
+    margin-left:auto !important;
+    gap:10px !important;
+    align-items:center !important;
+}
+
+.support-btn,
+#logoutBtn{
+    width:38px !important;
+    height:38px !important;
+    margin:0 !important;
+}
+
+}
