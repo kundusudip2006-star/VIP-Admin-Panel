@@ -312,9 +312,12 @@ header button{
     }
 
     .header-btn{
-        width:100%;
-        justify-content:center;
-    }
+    width:auto;
+    min-width:120px;
+    padding:8px 14px;
+    justify-content:center;
+    border-radius:10px;
+}
 
     .logo{
         font-size:20px;
@@ -526,4 +529,42 @@ header button{
 body{
     position:relative;
     overflow-x:hidden;
+}
+/* ===== Mobile Header Buttons ===== */
+
+.header-buttons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.header-btn{
+    width:auto !important;
+    min-width:110px;
+    padding:8px 14px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+@media(max-width:768px){
+
+    .top-header{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .header-buttons{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+    }
+
+    .header-btn{
+        width:130px !important;
+        padding:8px 10px;
+        font-size:13px;
+    }
 }
