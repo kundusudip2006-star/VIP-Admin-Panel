@@ -4,7 +4,6 @@
 function copyUPI() {
     const upi = document.getElementById("upi").innerText;
     navigator.clipboard.writeText(upi);
-    alert("UPI ID Copied");
 }
 
 // ==========================
