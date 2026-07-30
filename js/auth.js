@@ -1,124 +1,153 @@
 // ===============================
-// Login
+// LOGIN
 // ===============================
 
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
 
-    loginForm.addEventListener("submit", async (e) => {
+loginForm.addEventListener("submit", async (e)=>{
 
-        e.preventDefault();
+e.preventDefault();
 
-        let login = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+let login=document.getElementById("email").value.trim();
 
-        try {
+const password=document.getElementById("password").value;
 
-            let email = login;
+try{
 
-            // Username login
-            if (!login.includes("@")) {
+let email="";
 
-                const snap = await db.collection("customers")
-                    .where("username", "==", login)
-                    .get();
+const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(login);
 
-                if (snap.empty) {
-                    alert("Username not found!");
-                    return;
-                }
+if(isEmail){
 
-                email = snap.docs[0].data().email;
-            }
+email=login;
 
-            await auth.signInWithEmailAndPassword(email, password);
+}else{
 
-            if (window.location.pathname.includes("admin-login.html")) {
+const username=login.replace("@","");
 
-                if (email !== "kundusudip011@gmail.com") {
+const snap=await db.collection("customers")
+.where("username","==",username)
+.limit(1)
+.get();
 
-                    alert("Access Denied! Admin Only.");
-                    await auth.signOut();
-                    return;
+if(snap.empty){
 
-                }
-
-                alert("Admin Login Successful!");
-                window.location.href = "dashboard.html";
-
-            } else {
-
-                alert("Login Successful!");
-                window.location.href = "shop.html";
-
-            }
-
-        } catch (error) {
-
-            alert(error.message);
-
-        }
-
-    });
+alert("User ID not found!");
+return;
 
 }
 
+email=snap.docs[0].data().email;
+
+}
+
+await auth.signInWithEmailAndPassword(email,password);
+
+if(window.location.pathname.includes("admin-login.html")){
+
+if(email!=="kundusudip011@gmail.com"){
+
+alert("Access Denied!");
+await auth.signOut();
+return;
+
+}
+
+window.location.href="dashboard.html";
+
+}else{
+
+window.location.href="shop.html";
+
+}
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+}
+
+
 // ===============================
-// Register
+// REGISTER
 // ===============================
 
-const registerForm = document.getElementById("registerForm");
+const registerForm=document.getElementById("registerForm");
 
-if (registerForm) {
+if(registerForm){
 
-    registerForm.addEventListener("submit", async (e) => {
+registerForm.addEventListener("submit",async(e)=>{
 
-        e.preventDefault();
+e.preventDefault();
 
-        const name = document.getElementById("name").value.trim();
-        const username = document.getElementById("username").value.trim().replace("@", "");
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+const name=document.getElementById("name").value.trim();
 
-        try {
+const username=document.getElementById("username").value
+.trim()
+.replace("@","");
 
-            // Username already exists?
-            const check = await db.collection("customers")
-                .where("username", "==", username)
-                .get();
+const email=document.getElementById("email").value.trim();
 
-            if (!check.empty) {
-                alert("Username already taken!");
-                return;
-            }
+const password=document.getElementById("password").value;
 
-            const result = await auth.createUserWithEmailAndPassword(email, password);
+try{
 
-            await result.user.updateProfile({
-                displayName: name
-            });
+const check=await db.collection("customers")
+.where("username","==",username)
+.limit(1)
+.get();
 
-            await db.collection("customers").doc(result.user.uid).set({
-                uid: result.user.uid,
-                name: name,
-                username: username,
-                email: email,
-                phone: "",
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+if(!check.empty){
 
-            alert("Registration Successful!");
+alert("User ID already exists!");
+return;
 
-            window.location.href = "login.html";
+}
 
-        } catch (error) {
+const result=await auth.createUserWithEmailAndPassword(email,password);
 
-            alert(error.message);
+await result.user.updateProfile({
 
-        }
+displayName:name
 
-    });
+});
+
+await db.collection("customers")
+.doc(result.user.uid)
+.set({
+
+uid:result.user.uid,
+
+name:name,
+
+username:username,
+
+email:email,
+
+phone:"",
+
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+
+});
+
+alert("Registration Successful!");
+
+window.location.href="login.html";
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
 
 }
 // ===============================
@@ -143,6 +172,57 @@ if (togglePassword && passwordField) {
             passwordField.type = "password";
             togglePassword.classList.remove("fa-eye-slash");
             togglePassword.classList.add("fa-eye");
+
+        }
+
+    });
+
+}
+
+// ===============================
+// Google Login
+// ===============================
+
+const googleLogin = document.getElementById("googleLogin");
+
+if (googleLogin) {
+
+    googleLogin.addEventListener("click", async () => {
+
+        try {
+
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            const result = await auth.signInWithPopup(provider);
+
+            const user = result.user;
+
+            const doc = await db.collection("customers")
+                .doc(user.uid)
+                .get();
+
+            if (!doc.exists) {
+
+                await db.collection("customers")
+                    .doc(user.uid)
+                    .set({
+
+                        uid: user.uid,
+                        name: user.displayName,
+                        username: user.email.split("@")[0],
+                        email: user.email,
+                        phone: "",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+
+                    });
+
+            }
+
+            window.location.href = "shop.html";
+
+        } catch (error) {
+
+            alert(error.message);
 
         }
 
