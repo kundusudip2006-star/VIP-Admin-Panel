@@ -988,3 +988,42 @@ background:#0f172a;
 .logo span{
     display:none;
 }
+/* FINAL HEADER FIX */
+
+.top-header{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+    flex-direction:row !important;
+    padding:12px 15px !important;
+}
+
+#myOrdersBtn{
+    margin:0 !important;
+}
+
+.right-buttons{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    margin-left:auto !important;
+}
+
+.logo{
+    display:none !important;
+}
+
+@media(max-width:768px){
+
+.top-header{
+    display:flex !important;
+    flex-direction:row !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+}
+
+#myOrdersBtn{
+    font-size:13px;
+}
+
+}
