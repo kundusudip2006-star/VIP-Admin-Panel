@@ -167,3 +167,12 @@ body{
         padding:25px;
     }
 }
+#togglePassword{
+    cursor:pointer;
+    color:#666;
+    transition:.3s;
+}
+
+#togglePassword:hover{
+    color:#00e5ff;
+}

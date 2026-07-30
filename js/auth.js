@@ -10,14 +10,30 @@ if (loginForm) {
 
         e.preventDefault();
 
-        const email = document.getElementById("email").value.trim();
+        let login = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
 
         try {
 
+            let email = login;
+
+            // Username login
+            if (!login.includes("@")) {
+
+                const snap = await db.collection("customers")
+                    .where("username", "==", login)
+                    .get();
+
+                if (snap.empty) {
+                    alert("Username not found!");
+                    return;
+                }
+
+                email = snap.docs[0].data().email;
+            }
+
             await auth.signInWithEmailAndPassword(email, password);
 
-            // Admin Login
             if (window.location.pathname.includes("admin-login.html")) {
 
                 if (email !== "kundusudip011@gmail.com") {
@@ -31,10 +47,7 @@ if (loginForm) {
                 alert("Admin Login Successful!");
                 window.location.href = "dashboard.html";
 
-            }
-
-            // Customer Login
-            else {
+            } else {
 
                 alert("Login Successful!");
                 window.location.href = "shop.html";
@@ -50,6 +63,7 @@ if (loginForm) {
     });
 
 }
+
 // ===============================
 // Register
 // ===============================
@@ -63,10 +77,21 @@ if (registerForm) {
         e.preventDefault();
 
         const name = document.getElementById("name").value.trim();
+        const username = document.getElementById("username").value.trim().replace("@", "");
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
 
         try {
+
+            // Username already exists?
+            const check = await db.collection("customers")
+                .where("username", "==", username)
+                .get();
+
+            if (!check.empty) {
+                alert("Username already taken!");
+                return;
+            }
 
             const result = await auth.createUserWithEmailAndPassword(email, password);
 
@@ -74,9 +99,10 @@ if (registerForm) {
                 displayName: name
             });
 
-            await db.collection("customers").add({
+            await db.collection("customers").doc(result.user.uid).set({
                 uid: result.user.uid,
                 name: name,
+                username: username,
                 email: email,
                 phone: "",
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -89,6 +115,34 @@ if (registerForm) {
         } catch (error) {
 
             alert(error.message);
+
+        }
+
+    });
+
+}
+// ===============================
+// Show / Hide Password
+// ===============================
+
+const togglePassword = document.getElementById("togglePassword");
+const passwordField = document.getElementById("password");
+
+if (togglePassword && passwordField) {
+
+    togglePassword.addEventListener("click", () => {
+
+        if (passwordField.type === "password") {
+
+            passwordField.type = "text";
+            togglePassword.classList.remove("fa-eye");
+            togglePassword.classList.add("fa-eye-slash");
+
+        } else {
+
+            passwordField.type = "password";
+            togglePassword.classList.remove("fa-eye-slash");
+            togglePassword.classList.add("fa-eye");
 
         }
 

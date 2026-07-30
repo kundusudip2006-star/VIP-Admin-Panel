@@ -124,7 +124,7 @@ function loadOrders() {
 
             <tr>
 
-                <td>${doc.id.substring(0,8)}</td>
+                <td>${order.orderId || doc.id.substring(0,8)}</td>
 
                 <td>${order.customerName || ""}</td>
 
@@ -258,7 +258,7 @@ async function viewOrder(id){
         order.customerPhone || "";
 
     document.getElementById("orderId").innerText =
-        doc.id;
+    order.orderId || doc.id;
 
     document.getElementById("paymentStatus").innerText =
         order.paymentStatus || "Pending";

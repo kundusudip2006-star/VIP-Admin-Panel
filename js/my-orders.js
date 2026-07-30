@@ -61,7 +61,7 @@ function loadOrders(user) {
 
                     <p><b>Time :</b> ${order.orderTime}</p>
 
-                    <p><b>Plan :</b> ${order.plan || "1 Day"}</p>
+                    <p><b>Plan :</b> ${order.planName || "N/A"}</p>
 
                     <p><b>Price :</b> ₹${order.price}</p>
 
