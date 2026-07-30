@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VIP Key Store</title>
+<title>VIP PANEL STORE</title>
 
 <link rel="stylesheet" href="css/shop.css">
 
@@ -18,46 +18,56 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div id="particles-js"></div>
 
+<!-- Header -->
+
 <header class="top-header">
 
-    <button id="myOrdersBtn" class="header-btn">
-        <i class="fa-solid fa-box"></i>
-        My Orders
-    </button>
+<div class="left-header">
 
+<button id="myOrdersBtn" class="myorder-btn">
+<i class="fa-solid fa-box"></i>
+<span>My Orders</span>
+</button>
 
-    <div class="right-buttons">
+</div>
 
-        <button class="support-btn"
-        onclick="window.location.href='contact.html'">
-            <i class="fa-brands fa-whatsapp"></i>
-        </button>
+<div class="right-header">
 
-        <button id="logoutBtn" class="logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
+<button class="support-btn"
+onclick="window.location.href='contact.html'">
+<i class="fa-brands fa-whatsapp"></i>
+</button>
 
-    </div>
+<button id="logoutBtn" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
 
 </header>
 
+<!-- Hero Banner -->
+
 <section class="hero-banner">
 
-    <div class="hero-content">
+<div class="hero-content">
 
-        <h1>🔥 VIP PANEL STORE</h1>
+<h1>🔥 VIP PANEL STORE</h1>
 
-        <p>
-            Premium Accounts • Instant Delivery • Trusted Service
-        </p>
+<p>
+Premium Accounts • Instant Delivery • Trusted Service
+</p>
 
-        <button onclick="window.scrollTo({top:700,behavior:'smooth'})">
-            🛒 Shop Now
-        </button>
+<button
+onclick="window.scrollTo({top:700,behavior:'smooth'})">
+🛒 Shop Now
+</button>
 
-    </div>
+</div>
 
 </section>
+
+<!-- Products -->
 
 <div class="container">
 
@@ -68,42 +78,41 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 </div>
 
 <!-- Buy Modal -->
+
 <div id="buyModal" class="modal">
 
-    <div class="modal-content">
+<div class="modal-content">
 
-        <span class="close" id="closeModal">&times;</span>
+<span class="close" id="closeModal">&times;</span>
 
-        <h2>Confirm Purchase</h2>
+<h2>Confirm Purchase</h2>
 
-        <p>
-            Product :
-            <b id="buyProductName"></b>
-        </p>
+<p>
+Product :
+<b id="buyProductName"></b>
+</p>
 
-        <p style="margin-top:15px;">
-            Total Price :
-            <b style="color:#00c853;font-size:22px;">
-                ₹<span id="buyProductPrice">0</span>
-            </b>
-        </p>
+<p style="margin-top:15px;">
+Total Price :
+<b style="color:#00c853;font-size:22px;">
+₹<span id="buyProductPrice">0</span>
+</b>
+</p>
 
-        <p id="loginUser"></p>
+<p id="loginUser"></p>
 
-        <button id="confirmBuyBtn">
-            <i class="fa-solid fa-credit-card"></i>
-            Proceed To Payment
-        </button>
+<button id="confirmBuyBtn">
+<i class="fa-solid fa-credit-card"></i>
+Proceed To Payment
+</button>
 
-    </div>
+</div>
 
 </div>
 <!-- Firebase -->
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase.js"></script>
