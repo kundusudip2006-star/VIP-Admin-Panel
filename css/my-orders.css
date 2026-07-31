@@ -90,3 +90,19 @@ header a{
     }
 
 }
+.download-btn{
+display:inline-block;
+margin-top:10px;
+padding:10px 20px;
+background:#22c55e;
+color:#fff;
+text-decoration:none;
+border-radius:10px;
+font-weight:bold;
+transition:.3s;
+}
+
+.download-btn:hover{
+background:#16a34a;
+transform:scale(1.05);
+}

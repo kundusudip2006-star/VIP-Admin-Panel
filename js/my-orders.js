@@ -74,20 +74,26 @@ function loadOrders(user) {
                         </span>
                     </p>
 
-                    ${
-                        order.status === "Delivered"
-                        ? `
-                        <div class="key-box" id="key-${doc.id}">
-                            ${order.productKey}
-                        </div>
+                   ${order.status === "Delivered" ? `
 
-                        <button class="copy-btn"
-                            onclick="copyKey('key-${doc.id}')">
-                            Copy Key
-                        </button>
-                        `
-                        : ""
-                    }
+<div class="key-box" id="key-${doc.id}">
+${order.productKey}
+</div>
+
+<button class="copy-btn"
+onclick="copyKey('key-${doc.id}')">
+📋 Copy Key
+</button>
+
+<br><br>
+
+<a href="${order.downloadLink}"
+target="_blank"
+class="download-btn">
+⬇ Download
+</a>
+
+` : ""}
 
                 </div>
 
