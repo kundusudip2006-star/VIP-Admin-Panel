@@ -9,18 +9,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const BOT_TOKEN = "8545735365:AAEVzSmQQZiAdznz3FZfyrRXUS5ZPvcqLS4";
+const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHAT_ID = "8152666872";
 
 app.get("/", (req, res) => {
-  res.send("Telegram Notification Server Running");
+    res.send("Telegram Notification Server Running");
 });
 
 app.post("/new-order", async (req, res) => {
-  try {
-    const data = req.body;
+    try {
+        const data = req.body;
 
-    const text = `
+        const text = `
 🛒 NEW ORDER RECEIVED
 
 ━━━━━━━━━━━━━━
@@ -43,32 +43,35 @@ app.post("/new-order", async (req, res) => {
 ⏰ Time: ${new Date().toLocaleTimeString()}
 
 ━━━━━━━━━━━━━━
+
 VIP Admin Panel
 `;
 
-    await axios.post(
-      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-      {
-        chat_id: CHAT_ID,
-        text: text,
-      }
-    );
+        await axios.post(
+            `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+            {
+                chat_id: CHAT_ID,
+                text: text
+            }
+        );
 
-    res.json({
-      success: true,
-    });
-  } catch (err) {
-    console.error(err);
-    console.log(err.response?.data);
-    res.status(500).json({
-      success: false,
-      error: err.message,
-    });
-  }
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+        console.error(err);
+        console.log(err.response?.data);
+
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
