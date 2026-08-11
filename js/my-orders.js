@@ -87,12 +87,13 @@ onclick="copyKey('key-${doc.id}')">
 
 <br><br>
 
-<a href="${order.downloadLink}"
+<a href="https://t.me/+UMuZfXaJrXIwZWQ1"
 target="_blank"
+rel="noopener noreferrer"
 class="download-btn">
-⬇ Download
+    <i class="fa-brands fa-telegram"></i>
+    ⬇ Download
 </a>
-
 ` : ""}
 
                 </div>
