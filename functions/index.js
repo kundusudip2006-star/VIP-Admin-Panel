@@ -128,49 +128,43 @@ VIP Admin Panel
     }
 });
 
-// ==========================
+/// ==========================
 // Telegram Webhook
 // ==========================
 app.post("/telegram-webhook", async (req, res) => {
 
+    const update = req.body;
+
+    // Telegram-কে immediately 200 response
+    res.status(200).json({ ok: true });
+
+    // Button click না হলে কিছু করার নেই
+    if (!update.callback_query) {
+        return;
+    }
+
     try {
 
-        const update = req.body;
-
-        // Ignore messages that are not button clicks
-        if (!update.callback_query) {
-            return res.json({ ok: true });
-        }
-
         const callbackQuery = update.callback_query;
-
         const callbackData = callbackQuery.data || "";
 
-        const [action, orderId] = callbackData.split(":");
+        console.log("Telegram button clicked:", callbackData);
+
+        const parts = callbackData.split(":");
+        const action = parts[0];
+        const orderId = parts.slice(1).join(":");
 
         if (!orderId) {
-            return res.json({ ok: true });
+            console.log("Order ID missing");
+            return;
         }
-
-        // Remove Telegram loading animation
-       try {
-    await axios.post(
-        `${TELEGRAM_API}/answerCallbackQuery`,
-        {
-            callback_query_id: callbackQuery.id
-        }
-    );
-} catch (telegramError) {
-    console.log(
-        "Callback answer skipped:",
-        telegramError.response?.data || telegramError.message
-    );
-}
 
         // ==========================
         // APPROVE PAYMENT
         // ==========================
         if (action === "approve") {
+
+            console.log("Approving order:", orderId);
 
             const snapshot = await db
                 .collection("orders")
@@ -178,13 +172,15 @@ app.post("/telegram-webhook", async (req, res) => {
                 .limit(1)
                 .get();
 
+            console.log("Orders found:", snapshot.size);
+
             if (snapshot.empty) {
 
                 await sendTelegramMessage(
-                    `❌ Order not found\n\nOrder ID: ${orderId}`
+                    `❌ ORDER NOT FOUND\n\n🆔 ${orderId}`
                 );
 
-                return res.json({ ok: true });
+                return;
             }
 
             const doc = snapshot.docs[0];
@@ -196,16 +192,22 @@ app.post("/telegram-webhook", async (req, res) => {
                     admin.firestore.FieldValue.serverTimestamp()
             });
 
+            console.log("Payment approved:", orderId);
+
+            // Telegram notification
             await sendTelegramMessage(
                 `✅ PAYMENT APPROVED\n\n🆔 Order ID: ${orderId}\n\nPayment has been approved successfully.`
             );
 
+            return;
         }
 
         // ==========================
         // DELIVER KEY
         // ==========================
         if (action === "deliver") {
+
+            console.log("Deliver key clicked:", orderId);
 
             const snapshot = await db
                 .collection("orders")
@@ -216,34 +218,41 @@ app.post("/telegram-webhook", async (req, res) => {
             if (snapshot.empty) {
 
                 await sendTelegramMessage(
-                    `❌ Order not found\n\nOrder ID: ${orderId}`
+                    `❌ ORDER NOT FOUND\n\n🆔 ${orderId}`
                 );
 
-                return res.json({ ok: true });
+                return;
             }
 
-            const doc = snapshot.docs[0];
-            const order = doc.data();
+            const order = snapshot.docs[0].data();
 
-            // Key is not created automatically yet.
             await sendTelegramMessage(
-                `🔑 KEY DELIVERY\n\n🆔 Order ID: ${orderId}\n\n👤 Customer: ${order.customerName || "N/A"}\n📧 Email: ${order.customerEmail || "N/A"}\n\n⚠️ Key delivery system is ready, but a key must be entered first.`
+                `🔑 KEY DELIVERY\n\n🆔 Order ID: ${orderId}\n\n👤 Customer: ${order.customerName || "N/A"}\n📧 Email: ${order.customerEmail || "N/A"}\n\n⚠️ Please enter/deliver the key from the admin system.`
             );
-        }
 
-        res.json({
-            ok: true
-        });
+            return;
+        }
 
     } catch (err) {
 
-        console.error("Telegram webhook error:", err);
-        console.log(err.response?.data);
+        console.error("❌ Telegram webhook error:");
+        console.error(err);
+        console.error(err.response?.data);
 
-        res.status(500).json({
-            ok: false,
-            error: err.message
-        });
+        try {
+
+            await sendTelegramMessage(
+                `❌ SERVER ERROR\n\n${err.message}`
+            );
+
+        } catch (telegramError) {
+
+            console.error(
+                "Telegram error:",
+                telegramError.response?.data || telegramError.message
+            );
+
+        }
     }
 });
 
