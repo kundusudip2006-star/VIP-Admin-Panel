@@ -153,12 +153,19 @@ app.post("/telegram-webhook", async (req, res) => {
         }
 
         // Remove Telegram loading animation
-        await axios.post(
-            `${TELEGRAM_API}/answerCallbackQuery`,
-            {
-                callback_query_id: callbackQuery.id
-            }
-        );
+       try {
+    await axios.post(
+        `${TELEGRAM_API}/answerCallbackQuery`,
+        {
+            callback_query_id: callbackQuery.id
+        }
+    );
+} catch (telegramError) {
+    console.log(
+        "Callback answer skipped:",
+        telegramError.response?.data || telegramError.message
+    );
+}
 
         // ==========================
         // APPROVE PAYMENT
