@@ -101,7 +101,7 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         });
 
-        await fetch("https://vip-admin-panel-1.onrender.com/new-order", {
+       await fetch("https://vip-admin-panel-1.onrender.com/new-order", {
 
             method: "POST",
 
