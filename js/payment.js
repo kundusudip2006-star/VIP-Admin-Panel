@@ -101,7 +101,7 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         });
 
-        await fetch("https://vip-admin-panel.onrender.com/new-order", {
+        await fetch("https://vip-admin-panel-1.onrender.com/new-order", {
 
             method: "POST",
 
@@ -145,7 +145,6 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
     window.location.href = "my-order.html";
 });
 
-        window.location.href = "my-order.html";
 
     } catch (error) {
 
