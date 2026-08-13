@@ -10,15 +10,44 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const fs = require("fs");
+const path = require("path");
+
 // ==========================
 // Firebase Admin
 // ==========================
+
 if (!admin.apps.length) {
-    admin.initializeApp();
+
+    const secretDir = "/etc/secrets";
+
+    const files = fs.readdirSync(secretDir);
+
+    const serviceAccountFile = files.find(file =>
+        file.endsWith(".json")
+    );
+
+    if (!serviceAccountFile) {
+        throw new Error("Firebase Admin SDK JSON file not found in /etc/secrets");
+    }
+
+    const serviceAccountPath =
+        path.join(secretDir, serviceAccountFile);
+
+    const serviceAccount =
+        JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+    });
+
+    console.log(
+        "Firebase Admin initialized:",
+        serviceAccount.project_id
+    );
 }
 
 const db = admin.firestore();
-
 // ==========================
 // Telegram
 // ==========================
