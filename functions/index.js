@@ -4,14 +4,13 @@ const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const admin = require("firebase-admin");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-const fs = require("fs");
-const path = require("path");
 
 // ==========================
 // Firebase Admin
@@ -28,14 +27,18 @@ if (!admin.apps.length) {
     );
 
     if (!serviceAccountFile) {
-        throw new Error("Firebase Admin SDK JSON file not found in /etc/secrets");
+        throw new Error(
+            "Firebase Admin SDK JSON file not found in /etc/secrets"
+        );
     }
 
     const serviceAccountPath =
         path.join(secretDir, serviceAccountFile);
 
     const serviceAccount =
-        JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+        JSON.parse(
+            fs.readFileSync(serviceAccountPath, "utf8")
+        );
 
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
