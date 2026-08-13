@@ -12,28 +12,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ==========================
-// Firebase Admin
-// ==========================
+// ======================================================
+// FIREBASE ADMIN
+// ======================================================
+
+const secretDir = "/etc/secrets";
 
 if (!admin.apps.length) {
 
-    const secretDir = "/etc/secrets";
-
-    const files = fs.readdirSync(secretDir);
-
-    const serviceAccountFile = files.find(file =>
-        file.endsWith(".json")
-    );
-
-    if (!serviceAccountFile) {
-        throw new Error(
-            "Firebase Admin SDK JSON file not found in /etc/secrets"
-        );
-    }
+    const serviceAccountFile =
+        "vip-admin-panel-2fc30-firebase-adminsdk-fbsvc-09fab6b93e.json";
 
     const serviceAccountPath =
         path.join(secretDir, serviceAccountFile);
+
+    if (!fs.existsSync(serviceAccountPath)) {
+        throw new Error(
+            `Firebase Admin SDK JSON not found: ${serviceAccountPath}`
+        );
+    }
 
     const serviceAccount =
         JSON.parse(
@@ -51,26 +48,57 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-// ==========================
-// Telegram
-// ==========================
+
+// ======================================================
+// TELEGRAM
+// ======================================================
+
 const BOT_TOKEN = process.env.BOT_TOKEN;
+
+// তোমার Telegram admin chat ID
 const CHAT_ID = "8152666872";
+
+if (!BOT_TOKEN) {
+    throw new Error("BOT_TOKEN environment variable is missing");
+}
 
 const TELEGRAM_API =
     `https://api.telegram.org/bot${BOT_TOKEN}`;
 
-// ==========================
-// Home
-// ==========================
-app.get("/", (req, res) => {
-    res.send("Telegram Notification Server Running");
-});
+// ======================================================
+// TELEGRAM HELPER
+// ======================================================
 
-// ==========================
-// Send Telegram Message
-// ==========================
-async function sendTelegramMessage(text, replyMarkup = null) {
+async function telegramRequest(method, data) {
+
+    try {
+
+        const response = await axios.post(
+            `${TELEGRAM_API}/${method}`,
+            data
+        );
+
+        return response.data;
+
+    } catch (error) {
+
+        console.error(
+            `Telegram ${method} error:`,
+            error.response?.data || error.message
+        );
+
+        throw error;
+    }
+}
+
+// ======================================================
+// SEND TELEGRAM MESSAGE
+// ======================================================
+
+async function sendTelegramMessage(
+    text,
+    replyMarkup = null
+) {
 
     const payload = {
         chat_id: CHAT_ID,
@@ -81,27 +109,46 @@ async function sendTelegramMessage(text, replyMarkup = null) {
         payload.reply_markup = replyMarkup;
     }
 
-    return axios.post(
-        `${TELEGRAM_API}/sendMessage`,
+    return telegramRequest(
+        "sendMessage",
         payload
     );
 }
 
-// ==========================
+// ======================================================
+// HOME
+// ======================================================
+
+app.get("/", (req, res) => {
+
+    res.send(
+        "VIP Admin Panel Telegram Notification Server Running"
+    );
+});
+
+// ======================================================
 // NEW ORDER
-// ==========================
+// ======================================================
+
 app.post("/new-order", async (req, res) => {
 
     try {
 
         const data = req.body;
 
+        if (!data.orderId) {
+            return res.status(400).json({
+                success: false,
+                error: "Order ID is missing"
+            });
+        }
+
         const text = `
 🛒 NEW ORDER RECEIVED
 
-━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━
 
-🆔 Order ID: ${data.orderId || "N/A"}
+🆔 Order ID: ${data.orderId}
 
 👤 Customer: ${data.name || "N/A"}
 📧 Email: ${data.email || "N/A"}
@@ -112,187 +159,689 @@ app.post("/new-order", async (req, res) => {
 
 💰 Price: ₹${data.amount || "N/A"}
 
-💳 Payment: ${data.paymentMethod || "Google Pay"}
+💳 Payment:
+${data.paymentMethod || "Google Pay"}
 
 📌 Status: Pending
 
 📅 Date: ${new Date().toLocaleDateString()}
 ⏰ Time: ${new Date().toLocaleTimeString()}
 
-━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━
 
 VIP Admin Panel
 `;
 
-        // Telegram buttons
         const replyMarkup = {
+
             inline_keyboard: [
+
                 [
                     {
                         text: "✅ Approve Payment",
-                        callback_data: `approve:${data.orderId}`
+                        callback_data:
+                            `approve:${data.orderId}`
                     }
                 ],
+
                 [
                     {
                         text: "🔑 Deliver Key",
-                        callback_data: `deliver:${data.orderId}`
+                        callback_data:
+                            `deliver:${data.orderId}`
                     }
                 ]
+
             ]
+
         };
 
-        await sendTelegramMessage(text, replyMarkup);
+        await sendTelegramMessage(
+            text,
+            replyMarkup
+        );
+
+        console.log(
+            "Telegram order notification sent:",
+            data.orderId
+        );
 
         res.json({
             success: true
         });
 
-    } catch (err) {
+    } catch (error) {
 
-        console.error(err);
-        console.log(err.response?.data);
+        console.error(
+            "NEW ORDER ERROR:",
+            error.response?.data || error.message
+        );
 
         res.status(500).json({
             success: false,
-            error: err.message
+            error: error.message
         });
     }
 });
 
-/// ==========================
-// Telegram Webhook
-// ==========================
-app.post("/telegram-webhook", async (req, res) => {
+// ======================================================
+// FIND ORDER
+// ======================================================
 
-    const update = req.body;
+async function findOrder(orderId) {
 
-    // Telegram-কে immediately 200 response
-    res.status(200).json({ ok: true });
+    const snapshot = await db
+        .collection("orders")
+        .where(
+            "orderId",
+            "==",
+            orderId
+        )
+        .limit(1)
+        .get();
 
-    // Button click না হলে কিছু করার নেই
-    if (!update.callback_query) {
-        return;
+    if (snapshot.empty) {
+        return null;
     }
+
+    return snapshot.docs[0];
+}
+
+// ======================================================
+// TELEGRAM WEBHOOK
+// ======================================================
+
+app.post("/telegram-webhook", async (req, res) => {
 
     try {
 
-        const callbackQuery = update.callback_query;
-        const callbackData = callbackQuery.data || "";
+        const update = req.body;
 
-        console.log("Telegram button clicked:", callbackData);
+        // ==================================================
+        // CALLBACK BUTTON
+        // ==================================================
 
-        const parts = callbackData.split(":");
-        const action = parts[0];
-        const orderId = parts.slice(1).join(":");
+        if (update.callback_query) {
 
-        if (!orderId) {
-            console.log("Order ID missing");
-            return;
-        }
+            const callbackQuery =
+                update.callback_query;
 
-        // ==========================
-        // APPROVE PAYMENT
-        // ==========================
-        if (action === "approve") {
+            const callbackData =
+                callbackQuery.data || "";
 
-            console.log("Approving order:", orderId);
-
-            const snapshot = await db
-                .collection("orders")
-                .where("orderId", "==", orderId)
-                .limit(1)
-                .get();
-
-            console.log("Orders found:", snapshot.size);
-
-            if (snapshot.empty) {
-
-                await sendTelegramMessage(
-                    `❌ ORDER NOT FOUND\n\n🆔 ${orderId}`
+            const callbackChatId =
+                String(
+                    callbackQuery.message?.chat?.id || ""
                 );
 
-                return;
+            // Only admin can use buttons
+            if (callbackChatId !== CHAT_ID) {
+
+                await telegramRequest(
+                    "answerCallbackQuery",
+                    {
+                        callback_query_id:
+                            callbackQuery.id,
+                        text:
+                            "❌ Unauthorized",
+                        show_alert: true
+                    }
+                );
+
+                return res.json({
+                    ok: true
+                });
             }
 
-            const doc = snapshot.docs[0];
+            const parts =
+                callbackData.split(":");
 
-            await doc.ref.update({
-                paymentStatus: "Approved",
-                status: "Approved",
-                approvedAt:
-                    admin.firestore.FieldValue.serverTimestamp()
+            const action = parts[0];
+
+            const orderId =
+                parts.slice(1).join(":");
+
+            console.log(
+                "Telegram button clicked:",
+                action,
+                orderId
+            );
+
+            if (!orderId) {
+
+                await telegramRequest(
+                    "answerCallbackQuery",
+                    {
+                        callback_query_id:
+                            callbackQuery.id,
+                        text:
+                            "❌ Order ID missing",
+                        show_alert: true
+                    }
+                );
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            // Remove Telegram loading
+            // animation
+            await telegramRequest(
+                "answerCallbackQuery",
+                {
+                    callback_query_id:
+                        callbackQuery.id
+                }
+            );
+
+            // ==================================================
+            // APPROVE PAYMENT
+            // ==================================================
+
+            if (action === "approve") {
+
+                console.log(
+                    "Approving order:",
+                    orderId
+                );
+
+                const orderDoc =
+                    await findOrder(orderId);
+
+                if (!orderDoc) {
+
+                    await sendTelegramMessage(
+                        `❌ ORDER NOT FOUND
+
+🆔 Order ID:
+${orderId}
+
+The order could not be found in Firestore.`
+                    );
+
+                    return res.json({
+                        ok: true
+                    });
+                }
+
+                const order =
+                    orderDoc.data();
+
+                // Already approved
+                if (
+                    order.paymentStatus ===
+                        "Approved"
+                ) {
+
+                    await sendTelegramMessage(
+                        `ℹ️ PAYMENT ALREADY APPROVED
+
+🆔 Order ID:
+${orderId}`
+                    );
+
+                    return res.json({
+                        ok: true
+                    });
+                }
+
+                await orderDoc.ref.update({
+
+                    paymentStatus:
+                        "Approved",
+
+                    status:
+                        "Approved",
+
+                    approvedAt:
+                        admin.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+                await sendTelegramMessage(
+                    `✅ PAYMENT APPROVED
+
+🆔 Order ID:
+${orderId}
+
+👤 Customer:
+${order.customerName || "N/A"}
+
+💰 Amount:
+₹${order.price || "N/A"}
+
+Payment has been approved successfully.
+
+🔑 You can now press "Deliver Key".`
+                );
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            // ==================================================
+            // DELIVER KEY BUTTON
+            // ==================================================
+
+            if (action === "deliver") {
+
+                console.log(
+                    "Preparing key delivery:",
+                    orderId
+                );
+
+                const orderDoc =
+                    await findOrder(orderId);
+
+                if (!orderDoc) {
+
+                    await sendTelegramMessage(
+                        `❌ ORDER NOT FOUND
+
+🆔 Order ID:
+${orderId}`
+                    );
+
+                    return res.json({
+                        ok: true
+                    });
+                }
+
+                const order =
+                    orderDoc.data();
+
+                // Payment must be approved
+                if (
+                    order.paymentStatus !==
+                    "Approved"
+                ) {
+
+                    await sendTelegramMessage(
+                        `⚠️ PAYMENT NOT APPROVED
+
+🆔 Order ID:
+${orderId}
+
+Please approve the payment first.`
+                    );
+
+                    return res.json({
+                        ok: true
+                    });
+                }
+
+                // Key already delivered
+                if (
+                    order.productKey &&
+                    String(order.productKey)
+                        .trim() !== ""
+                ) {
+
+                    await sendTelegramMessage(
+                        `ℹ️ KEY ALREADY DELIVERED
+
+🆔 Order ID:
+${orderId}
+
+🔑 Key:
+${order.productKey}`
+                    );
+
+                    return res.json({
+                        ok: true
+                    });
+                }
+
+                // Save pending delivery request
+                await db
+                    .collection(
+                        "telegramPendingDeliveries"
+                    )
+                    .doc(CHAT_ID)
+                    .set({
+
+                        orderId:
+                            orderId,
+
+                        createdAt:
+                            admin.firestore
+                                .FieldValue
+                                .serverTimestamp()
+
+                    });
+
+                await sendTelegramMessage(
+                    `🔑 KEY DELIVERY
+
+🆔 Order ID:
+${orderId}
+
+👤 Customer:
+${order.customerName || "N/A"}
+
+📧 Email:
+${order.customerEmail || "N/A"}
+
+📦 Product:
+${order.productName || "N/A"}
+
+📋 Plan:
+${order.planName || "N/A"}
+
+━━━━━━━━━━━━━━━━━━
+
+✏️ Please send the product key now.
+
+Example:
+
+ABC-123-XYZ
+
+/cancel
+`
+                );
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            return res.json({
+                ok: true
+            });
+        }
+
+        // ==================================================
+        // TELEGRAM TEXT MESSAGE
+        // ==================================================
+
+        if (update.message) {
+
+            const message =
+                update.message;
+
+            const messageChatId =
+                String(
+                    message.chat?.id || ""
+                );
+
+            // Only admin can send keys
+            if (
+                messageChatId !== CHAT_ID
+            ) {
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            const text =
+                String(
+                    message.text || ""
+                ).trim();
+
+            // Ignore empty messages
+            if (!text) {
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            // ==================================================
+            // CANCEL DELIVERY
+            // ==================================================
+
+            if (
+                text.toLowerCase() ===
+                "/cancel"
+            ) {
+
+                await db
+                    .collection(
+                        "telegramPendingDeliveries"
+                    )
+                    .doc(CHAT_ID)
+                    .delete();
+
+                await sendTelegramMessage(
+                    `❌ KEY DELIVERY CANCELLED`
+                );
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            // ==================================================
+            // CHECK PENDING DELIVERY
+            // ==================================================
+
+            const pendingDoc =
+                await db
+                    .collection(
+                        "telegramPendingDeliveries"
+                    )
+                    .doc(CHAT_ID)
+                    .get();
+
+            if (!pendingDoc.exists) {
+
+                // Normal admin message
+                return res.json({
+                    ok: true
+                });
+            }
+
+            const pending =
+                pendingDoc.data();
+
+            const orderId =
+                pending.orderId;
+
+            console.log(
+                "Receiving key for order:",
+                orderId
+            );
+
+            // ==================================================
+            // FIND ORDER
+            // ==================================================
+
+            const orderDoc =
+                await findOrder(orderId);
+
+            if (!orderDoc) {
+
+                await sendTelegramMessage(
+                    `❌ ORDER NOT FOUND
+
+🆔 Order ID:
+${orderId}
+
+Key was NOT delivered.`
+                );
+
+                await pendingDoc.ref.delete();
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            const order =
+                orderDoc.data();
+
+            // ==================================================
+            // CHECK PAYMENT
+            // ==================================================
+
+            if (
+                order.paymentStatus !==
+                "Approved"
+            ) {
+
+                await sendTelegramMessage(
+                    `⚠️ PAYMENT IS NOT APPROVED
+
+🆔 Order ID:
+${orderId}
+
+Key was NOT delivered.`
+                );
+
+                await pendingDoc.ref.delete();
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            // ==================================================
+            // CHECK EXISTING KEY
+            // ==================================================
+
+            if (
+                order.productKey &&
+                String(order.productKey)
+                    .trim() !== ""
+            ) {
+
+                await sendTelegramMessage(
+                    `⚠️ KEY ALREADY EXISTS
+
+🆔 Order ID:
+${orderId}
+
+🔑 Existing Key:
+${order.productKey}`
+                );
+
+                await pendingDoc.ref.delete();
+
+                return res.json({
+                    ok: true
+                });
+            }
+
+            // ==================================================
+            // SAVE KEY TO FIRESTORE
+            // ==================================================
+
+            await orderDoc.ref.update({
+
+                productKey:
+                    text,
+
+                status:
+                    "Delivered",
+
+                deliveredAt:
+                    admin.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
             });
 
-            console.log("Payment approved:", orderId);
+            // Remove pending delivery
+            await pendingDoc.ref.delete();
 
-            // Telegram notification
-            await sendTelegramMessage(
-                `✅ PAYMENT APPROVED\n\n🆔 Order ID: ${orderId}\n\nPayment has been approved successfully.`
-            );
-
-            return;
-        }
-
-        // ==========================
-        // DELIVER KEY
-        // ==========================
-        if (action === "deliver") {
-
-            console.log("Deliver key clicked:", orderId);
-
-            const snapshot = await db
-                .collection("orders")
-                .where("orderId", "==", orderId)
-                .limit(1)
-                .get();
-
-            if (snapshot.empty) {
-
-                await sendTelegramMessage(
-                    `❌ ORDER NOT FOUND\n\n🆔 ${orderId}`
-                );
-
-                return;
-            }
-
-            const order = snapshot.docs[0].data();
+            // ==================================================
+            // SUCCESS MESSAGE
+            // ==================================================
 
             await sendTelegramMessage(
-                `🔑 KEY DELIVERY\n\n🆔 Order ID: ${orderId}\n\n👤 Customer: ${order.customerName || "N/A"}\n📧 Email: ${order.customerEmail || "N/A"}\n\n⚠️ Please enter/deliver the key from the admin system.`
+                `✅ KEY DELIVERED SUCCESSFULLY
+
+━━━━━━━━━━━━━━━━━━
+
+🆔 Order ID:
+${orderId}
+
+👤 Customer:
+${order.customerName || "N/A"}
+
+📧 Email:
+${order.customerEmail || "N/A"}
+
+📦 Product:
+${order.productName || "N/A"}
+
+📋 Plan:
+${order.planName || "N/A"}
+
+🔑 Product Key:
+${text}
+
+📌 Status:
+Delivered
+
+━━━━━━━━━━━━━━━━━━
+
+Customer can now see the key in My Orders.`
             );
 
-            return;
+            return res.json({
+                ok: true
+            });
         }
 
-    } catch (err) {
+        // ==================================================
+        // IGNORE OTHER TELEGRAM UPDATES
+        // ==================================================
 
-        console.error("❌ Telegram webhook error:");
-        console.error(err);
-        console.error(err.response?.data);
+        return res.json({
+            ok: true
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Telegram webhook error:"
+        );
+
+        console.error(
+            error.response?.data ||
+            error.stack ||
+            error.message
+        );
 
         try {
 
             await sendTelegramMessage(
-                `❌ SERVER ERROR\n\n${err.message}`
+                `❌ SERVER ERROR
+
+${error.message}`
             );
 
         } catch (telegramError) {
 
             console.error(
-                "Telegram error:",
-                telegramError.response?.data || telegramError.message
+                "Could not send Telegram error:",
+                telegramError.message
             );
-
         }
+
+        res.status(500).json({
+            ok: false,
+            error: error.message
+        });
     }
 });
 
-// ==========================
-// Start Server
-// ==========================
-const PORT = process.env.PORT || 3000;
+// ======================================================
+// START SERVER
+// ======================================================
+
+const PORT =
+    process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+
+    console.log(
+        `Server running on port ${PORT}`
+    );
 });
