@@ -8,11 +8,15 @@ let selectedProduct = null;
 firebase.auth().onAuthStateChanged((user) => {
 
     if (!user) {
-        window.location.href = "login.html";
+        window.location.replace("login.html");
         return;
     }
 
     currentUser = user;
+
+    // Auth check complete — show page
+    document.documentElement.classList.remove("auth-loading");
+
     loadProducts();
 
 });
