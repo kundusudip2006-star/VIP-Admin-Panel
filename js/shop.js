@@ -109,38 +109,59 @@ function loadProducts() {
 
 async function openBuy(productId, planIndex) {
 
-    const doc = await db.collection("products").doc(productId).get();
+    try {
 
-    if (!doc.exists) return;
+        const doc = await db
+            .collection("products")
+            .doc(productId)
+            .get();
 
-    const product = doc.data();
+        if (!doc.exists) {
+            alert("Product not found");
+            return;
+        }
 
-    const plan = product.plans[planIndex];
+        const product = doc.data();
 
-    if (plan.stock <= 0) {
-        alert("Out of Stock");
-        return;
+        if (!product.plans || !product.plans[planIndex]) {
+            alert("Plan not found");
+            return;
+        }
+
+        const plan = product.plans[planIndex];
+
+        if (Number(plan.stock) <= 0) {
+            alert("Out of Stock");
+            return;
+        }
+
+        selectedProduct = {
+            id: productId,
+            productName: product.name,
+            planName: plan.name,
+            price: plan.price,
+            stock: plan.stock,
+            planIndex: planIndex
+        };
+
+        document.getElementById("buyProductName").innerText =
+            product.name + " (" + plan.name + ")";
+
+        document.getElementById("buyProductPrice").innerText =
+            plan.price;
+
+        document.getElementById("loginUser").innerHTML =
+            "<b>Logged in :</b> " + currentUser.email;
+
+        buyModal.style.display = "flex";
+
+    } catch (error) {
+
+        console.error("Buy Error:", error);
+
+        alert("Something went wrong while opening purchase.");
+
     }
-
-    selectedProduct = {
-        id: productId,
-        productName: product.name,
-        planName: plan.name,
-        price: plan.price,
-        stock: plan.stock,
-        planIndex: planIndex
-    };
-
-    document.getElementById("buyProductName").innerText =
-        product.name + " (" + plan.name + ")";
-
-    document.getElementById("buyProductPrice").innerText =
-        plan.price;
-
-    document.getElementById("loginUser").innerHTML =
-        "<b>Logged in :</b> " + currentUser.email;
-
-    buyModal.style.display = "flex";
 }
 
 // ==========================
