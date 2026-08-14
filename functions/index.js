@@ -20,17 +20,33 @@ const secretDir = "/etc/secrets";
 
 if (!admin.apps.length) {
 
-    const serviceAccountFile =
-        "vip-admin-panel-2fc30-firebase-adminsdk-fbsvc-09fab6b93e.json";
+    if (!fs.existsSync(secretDir)) {
+        throw new Error(
+            `Secrets directory not found: ${secretDir}`
+        );
+    }
+
+    const files = fs.readdirSync(secretDir);
+
+    console.log("Files found in /etc/secrets:", files);
+
+    const serviceAccountFile = files.find(file =>
+        file.toLowerCase().endsWith(".json")
+    );
+
+    if (!serviceAccountFile) {
+        throw new Error(
+            "Firebase Admin SDK JSON file not found in /etc/secrets"
+        );
+    }
 
     const serviceAccountPath =
         path.join(secretDir, serviceAccountFile);
 
-    if (!fs.existsSync(serviceAccountPath)) {
-        throw new Error(
-            `Firebase Admin SDK JSON not found: ${serviceAccountPath}`
-        );
-    }
+    console.log(
+        "Using Firebase Admin SDK file:",
+        serviceAccountPath
+    );
 
     const serviceAccount =
         JSON.parse(
