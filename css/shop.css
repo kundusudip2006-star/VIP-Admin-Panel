@@ -854,3 +854,75 @@ button {
             translateY(0);
     }
 }
+/* ================================
+   MOBILE SHOP FINAL FIX
+================================ */
+
+@media (max-width: 700px) {
+
+    /* My Orders button */
+    .myorder-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-width: 105px;
+        padding: 11px 14px;
+    }
+
+    /* My Orders text visible */
+    .myorder-btn span {
+        display: inline !important;
+    }
+
+    /* Price / Plan section */
+    .product-card {
+        text-align: center;
+    }
+
+    .product-card h3 {
+        text-align: center;
+    }
+
+    .product-card p {
+        text-align: center;
+    }
+
+    /* Plan price text */
+    .product-card .plan,
+    .product-card .price,
+    .product-card .duration {
+        text-align: center;
+    }
+
+    /* Buy buttons */
+    .product-card button {
+        display: block;
+        width: 100%;
+        margin: 12px auto 0;
+    }
+}
+@media (max-width: 700px) {
+
+    .plan {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 4px;
+        margin: 14px 0;
+    }
+
+    .plan strong {
+        font-size: 18px;
+    }
+
+    .plan span {
+        font-size: 17px;
+        color: #e2e8f0;
+    }
+
+    .plan button {
+        margin-top: 10px;
+    }
+}
