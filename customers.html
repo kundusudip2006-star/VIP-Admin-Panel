@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customers</title>
-<link rel="stylesheet" href="css/customers.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customers</title>
+
+    <link rel="stylesheet" href="css/customers.css">
 </head>
+
 <body>
 
 <h2>Customers</h2>
 
-<input type="text" id="searchCustomer" placeholder="Search Customer...">
+<input
+    type="text"
+    id="searchCustomer"
+    placeholder="Search Customer..."
+>
 
 <table border="1" width="100%">
+
     <thead>
         <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Wallet Balance</th>
             <th>Total Orders</th>
             <th>Total Spending</th>
             <th>Action</th>
@@ -24,53 +34,141 @@
     </thead>
 
     <tbody id="customerTable">
+
         <tr>
-            <td colspan="5" align="center">Loading...</td>
+            <td colspan="6" align="center">
+                Loading...
+            </td>
         </tr>
+
     </tbody>
+
 </table>
 
+
+<!-- ==========================
+     CUSTOMER MODAL
+========================== -->
+
+<div id="customerModal" class="modal" style="display:none;">
+
+    <div class="modal-content">
+
+        <span
+            id="closeCustomerModal"
+            style="cursor:pointer;font-size:24px;"
+        >
+            &times;
+        </span>
+
+        <h2>Customer Profile</h2>
+
+        <p>
+            <b>Name:</b>
+            <span id="cName"></span>
+        </p>
+
+        <p>
+            <b>Email:</b>
+            <span id="cEmail"></span>
+        </p>
+
+        <p>
+            <b>Phone:</b>
+            <span id="cPhone"></span>
+        </p>
+
+        <p>
+            <b>Wallet Balance:</b>
+            ₹<span id="cBalance">0.00</span>
+        </p>
+
+        <p>
+            <b>Total Orders:</b>
+            <span id="cOrders">0</span>
+        </p>
+
+        <p>
+            <b>Total Spending:</b>
+            ₹<span id="cSpending">0</span>
+        </p>
+
+
+        <!-- ==========================
+             ADD BALANCE
+        ========================== -->
+
+        <hr>
+
+        <h3>Add Wallet Balance</h3>
+
+        <input
+            type="number"
+            id="adminBalanceAmount"
+            placeholder="Enter amount"
+            min="1"
+            step="1"
+        >
+
+        <button
+            id="addBalanceAdminBtn"
+        >
+            💰 Add Balance
+        </button>
+
+
+        <hr>
+
+
+        <!-- ==========================
+             ORDER HISTORY
+        ========================== -->
+
+        <h3>Order History</h3>
+
+        <table width="100%" border="1">
+
+            <thead>
+
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="customerOrders">
+
+                <tr>
+                    <td colspan="3" align="center">
+                        No Orders
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================
+     FIREBASE
+========================== -->
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase.js"></script>
+
 <script src="js/customers.js"></script>
 
-<div id="customerModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="closeCustomerModal" style="cursor:pointer;font-size:24px;">&times;</span>
-
-    <h2>Customer Profile</h2>
-
-    <p><b>Name:</b> <span id="cName"></span></p>
-    <p><b>Email:</b> <span id="cEmail"></span></p>
-    <p><b>Phone:</b> <span id="cPhone"></span></p>
-    <p><b>Total Orders:</b> <span id="cOrders">0</span></p>
-    <p><b>Total Spending:</b> ₹<span id="cSpending">0</span></p>
-
-    <hr>
-
-    <h3>Order History</h3>
-
-    <table width="100%" border="1">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Price</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody id="customerOrders">
-        <tr>
-          <td colspan="3" align="center">No Orders</td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-</div>
-
 </body>
+
 </html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Wallet - VIP PANEL STORE</title>
+
+<link rel="stylesheet" href="css/wallet.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+<header class="wallet-header">
+
+    <button onclick="location.href='shop.html'" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <h2>My Wallet</h2>
+
+</header>
+
+
+<main class="wallet-container">
+
+    <!-- Balance -->
+
+    <section class="balance-card">
+
+        <div class="balance-icon">
+            <i class="fa-solid fa-wallet"></i>
+        </div>
+
+        <p>Available Balance</p>
+
+        <h1>
+            ₹<span id="walletBalance">0.00</span>
+        </h1>
+
+        <button id="addBalanceBtn" class="add-btn">
+            <i class="fa-solid fa-plus"></i>
+            Add Balance
+        </button>
+
+    </section>
+
+
+    <!-- Transactions -->
+
+    <section class="transaction-section">
+
+        <h2>Transaction History</h2>
+
+        <div id="transactionList">
+            <p class="loading">Loading...</p>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ==========================
+     ADD BALANCE MODAL
+========================== -->
+
+<div id="addBalanceModal" class="modal">
+
+    <div class="modal-box">
+
+        <button id="closeModal" class="close-btn">
+            &times;
+        </button>
+
+        <h2>
+            <i class="fa-solid fa-wallet"></i>
+            Add Balance
+        </h2>
+
+        <p class="modal-description">
+            Enter your amount and mobile number
+        </p>
+
+
+        <!-- Amount -->
+
+        <label for="balanceAmount">
+            Amount
+        </label>
+
+        <div class="amount-input">
+
+            <span>₹</span>
+
+            <input
+                type="number"
+                id="balanceAmount"
+                placeholder="Enter amount"
+                min="1"
+                max="10000"
+                step="1"
+                inputmode="numeric"
+            >
+
+        </div>
+
+
+        <!-- Mobile -->
+
+        <label for="balanceMobile">
+            Mobile Number
+        </label>
+
+        <div class="mobile-input">
+
+            <i class="fa-solid fa-phone"></i>
+
+            <input
+                type="tel"
+                id="balanceMobile"
+                placeholder="Enter 10 digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+            >
+
+        </div>
+
+
+        <!-- Continue -->
+
+        <button id="continuePayment" class="continue-btn">
+
+            <i class="fa-solid fa-qrcode"></i>
+
+            Continue to Payment
+
+        </button>
+
+
+        <p class="payment-note">
+            You will receive a UPI QR code on the next step.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+
+<script src="js/firebase.js"></script>
+
+<script src="js/wallet.js"></script>
+
+</body>
+</html>

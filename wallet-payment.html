@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Wallet Payment - VIP PANEL STORE</title>
+
+<link rel="stylesheet" href="css/wallet-payment.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="payment-container">
+
+    <div class="payment-card">
+
+        <button
+            class="back-btn"
+            onclick="history.back()">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </button>
+
+
+        <div class="payment-icon">
+
+            <i class="fa-solid fa-wallet"></i>
+
+        </div>
+
+
+        <h1>Add Balance</h1>
+
+        <p class="subtitle">
+            Complete your UPI payment
+        </p>
+
+
+        <!-- Amount -->
+
+        <div class="amount-box">
+
+            <span>₹</span>
+
+            <strong id="paymentAmount">
+                ₹0.00
+            </strong>
+
+        </div>
+
+
+        <!-- Mobile -->
+
+        <div class="info-box">
+
+            <span>
+                <i class="fa-solid fa-phone"></i>
+                Mobile Number
+            </span>
+
+            <b id="paymentMobile">
+                -
+            </b>
+
+        </div>
+
+
+        <!-- QR -->
+
+        <div class="qr-section">
+
+            <p>
+                Scan QR using any UPI app
+            </p>
+
+            <div class="qr-wrapper">
+
+                <img
+                    id="qrImage"
+                    class="qr-image"
+                    alt="UPI QR Code">
+
+            </div>
+
+        </div>
+
+
+        <!-- Google Pay -->
+
+        <a
+            id="payNow"
+            class="pay-btn">
+
+            <i class="fa-brands fa-google-pay"></i>
+
+            Pay with Google Pay
+
+        </a>
+
+
+        <!-- UPI -->
+
+        <div class="upi-box">
+
+            <small>
+                UPI ID
+            </small>
+
+            <div>
+
+                <b id="upiId">
+                    kundusudip2006@oksbi
+                </b>
+
+                <button id="copyUpi">
+
+                    <i class="fa-solid fa-copy"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Paid -->
+
+        <button
+            id="paidBtn"
+            class="paid-btn">
+
+            <i class="fa-solid fa-check"></i>
+
+            I've Paid
+
+        </button>
+
+
+        <p class="warning">
+
+            After making the payment, press
+            <b>I've Paid</b>.
+            Your recharge will be manually verified.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+
+<script src="js/firebase.js"></script>
+
+<script src="js/wallet-payment.js"></script>
+
+</body>
+
+</html>

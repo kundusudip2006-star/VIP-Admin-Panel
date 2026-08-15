@@ -1,11 +1,14 @@
 // ==========================
-// Authentication Check
+// AUTHENTICATION
 // ==========================
 
 firebase.auth().onAuthStateChanged((user) => {
 
     if (!user) {
-        window.location.href = "login.html";
+
+        window.location.href =
+            "login.html";
+
         return;
     }
 
@@ -14,108 +17,294 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 // ==========================
-// Load My Orders
+// ELEMENT
 // ==========================
 
-const orderList = document.getElementById("orderList");
+const orderList =
+    document.getElementById("orderList");
+
+// ==========================
+// LOAD ORDERS REAL-TIME
+// ==========================
 
 function loadOrders(user) {
 
     db.collection("orders")
         .where("uid", "==", user.uid)
         .orderBy("createdAt", "desc")
-        .onSnapshot((snapshot) => {
+        .onSnapshot(
 
-            orderList.innerHTML = "";
+            (snapshot) => {
 
-            if (snapshot.empty) {
+                orderList.innerHTML = "";
 
-                orderList.innerHTML = `
-                    <h2 style="text-align:center;">
-                        No Orders Found
-                    </h2>
-                `;
+                if (snapshot.empty) {
 
-                return;
-            }
+                    orderList.innerHTML = `
+                        <h2 style="text-align:center;">
+                            No Orders Found
+                        </h2>
+                    `;
 
-            snapshot.forEach((doc) => {
-
-                const order = doc.data();
-
-                let statusColor = "pending";
-
-                if (order.status === "Delivered") {
-                    statusColor = "delivered";
+                    return;
                 }
 
-                orderList.innerHTML += `
+                snapshot.forEach((doc) => {
 
-                <div class="order-card">
+                    const order =
+                        doc.data();
 
-                    <h3>${order.productName}</h3>
+                    // ==========================
+                    // STATUS
+                    // ==========================
 
-                    <p><b>Order ID :</b> ${order.orderId}</p>
+                    let statusClass =
+                        "pending";
 
-                    <p><b>Date :</b> ${order.orderDate}</p>
+                    let statusText =
+                        "🔑 Key Pending";
 
-                    <p><b>Time :</b> ${order.orderTime}</p>
+                    if (
+                        order.status ===
+                        "Delivered" &&
+                        order.productKey &&
+                        String(order.productKey)
+                            .trim() !== ""
+                    ) {
 
-                    <p><b>Plan :</b> ${order.planName || "N/A"}</p>
+                        statusClass =
+                            "delivered";
 
-                    <p><b>Price :</b> ₹${order.price}</p>
+                        statusText =
+                            "✅ Key Delivered";
 
-                    <p><b>Payment :</b> ${order.paymentStatus}</p>
+                    }
 
-                    <p>
-                        <b>Status :</b>
-                        <span class="${statusColor}">
-                            ${order.status}
-                        </span>
+                    // ==========================
+                    // DATE
+                    // ==========================
+
+                    let dateText = "-";
+
+                    if (order.createdAt) {
+
+                        try {
+
+                            dateText =
+                                order.createdAt
+                                    .toDate()
+                                    .toLocaleString();
+
+                        } catch (e) {
+
+                            dateText = "-";
+
+                        }
+
+                    }
+
+                    // ==========================
+                    // KEY SECTION
+                    // ==========================
+
+                    let keyHTML = "";
+
+                    if (
+                        order.status ===
+                        "Delivered" &&
+                        order.productKey &&
+                        String(order.productKey)
+                            .trim() !== ""
+                    ) {
+
+                        keyHTML = `
+
+                            <div
+                                class="key-box"
+                                id="key-${doc.id}"
+                            >
+                                ${escapeHTML(
+                                    order.productKey
+                                )}
+                            </div>
+
+                            <button
+                                class="copy-btn"
+                                onclick="copyKey('key-${doc.id}')"
+                            >
+                                📋 Copy Key
+                            </button>
+
+                            <br><br>
+
+                            <a
+                                href="https://t.me/+UMuZfXaJrXIwZWQ1"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="download-btn"
+                            >
+                                <i class="fa-brands fa-telegram"></i>
+                                ⬇ Download
+                            </a>
+
+                        `;
+
+                    } else {
+
+                        keyHTML = `
+
+                            <div class="key-pending">
+
+                                🔑 Key Pending
+
+                                <small>
+                                    Please wait for key delivery.
+                                </small>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                    // ==========================
+                    // ORDER CARD
+                    // ==========================
+
+                    orderList.innerHTML += `
+
+                        <div class="order-card">
+
+                            <h3>
+                                ${escapeHTML(
+                                    order.productName ||
+                                    "Product"
+                                )}
+                            </h3>
+
+                            <p>
+                                <b>Order ID :</b>
+                                ${escapeHTML(
+                                    order.orderId ||
+                                    doc.id
+                                )}
+                            </p>
+
+                            <p>
+                                <b>Date :</b>
+                                ${dateText}
+                            </p>
+
+                            <p>
+                                <b>Plan :</b>
+                                ${escapeHTML(
+                                    order.planName ||
+                                    "N/A"
+                                )}
+                            </p>
+
+                            <p>
+                                <b>Price :</b>
+                                ₹${Number(
+                                    order.price || 0
+                                ).toFixed(2)}
+                            </p>
+
+                            <p>
+                                <b>Payment :</b>
+                                ${escapeHTML(
+                                    order.paymentStatus ||
+                                    "Pending"
+                                )}
+                            </p>
+
+                            <p>
+
+                                <b>Status :</b>
+
+                                <span
+                                    class="${statusClass}"
+                                >
+                                    ${statusText}
+                                </span>
+
+                            </p>
+
+                            ${keyHTML}
+
+                        </div>
+
+                    `;
+
+                });
+
+            },
+
+            (error) => {
+
+                console.error(
+                    "My Orders Error:",
+                    error
+                );
+
+                orderList.innerHTML = `
+                    <p style="text-align:center;">
+                        Unable to load orders.
                     </p>
-
-                   ${order.status === "Delivered" ? `
-
-<div class="key-box" id="key-${doc.id}">
-${order.productKey}
-</div>
-
-<button class="copy-btn"
-onclick="copyKey('key-${doc.id}')">
-📋 Copy Key
-</button>
-
-<br><br>
-
-<a href="https://t.me/+UMuZfXaJrXIwZWQ1"
-target="_blank"
-rel="noopener noreferrer"
-class="download-btn">
-    <i class="fa-brands fa-telegram"></i>
-    ⬇ Download
-</a>
-` : ""}
-
-                </div>
-
                 `;
 
-            });
+            }
+
+        );
+
+}
+
+// ==========================
+// COPY KEY
+// ==========================
+
+function copyKey(id) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) {
+        return;
+    }
+
+    const key =
+        element.innerText.trim();
+
+    navigator.clipboard
+        .writeText(key)
+        .then(() => {
+
+            alert(
+                "✅ Product Key Copied!"
+            );
+
+        })
+        .catch(() => {
+
+            alert(
+                "❌ Unable to copy key."
+            );
 
         });
 
 }
 
 // ==========================
-// Copy Key
+// HTML ESCAPE
 // ==========================
 
-function copyKey(id) {
+function escapeHTML(value) {
 
-    const key = document.getElementById(id).innerText;
-
-    navigator.clipboard.writeText(key);
-
-    alert("Product Key Copied!");
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
