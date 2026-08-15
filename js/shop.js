@@ -1080,13 +1080,16 @@ function showOrderSuccess(
     // DONE BUTTON
     // ==========================
 
-    document.getElementById(
-        "successOkBtn"
-    ).onclick = () => {
+  document.getElementById(
+    "successOkBtn"
+).onclick = () => {
 
-        popup.remove();
+    popup.remove();
 
-    };
+    window.location.href =
+        "my-order.html";
+
+};
 
 
     // ==========================
