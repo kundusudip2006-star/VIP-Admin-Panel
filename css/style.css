@@ -1,0 +1,159 @@
+/* ===== VIP COOL ALERT ===== */
+
+.vip-alert-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 8, 20, 0.42);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s ease;
+    padding: 20px;
+}
+
+.vip-alert-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.vip-alert {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+
+    padding: 25px 22px 20px;
+
+    background: rgba(10, 20, 35, 0.96);
+    border: 1px solid rgba(0, 200, 255, .22);
+    border-radius: 22px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45),
+        0 0 35px rgba(0,190,255,.10);
+
+    transform: translateY(18px) scale(.94);
+    transition: .28s cubic-bezier(.2,.8,.2,1);
+}
+
+.vip-alert-overlay.active .vip-alert {
+    transform: translateY(0) scale(1);
+}
+
+/* Icon */
+
+.vip-alert-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+    margin-bottom: 15px;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.vip-alert.success .vip-alert-icon {
+    color: #00e6a0;
+    background: rgba(0,230,160,.10);
+    border: 1px solid rgba(0,230,160,.20);
+    box-shadow: 0 0 25px rgba(0,230,160,.12);
+}
+
+.vip-alert.error .vip-alert-icon {
+    color: #ff5264;
+    background: rgba(255,82,100,.10);
+    border: 1px solid rgba(255,82,100,.20);
+    box-shadow: 0 0 25px rgba(255,82,100,.10);
+}
+
+.vip-alert.warning .vip-alert-icon {
+    color: #ffc34d;
+    background: rgba(255,195,77,.10);
+    border: 1px solid rgba(255,195,77,.20);
+}
+
+.vip-alert.info .vip-alert-icon {
+    color: #16cfff;
+    background: rgba(22,207,255,.10);
+    border: 1px solid rgba(22,207,255,.20);
+}
+
+/* Title */
+
+.vip-alert-title {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* Message */
+
+.vip-alert-message {
+    color: #9caabd;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+/* Close */
+
+.vip-alert-close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+
+    width: 32px;
+    height: 32px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.05);
+    color: #8190a3;
+
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Button */
+
+.vip-alert-button {
+    width: 100%;
+    margin-top: 20px;
+
+    padding: 12px;
+
+    border: 0;
+    border-radius: 13px;
+
+    background: linear-gradient(
+        135deg,
+        #087cff,
+        #08cfff
+    );
+
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 22px rgba(0,150,255,.18);
+}
+
+.vip-alert-button:active {
+    transform: scale(.97);
+}
