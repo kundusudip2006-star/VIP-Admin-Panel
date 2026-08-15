@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>VIP PANEL STORE</title>
@@ -10,134 +12,354 @@
 <link rel="stylesheet" href="css/shop.css">
 
 <style>
-    html.auth-loading body {
-        visibility: hidden;
+html.auth-loading body {
+    visibility: hidden;
+}
+
+html.auth-ready body {
+    visibility: visible;
+}
+
+/* =====================================
+   HEADER WALLET BALANCE
+===================================== */
+
+.wallet-balance-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    min-width: 105px;
+    padding: 6px 10px;
+
+    border-radius: 14px;
+
+    background: rgba(8, 24, 48, 0.95);
+
+    border: 1px solid rgba(0, 200, 255, 0.30);
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.wallet-balance-box:active {
+    transform: scale(0.96);
+}
+
+.wallet-balance-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #0072ff,
+        #00c6ff
+    );
+
+    font-size: 16px;
+}
+
+.wallet-balance-info {
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1.1;
+}
+
+.wallet-balance-label {
+    font-size: 10px;
+    color: #aebbd0;
+}
+
+.wallet-balance-value {
+    margin-top: 4px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    color: #00e676;
+
+    white-space: nowrap;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+
+    .wallet-balance-box {
+        min-width: 94px;
+        padding: 5px 8px;
+        gap: 6px;
     }
+
+    .wallet-balance-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 15px;
+    }
+
+    .wallet-balance-value {
+        font-size: 14px;
+    }
+
+}
 </style>
 
+
 <script>
-    document.documentElement.classList.add("auth-loading");
+document.documentElement.classList.add("auth-loading");
 </script>
+
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
+
 <body>
+
 
 <div id="particles-js"></div>
 
-<!-- Header -->
+
+<!-- =====================================
+     HEADER
+===================================== -->
 
 <header class="top-header">
 
-<div class="left-header">
 
-<button id="myOrdersBtn" class="myorder-btn">
-<i class="fa-solid fa-box"></i>
-<span>My Orders</span>
-</button>
+    <div class="left-header">
 
-</div>
+        <button
+            id="myOrdersBtn"
+            class="myorder-btn">
 
-<div class="right-header">
+            <i class="fa-solid fa-box"></i>
 
-    <button
-    class="wallet-btn"
-    onclick="window.location.href='wallet.html'">
-    <i class="fa-solid fa-wallet"></i>
-    <span>Wallet</span>
-</button>
+            <span>My Orders</span>
 
-<button class="support-btn"
-onclick="window.location.href='contact.html'">
-<i class="fa-brands fa-whatsapp"></i>
-</button>
+        </button>
 
-<button id="logoutBtn" class="logout-btn">
-<i class="fa-solid fa-right-from-bracket"></i>
-</button>
+    </div>
 
-</div>
+
+    <div class="right-header">
+
+
+        <!-- WALLET + BALANCE -->
+
+        <button
+            class="wallet-balance-box"
+            onclick="window.location.href='wallet.html'">
+
+            <div class="wallet-balance-icon">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+
+            <div class="wallet-balance-info">
+
+                <span class="wallet-balance-label">
+                    Wallet
+                </span>
+
+                <strong class="wallet-balance-value">
+
+                    ₹<span id="shopWalletBalance">
+                        0.00
+                    </span>
+
+                </strong>
+
+            </div>
+
+        </button>
+
+
+        <!-- SUPPORT -->
+
+        <button
+            class="support-btn"
+            onclick="window.location.href='contact.html'">
+
+            <i class="fa-brands fa-whatsapp"></i>
+
+        </button>
+
+
+        <!-- LOGOUT -->
+
+        <button
+            id="logoutBtn"
+            class="logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+        </button>
+
+
+    </div>
 
 </header>
 
-<!-- Hero Banner -->
+
+
+<!-- =====================================
+     HERO BANNER
+===================================== -->
 
 <section class="hero-banner">
 
-<div class="hero-content">
+    <div class="hero-content">
 
-<h1>🔥 VIP PANEL STORE</h1>
+        <h1>🔥 VIP PANEL STORE</h1>
 
-<p>
-Premium Accounts • Instant Delivery • Trusted Service
-</p>
+        <p>
+            Premium Accounts • Instant Delivery • Trusted Service
+        </p>
 
-<button
-onclick="window.scrollTo({top:700,behavior:'smooth'})">
-🛒 Shop Now
-</button>
+        <button
+            onclick="window.scrollTo({
+                top:700,
+                behavior:'smooth'
+            })">
 
-</div>
+            🛒 Shop Now
+
+        </button>
+
+    </div>
 
 </section>
 
-<!-- Products -->
+
+
+<!-- =====================================
+     PRODUCTS
+===================================== -->
 
 <div class="container">
 
-<h2>Available Products</h2>
+    <h2>Available Products</h2>
 
-<div id="productList" class="products"></div>
-
-</div>
-
-<!-- Buy Modal -->
-
-<div id="buyModal" class="modal">
-
-<div class="modal-content">
-
-<span class="close" id="closeModal">&times;</span>
-
-<h2>Confirm Purchase</h2>
-
-<p>
-Product :
-<b id="buyProductName"></b>
-</p>
-
-<p style="margin-top:15px;">
-Total Price :
-<b style="color:#00c853;font-size:22px;">
-₹<span id="buyProductPrice">0</span>
-</b>
-</p>
-
-<p id="loginUser"></p>
-
-<button id="confirmBuyBtn">
-<i class="fa-solid fa-credit-card"></i>
-Proceed To Payment
-</button>
+    <div
+        id="productList"
+        class="products">
+    </div>
 
 </div>
 
+
+
+<!-- =====================================
+     BUY MODAL
+===================================== -->
+
+<div
+    id="buyModal"
+    class="modal">
+
+    <div class="modal-content">
+
+
+        <span
+            class="close"
+            id="closeModal">
+
+            &times;
+
+        </span>
+
+
+        <h2>
+            Confirm Purchase
+        </h2>
+
+
+        <p>
+
+            Product :
+
+            <b id="buyProductName"></b>
+
+        </p>
+
+
+        <p style="margin-top:15px;">
+
+            Total Price :
+
+            <b
+                style="
+                color:#00c853;
+                font-size:22px;
+                ">
+
+                ₹<span id="buyProductPrice">
+                    0
+                </span>
+
+            </b>
+
+        </p>
+
+
+        <p id="loginUser"></p>
+
+
+        <button
+            id="confirmBuyBtn">
+
+            <i class="fa-solid fa-credit-card"></i>
+
+            Proceed To Payment
+
+        </button>
+
+
+    </div>
+
 </div>
-<!-- Firebase -->
+
+
+
+<!-- =====================================
+     FIREBASE
+===================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
 
 <script src="js/firebase.js"></script>
 
 <script src="js/shop.js"></script>
 
+
+<!-- PARTICLES -->
+
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
 <script src="js/particles.js"></script>
 
+
 </body>
+
 </html>

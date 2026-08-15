@@ -1038,3 +1038,398 @@ button {
     }
 
 }
+/* =====================================================
+   VIP RED + GREEN THEME
+===================================================== */
+
+:root {
+    --bg: #050805;
+    --panel: rgba(12, 22, 14, 0.92);
+    --panel-strong: rgba(8, 16, 10, 0.96);
+
+    --text: #ffffff;
+    --muted: #9cae9f;
+
+    --green: #00e676;
+    --green-dark: #00a844;
+
+    --red: #ff1744;
+    --red-dark: #d50032;
+
+    --border: rgba(0, 230, 118, 0.18);
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(0, 230, 118, 0.13),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(255, 23, 68, 0.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0, 230, 118, 0.07),
+            transparent 35%
+        ),
+        #050805;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.top-header {
+    background:
+        rgba(5, 10, 6, 0.94);
+
+    border-bottom:
+        1px solid rgba(0, 230, 118, 0.20);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =====================================================
+   MY ORDERS
+===================================================== */
+
+.myorder-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        ) !important;
+
+    color: #001b09 !important;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 230, 118, 0.20);
+}
+
+.myorder-btn:hover {
+    box-shadow:
+        0 12px 35px
+        rgba(0, 230, 118, 0.35);
+}
+
+
+/* =====================================================
+   WALLET BUTTON
+===================================================== */
+
+.wallet-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        ) !important;
+
+    color: #001b09 !important;
+
+    border:
+        1px solid rgba(0, 230, 118, 0.35) !important;
+
+    box-shadow:
+        0 7px 25px
+        rgba(0, 230, 118, 0.18);
+}
+
+.wallet-btn:hover {
+    box-shadow:
+        0 10px 30px
+        rgba(0, 230, 118, 0.30);
+}
+
+
+/* =====================================================
+   SUPPORT
+===================================================== */
+
+.support-btn {
+    border-color:
+        rgba(0, 230, 118, 0.20);
+
+    background:
+        rgba(10, 25, 14, 0.90);
+}
+
+.support-btn:hover {
+    border-color:
+        rgba(0, 230, 118, 0.45);
+}
+
+
+/* =====================================================
+   LOGOUT = RED
+===================================================== */
+
+.logout-btn {
+    border:
+        1px solid rgba(255, 23, 68, 0.25);
+
+    background:
+        rgba(35, 8, 14, 0.90);
+}
+
+.logout-btn:hover {
+    background:
+        rgba(255, 23, 68, 0.14);
+
+    border-color:
+        rgba(255, 23, 68, 0.55);
+
+    color: #ff5270;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero-banner {
+    border:
+        1px solid rgba(0, 230, 118, 0.20);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 230, 118, 0.12),
+            rgba(255, 23, 68, 0.08),
+            rgba(5, 15, 8, 0.90)
+        );
+
+    box-shadow:
+        0 25px 70px
+        rgba(0, 0, 0, 0.40);
+}
+
+
+/* HERO TITLE */
+
+.hero-content h1 {
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #00e676,
+            #ff1744
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* HERO BUTTON */
+
+.hero-content button {
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        );
+
+    color: #001b09;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0, 230, 118, 0.20);
+}
+
+
+/* =====================================================
+   AVAILABLE PRODUCTS TITLE
+===================================================== */
+
+.container > h2::after {
+    background:
+        linear-gradient(
+            90deg,
+            #00e676,
+            #ff1744
+        );
+}
+
+
+/* =====================================================
+   PRODUCT CARD
+===================================================== */
+
+.product-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 28, 17, 0.95),
+            rgba(8, 16, 10, 0.96)
+        );
+
+    border:
+        1px solid rgba(0, 230, 118, 0.15);
+
+    box-shadow:
+        0 18px 45px
+        rgba(0, 0, 0, 0.35);
+}
+
+.product-card:hover {
+    border-color:
+        rgba(0, 230, 118, 0.40);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 230, 118, 0.10);
+}
+
+
+/* =====================================================
+   PRODUCT IMAGE
+===================================================== */
+
+.product-card img {
+    background:
+        #071008;
+
+    border:
+        1px solid rgba(0, 230, 118, 0.10);
+}
+
+
+/* =====================================================
+   PRODUCT NAME
+===================================================== */
+
+.product-card h3 {
+    color: #ffffff;
+}
+
+
+/* =====================================================
+   PRODUCT DESCRIPTION
+===================================================== */
+
+.product-card p {
+    color: #9caf9f;
+}
+
+
+/* =====================================================
+   BUY BUTTON
+===================================================== */
+
+.product-card button {
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        );
+
+    color: #001b09;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 230, 118, 0.18);
+}
+
+.product-card button:hover {
+    box-shadow:
+        0 12px 30px
+        rgba(0, 230, 118, 0.32);
+}
+
+
+/* =====================================================
+   BUY MODAL
+===================================================== */
+
+.modal {
+    background:
+        rgba(0, 0, 0, 0.82);
+}
+
+.modal-content {
+    background:
+        linear-gradient(
+            145deg,
+            #0d1d12,
+            #071008
+        );
+
+    border:
+        1px solid rgba(0, 230, 118, 0.25);
+
+    box-shadow:
+        0 25px 80px
+        rgba(0, 0, 0, 0.70);
+}
+
+
+/* =====================================================
+   PAYMENT BUTTON
+===================================================== */
+
+#confirmBuyBtn {
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        );
+
+    color: #001b09;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 230, 118, 0.20);
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.close {
+    color: #ff1744;
+}
+
+.close:hover {
+    color: #ff5270;
+}
+
+
+/* =====================================================
+   MOBILE WALLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .wallet-btn {
+        background:
+            linear-gradient(
+                135deg,
+                #00c853,
+                #00e676
+            ) !important;
+
+        color: #001b09 !important;
+    }
+
+}

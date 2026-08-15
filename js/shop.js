@@ -1,5 +1,6 @@
 let currentUser = null;
 let selectedProduct = null;
+let walletBalanceUnsubscribe = null;
 
 const productList = document.getElementById("productList");
 const buyModal = document.getElementById("buyModal");
@@ -20,9 +21,63 @@ firebase.auth().onAuthStateChanged((user) => {
     currentUser = user;
 
     document.documentElement.classList.remove("auth-loading");
+    document.documentElement.classList.add("auth-ready");
 
     loadProducts();
+    loadWalletBalance();
 });
+
+// ==========================
+// LIVE WALLET BALANCE
+// ==========================
+
+function loadWalletBalance() {
+
+    if (!currentUser) return;
+
+    if (walletBalanceUnsubscribe) {
+        walletBalanceUnsubscribe();
+    }
+
+    walletBalanceUnsubscribe = db
+        .collection("customers")
+        .where("email", "==", currentUser.email)
+        .limit(1)
+        .onSnapshot((snapshot) => {
+
+            const balanceElement =
+                document.getElementById(
+                    "shopWalletBalance"
+                );
+
+            if (!balanceElement) return;
+
+            if (snapshot.empty) {
+
+                balanceElement.innerText =
+                    "0.00";
+
+                return;
+            }
+
+            const customer =
+                snapshot.docs[0].data();
+
+            const balance =
+                Number(customer.balance || 0);
+
+            balanceElement.innerText =
+                balance.toFixed(2);
+
+        }, (error) => {
+
+            console.error(
+                "Wallet balance error:",
+                error
+            );
+
+        });
+}
 
 // ==========================
 // LOAD PRODUCTS
@@ -1109,3 +1164,59 @@ function showOrderSuccess(
     };
 
 }
+
+// ==========================================
+// SHOP HEADER - LIVE WALLET BALANCE
+// ==========================================
+
+firebase.auth().onAuthStateChanged(async (user) => {
+
+    if (!user) {
+        return;
+    }
+
+    const balanceElement =
+        document.getElementById("shopWalletBalance");
+
+    if (!balanceElement) {
+        return;
+    }
+
+    try {
+
+        const customerSnap = await db
+            .collection("customers")
+            .where("email", "==", user.email)
+            .limit(1)
+            .get();
+
+        if (customerSnap.empty) {
+
+            balanceElement.innerText = "0.00";
+
+            return;
+        }
+
+        const customerData =
+            customerSnap.docs[0].data();
+
+        const balance =
+            Number(
+                customerData.balance || 0
+            );
+
+        balanceElement.innerText =
+            balance.toFixed(2);
+
+    } catch (error) {
+
+        console.error(
+            "Wallet Balance Error:",
+            error
+        );
+
+        balanceElement.innerText =
+            "0.00";
+    }
+
+});
