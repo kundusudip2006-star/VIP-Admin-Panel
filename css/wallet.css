@@ -870,3 +870,81 @@ body {
 .vip-alert-button:active {
     transform: scale(.97);
 }
+/* ======================================================
+   VIP ALERT EXTRA STYLE
+====================================================== */
+
+.vip-alert-overlay {
+    background: rgba(0, 0, 0, 0.72) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.vip-alert {
+    overflow: hidden;
+    color: #fff;
+}
+
+.vip-alert::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 200, 255, 0.08);
+
+    filter: blur(35px);
+
+    pointer-events: none;
+}
+
+.vip-alert-title,
+.vip-alert-message,
+.vip-alert-button,
+.vip-alert-close,
+.vip-alert-icon {
+    position: relative;
+    z-index: 2;
+}
+
+.vip-alert-button {
+    transition: 0.2s ease;
+}
+
+.vip-alert-button:hover {
+    transform: translateY(-1px);
+}
+
+.vip-alert-button:active {
+    transform: scale(0.97);
+}
+
+.vip-alert.error .vip-alert-button {
+    background: linear-gradient(
+        135deg,
+        #ff3b55,
+        #ff6b7d
+    );
+}
+
+.vip-alert.success .vip-alert-button {
+    background: linear-gradient(
+        135deg,
+        #00c98d,
+        #00e6a0
+    );
+}
+
+.vip-alert.warning .vip-alert-button {
+    background: linear-gradient(
+        135deg,
+        #ffad32,
+        #ffc857
+    );
+}

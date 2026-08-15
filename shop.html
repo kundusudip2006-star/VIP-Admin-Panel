@@ -5,13 +5,23 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>VIP PANEL STORE</title>
 
 <link rel="stylesheet" href="css/shop.css">
 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
 <style>
+
+/* =====================================================
+   AUTH LOADING
+===================================================== */
+
 html.auth-loading body {
     visibility: hidden;
 }
@@ -20,11 +30,13 @@ html.auth-ready body {
     visibility: visible;
 }
 
-/* =====================================
+
+/* =====================================================
    HEADER WALLET BALANCE
-===================================== */
+===================================================== */
 
 .wallet-balance-box {
+
     display: flex;
     align-items: center;
     gap: 8px;
@@ -43,13 +55,16 @@ html.auth-ready body {
     cursor: pointer;
 
     transition: 0.2s ease;
+
 }
 
 .wallet-balance-box:active {
     transform: scale(0.96);
 }
 
+
 .wallet-balance-icon {
+
     width: 36px;
     height: 36px;
 
@@ -66,63 +81,539 @@ html.auth-ready body {
     );
 
     font-size: 16px;
+
 }
 
+
 .wallet-balance-info {
+
     display: flex;
     flex-direction: column;
 
     line-height: 1.1;
+
 }
+
 
 .wallet-balance-label {
+
     font-size: 10px;
+
     color: #aebbd0;
+
 }
 
+
 .wallet-balance-value {
+
     margin-top: 4px;
 
     font-size: 15px;
+
     font-weight: 800;
 
     color: #00e676;
 
     white-space: nowrap;
+
 }
 
 
-/* MOBILE */
+/* =====================================================
+   MOBILE WALLET
+===================================================== */
 
 @media (max-width: 480px) {
 
     .wallet-balance-box {
+
         min-width: 94px;
+
         padding: 5px 8px;
+
         gap: 6px;
+
     }
 
     .wallet-balance-icon {
+
         width: 34px;
         height: 34px;
+
         font-size: 15px;
+
     }
 
     .wallet-balance-value {
+
         font-size: 14px;
+
     }
 
 }
+
+
+/* =====================================================
+   VIP CUSTOM ALERT
+===================================================== */
+
+.vip-alert-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 999999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.70);
+
+    backdrop-filter: blur(8px);
+
+    -webkit-backdrop-filter: blur(8px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+
+}
+
+
+.vip-alert-overlay.active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+/* =====================================================
+   ALERT BOX
+===================================================== */
+
+.vip-alert {
+
+    position: relative;
+
+    width: 100%;
+
+    max-width: 370px;
+
+    padding: 24px 22px 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 28, 48, 0.98),
+            rgba(5, 14, 28, 0.98)
+        );
+
+    border: 1px solid rgba(0, 200, 255, 0.22);
+
+    border-radius: 22px;
+
+    box-shadow:
+
+        0 25px 80px rgba(0,0,0,.60),
+
+        0 0 40px rgba(0,180,255,.10);
+
+    transform:
+        translateY(20px)
+        scale(.94);
+
+    transition:
+        transform .28s cubic-bezier(.2,.8,.2,1);
+
+    overflow: hidden;
+
+}
+
+
+/* Top glow */
+
+.vip-alert::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: -100px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 220px;
+
+    height: 220px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 200, 255, .08);
+
+    filter: blur(40px);
+
+    pointer-events: none;
+
+}
+
+
+.vip-alert-overlay.active .vip-alert {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.vip-alert-icon {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 17px;
+
+    margin-bottom: 15px;
+
+    font-size: 25px;
+
+}
+
+
+/* SUCCESS */
+
+.vip-alert.success .vip-alert-icon {
+
+    color: #00e6a0;
+
+    background: rgba(0,230,160,.10);
+
+    border: 1px solid rgba(0,230,160,.22);
+
+    box-shadow:
+        0 0 25px rgba(0,230,160,.12);
+
+}
+
+
+/* ERROR */
+
+.vip-alert.error .vip-alert-icon {
+
+    color: #ff5264;
+
+    background: rgba(255,82,100,.10);
+
+    border: 1px solid rgba(255,82,100,.22);
+
+    box-shadow:
+        0 0 25px rgba(255,82,100,.12);
+
+}
+
+
+/* WARNING */
+
+.vip-alert.warning .vip-alert-icon {
+
+    color: #ffc34d;
+
+    background: rgba(255,195,77,.10);
+
+    border: 1px solid rgba(255,195,77,.22);
+
+}
+
+
+/* INFO */
+
+.vip-alert.info .vip-alert-icon {
+
+    color: #16cfff;
+
+    background: rgba(22,207,255,.10);
+
+    border: 1px solid rgba(22,207,255,.22);
+
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.vip-alert-title {
+
+    position: relative;
+
+    z-index: 2;
+
+    color: #ffffff;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.vip-alert-message {
+
+    position: relative;
+
+    z-index: 2;
+
+    color: #a9b7ca;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+
+    white-space: pre-line;
+
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.vip-alert-close {
+
+    position: absolute;
+
+    right: 14px;
+
+    top: 14px;
+
+    z-index: 5;
+
+    width: 34px;
+
+    height: 34px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.06);
+
+    color: #8b9aaf;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+
+.vip-alert-close:hover {
+
+    background: rgba(255,255,255,.10);
+
+    color: white;
+
+}
+
+
+.vip-alert-close:active {
+
+    transform: scale(.90);
+
+}
+
+
+/* =====================================================
+   OK BUTTON
+===================================================== */
+
+.vip-alert-button {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 13px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #087cff,
+            #08cfff
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0,150,255,.18);
+
+    transition: .2s ease;
+
+}
+
+
+.vip-alert-button:active {
+
+    transform: scale(.97);
+
+}
+
+
+/* ERROR BUTTON */
+
+.vip-alert.error .vip-alert-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff3b55,
+            #ff6b7d
+        );
+
+}
+
+
+/* SUCCESS BUTTON */
+
+.vip-alert.success .vip-alert-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c98d,
+            #00e6a0
+        );
+
+}
+
+
+/* WARNING BUTTON */
+
+.vip-alert.warning .vip-alert-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffad32,
+            #ffc857
+        );
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .vip-alert {
+
+        max-width: 340px;
+
+        padding:
+            22px 19px 18px;
+
+        border-radius: 20px;
+
+    }
+
+    .vip-alert-title {
+
+        font-size: 19px;
+
+    }
+
+    .vip-alert-message {
+
+        font-size: 13px;
+
+    }
+
+}
+
+
+/* =====================================================
+   PREVENT BODY SCROLL WHEN ALERT OPEN
+===================================================== */
+
+body.vip-alert-open {
+
+    overflow: hidden;
+
+}
+
 </style>
 
 
 <script>
-document.documentElement.classList.add("auth-loading");
+
+/*
+=======================================================
+AUTH LOADING
+=======================================================
+*/
+
+document.documentElement.classList.add(
+    "auth-loading"
+);
+
 </script>
-
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
@@ -133,14 +624,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <div id="particles-js"></div>
 
 
-<!-- =====================================
+<!-- =====================================================
      HEADER
-===================================== -->
+===================================================== -->
 
 <header class="top-header">
 
 
     <div class="left-header">
+
 
         <button
             id="myOrdersBtn"
@@ -148,9 +640,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
             <i class="fa-solid fa-box"></i>
 
-            <span>My Orders</span>
+            <span>
+                My Orders
+            </span>
 
         </button>
+
 
     </div>
 
@@ -158,11 +653,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     <div class="right-header">
 
 
-        <!-- WALLET + BALANCE -->
+        <!-- WALLET -->
 
         <button
             class="wallet-balance-box"
             onclick="window.location.href='wallet.html'">
+
 
             <div class="wallet-balance-icon">
 
@@ -173,11 +669,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
             <div class="wallet-balance-info">
 
+
                 <span class="wallet-balance-label">
+
                     Wallet
+
                 </span>
 
-                <strong class="wallet-balance-value">
+
+                <strong
+                    class="wallet-balance-value">
 
                     ₹<span id="shopWalletBalance">
                         0.00
@@ -185,7 +686,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
                 </strong>
 
+
             </div>
+
 
         </button>
 
@@ -218,19 +721,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 
 
-<!-- =====================================
-     HERO BANNER
-===================================== -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <section class="hero-banner">
 
+
     <div class="hero-content">
 
-        <h1>🔥 VIP PANEL STORE</h1>
+
+        <h1>
+            🔥 VIP PANEL STORE
+        </h1>
+
 
         <p>
             Premium Accounts • Instant Delivery • Trusted Service
         </p>
+
 
         <button
             onclick="window.scrollTo({
@@ -242,36 +751,44 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
         </button>
 
+
     </div>
 
 </section>
 
 
 
-<!-- =====================================
+<!-- =====================================================
      PRODUCTS
-===================================== -->
+===================================================== -->
 
 <div class="container">
 
-    <h2>Available Products</h2>
+
+    <h2>
+        Available Products
+    </h2>
+
 
     <div
         id="productList"
         class="products">
+
     </div>
+
 
 </div>
 
 
 
-<!-- =====================================
+<!-- =====================================================
      BUY MODAL
-===================================== -->
+===================================================== -->
 
 <div
     id="buyModal"
     class="modal">
+
 
     <div class="modal-content">
 
@@ -337,9 +854,74 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 
 
-<!-- =====================================
+<!-- =====================================================
+     VIP ALERT
+===================================================== -->
+
+<div
+    id="vipAlertOverlay"
+    class="vip-alert-overlay">
+
+
+    <div
+        id="vipAlertBox"
+        class="vip-alert info">
+
+
+        <button
+            id="vipAlertClose"
+            class="vip-alert-close"
+            type="button">
+
+            ×
+
+        </button>
+
+
+        <div
+            id="vipAlertIcon"
+            class="vip-alert-icon">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+        </div>
+
+
+        <div
+            id="vipAlertTitle"
+            class="vip-alert-title">
+
+            Notice
+
+        </div>
+
+
+        <div
+            id="vipAlertMessage"
+            class="vip-alert-message">
+
+        </div>
+
+
+        <button
+            id="vipAlertButton"
+            class="vip-alert-button"
+            type="button">
+
+            OK
+
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
      FIREBASE
-===================================== -->
+===================================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 
@@ -350,10 +932,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <script src="js/firebase.js"></script>
 
+
+<!-- IMPORTANT:
+     VIP alert MUST load BEFORE shop.js
+-->
+
+<script src="js/vip-alert.js"></script>
+
+
 <script src="js/shop.js"></script>
 
 
-<!-- PARTICLES -->
+
+<!-- =====================================================
+     PARTICLES
+===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
