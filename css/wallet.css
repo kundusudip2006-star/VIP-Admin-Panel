@@ -44,19 +44,17 @@ body {
     cursor: pointer;
 }
 
-
 /* ==========================
    CONTAINER
 ========================== */
 
 .wallet-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 640px;
 
     margin: auto;
-    padding: 25px 18px;
+    padding: 35px 20px;
 }
-
 
 /* ==========================
    BALANCE CARD
@@ -65,9 +63,9 @@ body {
 .balance-card {
     text-align: center;
 
-    padding: 30px 20px;
+    padding: 40px 28px;
 
-    border-radius: 22px;
+    border-radius: 25px;
 
     background:
         linear-gradient(
@@ -76,17 +74,17 @@ body {
             #071122
         );
 
-    border: 1px solid rgba(0, 229, 255, 0.25);
+    border: 1px solid rgba(0, 229, 255, 0.28);
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.35);
+        0 15px 45px rgba(0, 0, 0, 0.4);
 }
 
 .balance-icon {
-    width: 65px;
-    height: 65px;
+    width: 90px;
+    height: 90px;
 
-    margin: 0 auto 15px;
+    margin: 0 auto 20px;
 
     display: flex;
     align-items: center;
@@ -94,25 +92,30 @@ body {
 
     border-radius: 50%;
 
-    background: linear-gradient(
-        135deg,
-        #00c6ff,
-        #0072ff
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #00c6ff,
+            #0072ff
+        );
 
-    font-size: 28px;
+    font-size: 36px;
+
+    box-shadow:
+        0 0 30px rgba(0, 198, 255, 0.25);
 }
 
 .balance-card p {
     color: #aebbd0;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
+    font-size: 19px;
 }
 
 .balance-card h1 {
-    font-size: 42px;
-    margin-bottom: 25px;
+    font-size: 52px;
+    margin-bottom: 32px;
+    font-weight: 800;
 }
-
 
 /* ==========================
    ADD BUTTON
@@ -121,41 +124,218 @@ body {
 .add-btn {
     width: 100%;
 
-    padding: 14px;
+    padding: 16px;
 
     border: none;
-    border-radius: 12px;
+    border-radius: 15px;
 
-    background: linear-gradient(
-        90deg,
-        #0072ff,
-        #00c6ff
-    );
+    background:
+        linear-gradient(
+            90deg,
+            #0072ff,
+            #00c6ff
+        );
 
     color: white;
 
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
 
     cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0, 140, 255, 0.2);
+
+    transition: 0.2s ease;
 }
 
-.add-btn:hover {
-    opacity: 0.9;
+.add-btn:active {
+    transform: scale(0.98);
 }
-
 
 /* ==========================
    TRANSACTIONS
 ========================== */
 
 .transaction-section {
-    margin-top: 25px;
+    margin-top: 35px;
 }
 
 .transaction-section h2 {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+
+    font-size: 28px;
+    font-weight: 800;
 }
+
+/* ==========================
+   NEW TRANSACTION CARD
+========================== */
+
+.transaction-card {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 17px 20px;
+
+    margin-bottom: 13px;
+
+    border-radius: 17px;
+
+    background: #0d1a31;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    min-height: 70px;
+
+    transition: 0.2s ease;
+}
+
+.transaction-card:active {
+    transform: scale(0.985);
+}
+
+/* ==========================
+   LEFT SIDE
+========================== */
+
+.transaction-left {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+}
+
+.transaction-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 16px;
+}
+
+/* ==========================
+   CREDIT / RECHARGE
+========================== */
+
+.transaction-card.credit {
+    border-left: 3px solid #00e676;
+}
+
+.transaction-card.credit
+.transaction-icon {
+    color: #00e676;
+
+    background:
+        rgba(0, 230, 118, 0.12);
+}
+
+.transaction-card.credit
+.transaction-right strong {
+    color: #00e676;
+}
+
+/* ==========================
+   DEBIT / PURCHASE
+========================== */
+
+.transaction-card.debit {
+    border-left: 3px solid #ff1744;
+}
+
+.transaction-card.debit
+.transaction-icon {
+    color: #ff1744;
+
+    background:
+        rgba(255, 23, 68, 0.12);
+}
+
+.transaction-card.debit
+.transaction-right strong {
+    color: #ff1744;
+}
+
+/* ==========================
+   TRANSACTION INFO
+========================== */
+
+.transaction-info {
+    min-width: 0;
+}
+
+.transaction-info h3 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.transaction-info p {
+    margin: 0;
+
+    color: #8d9ab0;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+/* ==========================
+   RIGHT SIDE
+========================== */
+
+.transaction-right {
+    text-align: right;
+
+    flex-shrink: 0;
+
+    margin-left: 10px;
+}
+
+.transaction-right strong {
+    display: block;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    margin-bottom: 4px;
+
+    white-space: nowrap;
+}
+
+.transaction-status {
+    display: block;
+
+    font-size: 12px;
+
+    color: #aab5c7;
+
+    white-space: nowrap;
+}
+
+/* ==========================
+   OLD TRANSACTION SUPPORT
+========================== */
 
 .transaction-item {
     display: flex;
@@ -192,6 +372,68 @@ body {
     color: #9aa8bd;
 }
 
+/* ==========================
+   EMPTY WALLET
+========================== */
+
+.empty-wallet {
+    text-align: center;
+
+    padding: 45px 20px;
+
+    border-radius: 18px;
+
+    background: #0d1a31;
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    color: #8d9ab0;
+}
+
+.empty-wallet i {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.empty-wallet h3 {
+    color: white;
+    margin-bottom: 7px;
+}
+
+.empty-wallet p {
+    font-size: 13px;
+}
+
+/* ==========================
+   ERROR
+========================== */
+
+.wallet-error {
+    text-align: center;
+
+    padding: 30px;
+
+    color: #ff1744;
+}
+
+.wallet-error i {
+    font-size: 35px;
+}
+
+.wallet-error button {
+    margin-top: 12px;
+
+    padding: 10px 22px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #168cff;
+
+    color: white;
+
+    cursor: pointer;
+}
 
 /* ==========================
    MODAL
@@ -212,8 +454,15 @@ body {
     padding: 20px;
 
     background: rgba(0, 0, 0, 0.75);
+
+    backdrop-filter: blur(6px);
 }
 
+/* JS uses .show */
+
+.modal.show {
+    display: flex;
+}
 
 /* ==========================
    MODAL BOX
@@ -250,9 +499,8 @@ body {
     margin-bottom: 25px;
 }
 
-
 /* ==========================
-   CLOSE BUTTON
+   CLOSE
 ========================== */
 
 .close-btn {
@@ -277,7 +525,6 @@ body {
     cursor: pointer;
 }
 
-
 /* ==========================
    LABEL
 ========================== */
@@ -292,7 +539,6 @@ body {
     font-weight: bold;
 }
 
-
 /* ==========================
    INPUTS
 ========================== */
@@ -300,10 +546,10 @@ body {
 .amount-input,
 .mobile-input {
     display: flex;
+
     align-items: center;
 
     width: 100%;
-
     height: 52px;
 
     border-radius: 12px;
@@ -321,6 +567,7 @@ body {
     color: #00d9ff;
 
     font-size: 20px;
+
     font-weight: bold;
 }
 
@@ -335,7 +582,6 @@ body {
     flex: 1;
 
     width: 100%;
-
     height: 100%;
 
     padding: 0 14px;
@@ -355,7 +601,6 @@ body {
     color: #718096;
 }
 
-
 /* Remove number arrows */
 
 .amount-input input::-webkit-inner-spin-button,
@@ -363,7 +608,6 @@ body {
     -webkit-appearance: none;
     margin: 0;
 }
-
 
 /* ==========================
    CONTINUE BUTTON
@@ -380,11 +624,12 @@ body {
 
     border-radius: 12px;
 
-    background: linear-gradient(
-        90deg,
-        #0072ff,
-        #00c6ff
-    );
+    background:
+        linear-gradient(
+            90deg,
+            #0072ff,
+            #00c6ff
+        );
 
     color: white;
 
@@ -393,10 +638,6 @@ body {
     font-weight: bold;
 
     cursor: pointer;
-}
-
-.continue-btn:hover {
-    opacity: 0.9;
 }
 
 .payment-note {
@@ -409,7 +650,6 @@ body {
     font-size: 12px;
 }
 
-
 /* ==========================
    MOBILE
 ========================== */
@@ -417,19 +657,57 @@ body {
 @media (max-width: 480px) {
 
     .wallet-container {
-        padding: 18px 14px;
+        padding: 22px 14px;
     }
 
     .balance-card {
-        padding: 25px 16px;
+        padding: 30px 18px;
+    }
+
+    .balance-icon {
+        width: 80px;
+        height: 80px;
     }
 
     .balance-card h1 {
-        font-size: 36px;
+        font-size: 42px;
+    }
+
+    .transaction-section h2 {
+        font-size: 27px;
+    }
+
+    .transaction-card {
+        padding: 15px 13px;
+    }
+
+    .transaction-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .transaction-left {
+        gap: 10px;
+    }
+
+    .transaction-info h3 {
+        font-size: 14px;
+    }
+
+    .transaction-info p {
+        font-size: 10px;
+    }
+
+    .transaction-right strong {
+        font-size: 14px;
+    }
+
+    .transaction-status {
+        font-size: 10px;
     }
 
     .modal-box {
         padding: 25px 18px;
     }
-
 }
