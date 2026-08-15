@@ -474,89 +474,82 @@ confirmBuyBtn.addEventListener("click", async () => {
         });
 
         // ==========================
-        // TELEGRAM IMMEDIATE NOTIFICATION
-        // ==========================
+// TELEGRAM NOTIFICATION
+// SEND WITHOUT WAITING
+// ==========================
 
-        try {
+fetch(
+    "https://vip-admin-panel-1.onrender.com/new-order",
+    {
+        method: "POST",
 
-            await fetch(
-                "https://vip-admin-panel-1.onrender.com/new-order",
-                {
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-                    method: "POST",
+        body: JSON.stringify({
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+            orderId: orderId,
 
-                    body: JSON.stringify({
+            name: customerName,
 
-                        orderId:
-                            orderId,
+            email: currentUser.email,
 
-                        name:
-                            customerName,
+            phone: customerPhone,
 
-                        email:
-                            currentUser.email,
+            product:
+                selectedProduct.productName,
 
-                        phone:
-                            customerPhone,
+            plan:
+                selectedProduct.planName,
 
-                        product:
-                            selectedProduct.productName,
+            amount: price,
 
-                        plan:
-                            selectedProduct.planName,
+            paymentMethod:
+                "Wallet Balance"
 
-                        amount:
-                            price,
+        })
+    }
+)
+.then(async (response) => {
 
-                        paymentMethod:
-                            "Wallet Balance"
+    const result =
+        await response.json().catch(() => null);
 
-                    })
+    console.log(
+        "Telegram notification response:",
+        result
+    );
 
-                }
-            );
+})
+.catch((telegramError) => {
 
-        } catch (telegramError) {
+    console.error(
+        "Telegram notification failed:",
+        telegramError
+    );
 
-            console.error(
-                "Telegram notification failed:",
-                telegramError
-            );
+});
 
-        }
 
-        // ==========================
-        // CLOSE BUY MODAL
-        // ==========================
+// ==========================
+// CLOSE BUY MODAL
+// ==========================
 
-        buyModal.style.display = "none";
+buyModal.style.display = "none";
 
-        // ==========================
-        // SILENT 10 SECOND PROCESSING
-        // CUSTOMER TIMER DEKHBE NA
-        // ==========================
 
-        await new Promise(resolve => {
-            setTimeout(resolve, 10000);
-        });
+// ==========================
+// BEAUTIFUL SUCCESS NOTIFICATION
+// NO 10 SECOND DELAY
+// ==========================
 
-        // ==========================
-        // CUSTOMER SUCCESS
-        // ==========================
-
-        alert(
-            "✅ Order placed successfully!\n\n" +
-            "Order ID: " +
-            orderId +
-            "\n\n" +
-            "🔑 Key Pending\n" +
-            "Your key will appear after delivery."
-        );
+showOrderSuccess(
+    orderId,
+    selectedProduct.productName,
+    selectedProduct.planName,
+    price
+);
 
     } catch (error) {
 
@@ -641,3 +634,475 @@ document.getElementById("logoutBtn").onclick = async () => {
     }
 
 };
+// ======================================================
+// BEAUTIFUL ORDER SUCCESS POPUP
+// ======================================================
+
+function showOrderSuccess(
+    orderId,
+    productName,
+    planName,
+    price
+) {
+
+    // Remove old popup if exists
+    const oldPopup =
+        document.getElementById(
+            "orderSuccessPopup"
+        );
+
+    if (oldPopup) {
+        oldPopup.remove();
+    }
+
+
+    // ==========================
+    // ADD STYLE
+    // ==========================
+
+    if (
+        !document.getElementById(
+            "orderSuccessStyle"
+        )
+    ) {
+
+        const style =
+            document.createElement("style");
+
+        style.id =
+            "orderSuccessStyle";
+
+        style.innerHTML = `
+
+        #orderSuccessPopup {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 999999;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(0, 0, 0, 0.72);
+
+            backdrop-filter:
+                blur(8px);
+
+            animation:
+                popupFadeIn
+                0.25s ease;
+
+        }
+
+
+        .order-success-box {
+
+            width: 100%;
+
+            max-width: 380px;
+
+            padding: 28px 22px;
+
+            border-radius: 24px;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #071b35,
+                    #062c42
+                );
+
+            border:
+                1px solid
+                rgba(0, 220, 255, 0.35);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.55),
+
+                0 0 35px
+                rgba(0, 200, 255, 0.15);
+
+            color: white;
+
+            transform:
+                scale(0.9);
+
+            animation:
+                popupScale
+                0.3s ease
+                forwards;
+
+        }
+
+
+        .success-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin:
+                0 auto 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            font-size: 34px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00e676,
+                    #00bfa5
+                );
+
+            box-shadow:
+                0 0 30px
+                rgba(0, 230, 118, 0.35);
+
+        }
+
+
+        .order-success-box h2 {
+
+            margin:
+                0 0 8px;
+
+            font-size: 24px;
+
+            font-weight: 700;
+
+        }
+
+
+        .success-subtitle {
+
+            margin:
+                0 0 20px;
+
+            color:
+                rgba(255,255,255,0.72);
+
+            font-size: 14px;
+
+        }
+
+
+        .order-info {
+
+            text-align: left;
+
+            padding: 15px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .order-info-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 10px;
+
+            font-size: 13px;
+
+        }
+
+
+        .order-info-row:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .order-label {
+
+            color:
+                rgba(255,255,255,0.55);
+
+        }
+
+
+        .order-value {
+
+            text-align: right;
+
+            font-weight: 600;
+
+            color: white;
+
+            word-break: break-word;
+
+        }
+
+
+        .pending-text {
+
+            margin-bottom: 20px;
+
+            padding: 11px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,193,7,0.10);
+
+            border:
+                1px solid
+                rgba(255,193,7,0.22);
+
+            color:
+                #ffd54f;
+
+            font-size: 13px;
+
+        }
+
+
+        .success-ok-btn {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 13px;
+
+            border-radius: 14px;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            color: white;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #006eff,
+                    #00c6ff
+                );
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,150,255,0.25);
+
+        }
+
+
+        .success-ok-btn:active {
+
+            transform:
+                scale(0.97);
+
+        }
+
+
+        @keyframes popupFadeIn {
+
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+        }
+
+
+        @keyframes popupScale {
+
+            from {
+                transform:
+                    scale(0.88);
+
+                opacity: 0;
+            }
+
+            to {
+                transform:
+                    scale(1);
+
+                opacity: 1;
+            }
+
+        }
+
+        `;
+
+        document.head.appendChild(style);
+    }
+
+
+    // ==========================
+    // CREATE POPUP
+    // ==========================
+
+    const popup =
+        document.createElement("div");
+
+    popup.id =
+        "orderSuccessPopup";
+
+
+    popup.innerHTML = `
+
+        <div class="order-success-box">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2>
+                Order Confirmed!
+            </h2>
+
+            <p class="success-subtitle">
+                Your order has been placed successfully.
+            </p>
+
+
+            <div class="order-info">
+
+                <div class="order-info-row">
+
+                    <span class="order-label">
+                        Order ID
+                    </span>
+
+                    <span class="order-value">
+                        ${orderId}
+                    </span>
+
+                </div>
+
+
+                <div class="order-info-row">
+
+                    <span class="order-label">
+                        Product
+                    </span>
+
+                    <span class="order-value">
+                        ${productName}
+                    </span>
+
+                </div>
+
+
+                <div class="order-info-row">
+
+                    <span class="order-label">
+                        Plan
+                    </span>
+
+                    <span class="order-value">
+                        ${planName}
+                    </span>
+
+                </div>
+
+
+                <div class="order-info-row">
+
+                    <span class="order-label">
+                        Amount
+                    </span>
+
+                    <span class="order-value">
+                        ₹${Number(price).toFixed(2)}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="pending-text">
+
+                🔑 Your key is currently pending.
+                <br>
+                It will appear here after delivery.
+
+            </div>
+
+
+            <button
+                class="success-ok-btn"
+                id="successOkBtn">
+
+                Done
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(popup);
+
+
+    // ==========================
+    // DONE BUTTON
+    // ==========================
+
+    document.getElementById(
+        "successOkBtn"
+    ).onclick = () => {
+
+        popup.remove();
+
+    };
+
+
+    // ==========================
+    // CLICK OUTSIDE
+    // ==========================
+
+    popup.onclick = (e) => {
+
+        if (
+            e.target === popup
+        ) {
+
+            popup.remove();
+
+        }
+
+    };
+
+}
