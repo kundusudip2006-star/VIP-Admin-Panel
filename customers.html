@@ -5,159 +5,341 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Customers</title>
+    <title>Customers - VIP Admin Panel</title>
 
     <link rel="stylesheet" href="css/customers.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body>
 
-<h2>Customers</h2>
+<!-- =========================
+     SIDEBAR
+========================= -->
 
-<input
-    type="text"
-    id="searchCustomer"
-    placeholder="Search Customer..."
->
+<div class="sidebar">
 
-<table border="1" width="100%">
+    <div class="logo">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h2>VIP PANEL</h2>
+    </div>
 
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Wallet Balance</th>
-            <th>Total Orders</th>
-            <th>Total Spending</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+    <ul>
 
-    <tbody id="customerTable">
+        <li>
+            <a href="dashboard.html">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
 
-        <tr>
-            <td colspan="6" align="center">
-                Loading...
-            </td>
-        </tr>
+        <li>
+            <a href="users.html">
+                <i class="fa-solid fa-users"></i>
+                <span>Users</span>
+            </a>
+        </li>
 
-    </tbody>
+        <li class="active">
+            <a href="customers.html">
+                <i class="fa-solid fa-address-book"></i>
+                <span>Customers</span>
+            </a>
+        </li>
 
-</table>
+        <li>
+            <a href="products.html">
+                <i class="fa-solid fa-box"></i>
+                <span>Products</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="orders.html">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="profile.html">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+        </li>
+
+        <li id="logoutBtn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </li>
+
+    </ul>
+
+</div>
 
 
-<!-- ==========================
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+    <header>
+
+        <div>
+            <h1>Customers</h1>
+            <p class="page-subtitle">
+                Manage customer accounts and wallet balance
+            </p>
+        </div>
+
+        <div class="header-right">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchCustomer"
+                    placeholder="Search Customer..."
+                >
+
+            </div>
+
+            <div class="admin-icon">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         CUSTOMER TABLE
+    ========================= -->
+
+    <section class="table-box">
+
+        <div class="table-header">
+
+            <div>
+                <h2>Customer List</h2>
+                <p>All registered customers</p>
+            </div>
+
+            <div class="customer-count">
+                <i class="fa-solid fa-users"></i>
+                <span id="customerCount">0</span>
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Wallet Balance</th>
+                        <th>Total Orders</th>
+                        <th>Total Spending</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="customerTable">
+
+                    <tr>
+                        <td colspan="6" class="loading">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            Loading customers...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================
      CUSTOMER MODAL
-========================== -->
+========================= -->
 
-<div id="customerModal" class="modal" style="display:none;">
+<div id="customerModal" class="modal">
 
     <div class="modal-content">
 
-        <span
-            id="closeCustomerModal"
-            style="cursor:pointer;font-size:24px;"
-        >
-            &times;
-        </span>
-
-        <h2>Customer Profile</h2>
-
-        <p>
-            <b>Name:</b>
-            <span id="cName"></span>
-        </p>
-
-        <p>
-            <b>Email:</b>
-            <span id="cEmail"></span>
-        </p>
-
-        <p>
-            <b>Phone:</b>
-            <span id="cPhone"></span>
-        </p>
-
-        <p>
-            <b>Wallet Balance:</b>
-            ₹<span id="cBalance">0.00</span>
-        </p>
-
-        <p>
-            <b>Total Orders:</b>
-            <span id="cOrders">0</span>
-        </p>
-
-        <p>
-            <b>Total Spending:</b>
-            ₹<span id="cSpending">0</span>
-        </p>
-
-
-        <!-- ==========================
-             ADD BALANCE
-        ========================== -->
-
-        <hr>
-
-        <h3>Add Wallet Balance</h3>
-
-        <input
-            type="number"
-            id="adminBalanceAmount"
-            placeholder="Enter amount"
-            min="1"
-            step="1"
-        >
-
         <button
-            id="addBalanceAdminBtn"
-        >
-            💰 Add Balance
+            id="closeCustomerModal"
+            class="close-btn"
+            type="button">
+            &times;
         </button>
 
 
-        <hr>
+        <div class="modal-title">
+
+            <div class="customer-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+                <h2>Customer Profile</h2>
+                <p>Customer account details</p>
+            </div>
+
+        </div>
 
 
-        <!-- ==========================
-             ORDER HISTORY
-        ========================== -->
+        <!-- CUSTOMER INFO -->
 
-        <h3>Order History</h3>
+        <div class="customer-info">
 
-        <table width="100%" border="1">
+            <div class="info-item">
+                <span>Name</span>
+                <strong id="cName">-</strong>
+            </div>
 
-            <thead>
+            <div class="info-item">
+                <span>Email</span>
+                <strong id="cEmail">-</strong>
+            </div>
 
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                </tr>
+            <div class="info-item">
+                <span>Phone</span>
+                <strong id="cPhone">-</strong>
+            </div>
 
-            </thead>
+            <div class="info-item balance-info">
+                <span>Wallet Balance</span>
+                <strong>
+                    ₹<span id="cBalance">0.00</span>
+                </strong>
+            </div>
 
-            <tbody id="customerOrders">
+            <div class="info-item">
+                <span>Total Orders</span>
+                <strong id="cOrders">0</strong>
+            </div>
 
-                <tr>
-                    <td colspan="3" align="center">
-                        No Orders
-                    </td>
-                </tr>
+            <div class="info-item">
+                <span>Total Spending</span>
+                <strong>
+                    ₹<span id="cSpending">0</span>
+                </strong>
+            </div>
 
-            </tbody>
+        </div>
 
-        </table>
+
+        <!-- ADD BALANCE -->
+
+        <div class="section-divider"></div>
+
+        <div class="balance-section">
+
+            <h3>
+                <i class="fa-solid fa-wallet"></i>
+                Add Wallet Balance
+            </h3>
+
+            <p>Add balance directly to this customer's wallet.</p>
+
+            <div class="balance-form">
+
+                <input
+                    type="number"
+                    id="adminBalanceAmount"
+                    placeholder="Enter amount"
+                    min="1"
+                    step="1"
+                >
+
+                <button
+                    id="addBalanceAdminBtn"
+                    type="button">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Add Balance
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER HISTORY -->
+
+        <div class="section-divider"></div>
+
+        <div class="orders-section">
+
+            <h3>
+                <i class="fa-solid fa-cart-shopping"></i>
+                Order History
+            </h3>
+
+            <div class="order-table-wrapper">
+
+                <table class="order-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="customerOrders">
+
+                        <tr>
+                            <td colspan="3" class="no-orders">
+                                No Orders
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 
-<!-- ==========================
+<!-- =========================
      FIREBASE
-========================== -->
+========================= -->
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 

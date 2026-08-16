@@ -1,819 +1,722 @@
-// =====================================================
+// ======================================================
 // VIP ADMIN DASHBOARD
-// =====================================================
+// ======================================================
 
 const ADMIN_EMAIL = "kundusudip011@gmail.com";
 
-// =====================================================
-// AUTHENTICATION
-// =====================================================
 
-firebase.auth().onAuthStateChanged(async (user) => {
+// ======================================================
+// ELEMENTS
+// ======================================================
+
+const totalUsersEl = document.getElementById("totalUsers");
+const totalCustomersEl = document.getElementById("totalCustomers");
+const totalRevenueEl = document.getElementById("totalRevenue");
+const totalOrdersEl = document.getElementById("totalOrders");
+const pendingPaymentsEl = document.getElementById("pendingPayments");
+
+const recentCustomersEl =
+    document.getElementById("recentCustomers");
+
+const notificationCountEl =
+    document.getElementById("notificationCount");
+
+const notificationListEl =
+    document.getElementById("notificationList");
+
+const searchBox =
+    document.getElementById("searchBox");
+
+const notificationBox =
+    document.getElementById("notificationBox");
+
+
+// ======================================================
+// ADMIN CHECK
+// ======================================================
+
+auth.onAuthStateChanged(async (user) => {
 
     if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "admin-login.html";
         return;
     }
 
-    if (user.email !== ADMIN_EMAIL) {
-        alert("❌ Access Denied! Admin only.");
-        await firebase.auth().signOut();
-        window.location.href = "login.html";
+    if (
+        !user.email ||
+        user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
+    ) {
+        await auth.signOut();
+        window.location.href = "admin-login.html";
         return;
     }
 
-    loadDashboard();
-    loadNotifications();
+    await loadDashboard();
+
 });
 
-// =====================================================
-// DASHBOARD
-// =====================================================
 
-function loadDashboard() {
+// ======================================================
+// LOAD DASHBOARD
+// ======================================================
 
-    // --------------------------
-    // TOTAL CUSTOMERS
-    // --------------------------
+async function loadDashboard() {
 
-    db.collection("customers").onSnapshot((snapshot) => {
+    try {
 
-        const el = document.getElementById("totalCustomers");
+        await Promise.all([
+            loadCustomers(),
+            loadOrders(),
+            loadPendingPayments()
+        ]);
 
-        if (el) {
-            el.innerText = snapshot.size;
-        }
+    } catch (error) {
 
-    });
+        console.error(
+            "Dashboard loading error:",
+            error
+        );
 
-    // --------------------------
-    // TOTAL USERS
-    // --------------------------
+    }
 
-    db.collection("customers").onSnapshot((snapshot) => {
+}
 
-        const el = document.getElementById("totalUsers");
 
-        if (el) {
-            el.innerText = snapshot.size;
-        }
+// ======================================================
+// LOAD CUSTOMERS
+// ======================================================
 
-    });
+async function loadCustomers() {
 
-    // --------------------------
-    // TOTAL ORDERS
-    // --------------------------
+    try {
 
-    db.collection("orders").onSnapshot((snapshot) => {
+        const snapshot = await db
+            .collection("customers")
+            .get();
 
-        const el = document.getElementById("totalOrders");
+        const customers = [];
 
-        if (el) {
-            el.innerText = snapshot.size;
-        }
+        snapshot.forEach(doc => {
 
-    });
-
-    // --------------------------
-    // PENDING PAYMENTS
-    // --------------------------
-
-    db.collection("orders")
-        .where("paymentStatus", "==", "Pending")
-        .onSnapshot((snapshot) => {
-
-            const el =
-                document.getElementById("pendingPayments");
-
-            if (el) {
-                el.innerText = snapshot.size;
-            }
-
-        });
-
-    // --------------------------
-    // REVENUE
-    // --------------------------
-
-    db.collection("orders")
-        .where("status", "==", "Delivered")
-        .onSnapshot((snapshot) => {
-
-            let revenue = 0;
-
-            snapshot.forEach((doc) => {
-
-                const order = doc.data();
-
-                revenue += Number(order.price || 0);
-
+            customers.push({
+                id: doc.id,
+                ...doc.data()
             });
 
-            const el =
-                document.getElementById("totalRevenue");
+        });
 
-            if (el) {
-                el.innerText =
-                    "₹" + revenue.toFixed(2);
+
+        // ==============================================
+        // TOTAL USERS
+        // ==============================================
+
+        totalUsersEl.textContent =
+            customers.length;
+
+
+        // ==============================================
+        // TOTAL CUSTOMERS
+        // ==============================================
+
+        totalCustomersEl.textContent =
+            customers.length;
+
+
+        // ==============================================
+        // RECENT CUSTOMERS
+        // ==============================================
+
+        customers.sort((a, b) => {
+
+            const aTime =
+                a.createdAt?.toMillis
+                    ? a.createdAt.toMillis()
+                    : 0;
+
+            const bTime =
+                b.createdAt?.toMillis
+                    ? b.createdAt.toMillis()
+                    : 0;
+
+            return bTime - aTime;
+
+        });
+
+
+        renderRecentCustomers(
+            customers.slice(0, 5)
+        );
+
+
+        // ==============================================
+        // ANALYTICS
+        // ==============================================
+
+        renderCustomerChart(customers);
+
+    } catch (error) {
+
+        console.error(
+            "Customer loading error:",
+            error
+        );
+
+        totalUsersEl.textContent = "0";
+        totalCustomersEl.textContent = "0";
+
+        recentCustomersEl.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    Failed to load customers
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+// ======================================================
+// RECENT CUSTOMERS
+// ======================================================
+
+function renderRecentCustomers(customers) {
+
+    if (!customers.length) {
+
+        recentCustomersEl.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    No Customers Found
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    recentCustomersEl.innerHTML =
+        customers.map(customer => {
+
+            const name =
+                escapeHtml(
+                    customer.name || "Customer"
+                );
+
+            const phone =
+                escapeHtml(
+                    customer.phone || "-"
+                );
+
+            const email =
+                escapeHtml(
+                    customer.email || "-"
+                );
+
+            return `
+                <tr>
+
+                    <td>${name}</td>
+
+                    <td>${phone}</td>
+
+                    <td>${email}</td>
+
+                    <td>
+                        <span class="status active">
+                            Active
+                        </span>
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+}
+
+
+// ======================================================
+// LOAD ORDERS
+// ======================================================
+
+async function loadOrders() {
+
+    try {
+
+        const snapshot = await db
+            .collection("orders")
+            .get();
+
+        let completedOrders = 0;
+        let revenue = 0;
+
+        const now = new Date();
+
+        const currentMonth =
+            now.getMonth();
+
+        const currentYear =
+            now.getFullYear();
+
+
+        const notifications = [];
+
+
+        snapshot.forEach(doc => {
+
+            const order = doc.data();
+
+
+            // ==========================================
+            // COMPLETED ORDERS
+            // ==========================================
+
+            if (
+                String(order.status || "").toLowerCase()
+                === "delivered"
+            ) {
+
+                completedOrders++;
+
+            }
+
+
+            // ==========================================
+            // MONTHLY REVENUE
+            // ==========================================
+
+            if (
+                String(order.status || "").toLowerCase()
+                === "delivered"
+                &&
+                String(order.paymentStatus || "").toLowerCase()
+                === "approved"
+            ) {
+
+                let orderDate = null;
+
+                if (
+                    order.createdAt &&
+                    order.createdAt.toDate
+                ) {
+
+                    orderDate =
+                        order.createdAt.toDate();
+
+                } else if (
+                    order.orderDate &&
+                    order.orderDate.toDate
+                ) {
+
+                    orderDate =
+                        order.orderDate.toDate();
+
+                }
+
+
+                if (
+                    orderDate &&
+                    orderDate.getMonth() === currentMonth &&
+                    orderDate.getFullYear() === currentYear
+                ) {
+
+                    revenue +=
+                        Number(order.price || 0);
+
+                }
+
+            }
+
+
+            // ==========================================
+            // NEW / PENDING ORDERS
+            // ==========================================
+
+            if (
+                String(order.status || "").toLowerCase()
+                === "pending"
+            ) {
+
+                notifications.push(order);
+
             }
 
         });
 
-    // --------------------------
-    // RECENT CUSTOMERS
-    // --------------------------
 
-    db.collection("customers")
-        .orderBy("createdAt", "desc")
-        .limit(5)
-        .onSnapshot(
+        totalOrdersEl.textContent =
+            completedOrders;
 
-            (snapshot) => {
 
-                const tbody =
-                    document.getElementById(
-                        "recentCustomers"
-                    );
+        totalRevenueEl.textContent =
+            "₹" + revenue.toFixed(2);
 
-                if (!tbody) return;
 
-                tbody.innerHTML = "";
+        updateNotifications(
+            notifications
+        );
 
-                if (snapshot.empty) {
 
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="4"
-                                style="text-align:center;">
-                                No Customers Found
-                            </td>
-                        </tr>
-                    `;
+    } catch (error) {
 
-                    return;
-                }
+        console.error(
+            "Order loading error:",
+            error
+        );
 
-                snapshot.forEach((doc) => {
+        totalOrdersEl.textContent = "0";
+        totalRevenueEl.textContent = "₹0";
+
+    }
+
+}
+
+
+// ======================================================
+// PENDING PAYMENTS
+// ======================================================
+
+async function loadPendingPayments() {
+
+    try {
+
+        const snapshot = await db
+            .collection("balanceRechargeRequests")
+            .get();
+
+        let pending = 0;
+
+        snapshot.forEach(doc => {
+
+            const data = doc.data();
+
+            if (
+                String(data.status || "").toLowerCase()
+                === "pending"
+            ) {
+
+                pending++;
+
+            }
+
+        });
+
+
+        pendingPaymentsEl.textContent =
+            pending;
+
+
+    } catch (error) {
+
+        console.error(
+            "Pending payment error:",
+            error
+        );
+
+        pendingPaymentsEl.textContent = "0";
+
+    }
+
+}
+
+
+// ======================================================
+// NOTIFICATIONS
+// ======================================================
+
+function updateNotifications(orders) {
+
+    notificationCountEl.textContent =
+        orders.length;
+
+
+    if (!orders.length) {
+
+        notificationListEl.innerHTML =
+            "No New Orders";
+
+        return;
+
+    }
+
+
+    notificationListEl.innerHTML =
+        orders.slice(0, 5).map(order => {
+
+            return `
+                <div class="notification-item">
+
+                    <strong>
+                        New Order
+                    </strong>
+
+                    <br>
+
+                    ${escapeHtml(
+                        order.productName || "Order"
+                    )}
+
+                    <br>
+
+                    ₹${Number(
+                        order.price || 0
+                    ).toFixed(2)}
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+// ======================================================
+// NOTIFICATION CLICK
+// ======================================================
+
+const bell =
+    document.querySelector(".fa-bell");
+
+if (bell) {
+
+    bell.addEventListener("click", () => {
+
+        notificationBox.classList.toggle(
+            "show"
+        );
+
+    });
+
+}
+
+
+// ======================================================
+// SEARCH
+// ======================================================
+
+if (searchBox) {
+
+    searchBox.addEventListener(
+        "input",
+        async () => {
+
+            const keyword =
+                searchBox.value
+                    .trim()
+                    .toLowerCase();
+
+            if (!keyword) {
+
+                await loadCustomers();
+
+                return;
+
+            }
+
+
+            try {
+
+                const snapshot =
+                    await db
+                        .collection("customers")
+                        .get();
+
+                const results = [];
+
+
+                snapshot.forEach(doc => {
 
                     const customer =
                         doc.data();
 
-                    tbody.innerHTML += `
+                    const text = `
+                        ${customer.name || ""}
+                        ${customer.email || ""}
+                        ${customer.phone || ""}
+                        ${customer.username || ""}
+                    `.toLowerCase();
 
-                        <tr>
 
-                            <td>
-                                ${escapeHTML(
-                                    customer.name || "-"
-                                )}
-                            </td>
+                    if (
+                        text.includes(keyword)
+                    ) {
 
-                            <td>
-                                ${escapeHTML(
-                                    customer.phone || "-"
-                                )}
-                            </td>
+                        results.push({
+                            id: doc.id,
+                            ...customer
+                        });
 
-                            <td>
-                                ${escapeHTML(
-                                    customer.email || "-"
-                                )}
-                            </td>
-
-                            <td>
-                                <span class="active">
-                                    Active
-                                </span>
-                            </td>
-
-                        </tr>
-
-                    `;
+                    }
 
                 });
 
-            },
 
-            (error) => {
+                renderRecentCustomers(
+                    results.slice(0, 5)
+                );
+
+
+            } catch (error) {
 
                 console.error(
-                    "Customer Error:",
+                    "Search error:",
                     error
                 );
 
             }
 
-        );
+        }
+    );
+
 }
 
-// =====================================================
-// NOTIFICATIONS
-// =====================================================
 
-function loadNotifications() {
+// ======================================================
+// CUSTOMER CHART
+// ======================================================
 
-    const bell =
-        document.querySelector(".fa-bell");
+function renderCustomerChart(customers) {
 
-    const box =
+    const canvas =
         document.getElementById(
-            "notificationBox"
+            "userChart"
         );
 
-    if (bell && box) {
+    if (!canvas) return;
 
-        bell.onclick = () => {
 
-            box.style.display =
-                box.style.display === "block"
-                    ? "none"
-                    : "block";
+    const ctx =
+        canvas.getContext("2d");
 
-        };
+
+    const monthlyCounts =
+        new Array(12).fill(0);
+
+
+    customers.forEach(customer => {
+
+        if (
+            customer.createdAt &&
+            customer.createdAt.toDate
+        ) {
+
+            const date =
+                customer.createdAt.toDate();
+
+            monthlyCounts[
+                date.getMonth()
+            ]++;
+
+        }
+
+    });
+
+
+    if (
+        window.customerChart
+    ) {
+
+        window.customerChart.destroy();
 
     }
 
-    db.collection("orders")
-        .where("status", "==", "Pending")
-        .onSnapshot((snapshot) => {
 
-            const count =
-                document.getElementById(
-                    "notificationCount"
-                );
+    window.customerChart =
+        new Chart(ctx, {
 
-            const list =
-                document.getElementById(
-                    "notificationList"
-                );
+            type: "line",
 
-            if (count) {
-                count.innerText =
-                    snapshot.size;
+            data: {
+
+                labels: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec"
+                ],
+
+                datasets: [
+
+                    {
+                        label: "Customers",
+
+                        data:
+                            monthlyCounts,
+
+                        tension: 0.35,
+
+                        fill: true
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: true
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+
+                    }
+
+                }
+
             }
-
-            if (!list) return;
-
-            list.innerHTML = "";
-
-            if (snapshot.empty) {
-
-                list.innerHTML = `
-                    <div style="padding:15px;">
-                        No New Orders
-                    </div>
-                `;
-
-                return;
-            }
-
-            snapshot.forEach((doc) => {
-
-                const order =
-                    doc.data();
-
-                list.innerHTML += `
-
-                    <div
-                        class="notification-item"
-                        style="
-                            padding:12px;
-                            border-bottom:
-                                1px solid rgba(255,255,255,.08);
-                        "
-                    >
-
-                        <b>
-                            ${escapeHTML(
-                                order.customerName ||
-                                order.email ||
-                                "Customer"
-                            )}
-                        </b>
-
-                        <br>
-
-                        Ordered:
-
-                        <b>
-                            ${escapeHTML(
-                                order.productName ||
-                                "Product"
-                            )}
-                        </b>
-
-                        <br>
-
-                        <small>
-                            ₹${Number(
-                                order.price || 0
-                            ).toFixed(2)}
-                        </small>
-
-                        <br><br>
-
-                        <button
-                            onclick="openOrder(
-                                '${doc.id}'
-                            )"
-                            style="
-                                padding:8px 12px;
-                                border:0;
-                                border-radius:8px;
-                                cursor:pointer;
-                            "
-                        >
-                            Manage Order
-                        </button>
-
-                    </div>
-
-                `;
-
-            });
 
         });
 
 }
 
-// =====================================================
-// OPEN ORDER
-// =====================================================
 
-async function openOrder(orderId) {
+// ======================================================
+// HTML ESCAPE
+// ======================================================
 
-    try {
+function escapeHtml(value) {
 
-        const ref =
-            db.collection("orders")
-                .doc(orderId);
-
-        const snap =
-            await ref.get();
-
-        if (!snap.exists) {
-
-            alert("Order not found.");
-            return;
-
-        }
-
-        const order =
-            snap.data();
-
-        const action =
-            prompt(
-                `Order: ${
-                    order.productName || "Product"
-                }\n\n` +
-
-                `Price: ₹${
-                    Number(order.price || 0)
-                        .toFixed(2)
-                }\n\n` +
-
-                `Payment: ${
-                    order.paymentStatus || "Pending"
-                }\n\n` +
-
-                `Current Status: ${
-                    order.status || "Pending"
-                }\n\n` +
-
-                `Type:\n` +
-                `1 = Mark Delivery Failed + Refund\n` +
-                `2 = Mark Delivered\n` +
-                `3 = Cancel\n\n` +
-                `Enter option:`
-            );
-
-        if (action === "1") {
-
-            await refundOrder(
-                orderId
-            );
-
-        } else if (action === "2") {
-
-            await markDelivered(
-                orderId
-            );
-
-        } else if (action === "3") {
-
-            await cancelOrder(
-                orderId
-            );
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Open Order Error:",
-            error
-        );
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
-// =====================================================
-// REFUND ORDER
-// =====================================================
 
-async function refundOrder(orderId) {
-
-    const confirmRefund =
-        confirm(
-            "Delivery failed হলে order amount customer wallet-এ ফেরত যাবে.\n\nContinue?"
-        );
-
-    if (!confirmRefund) {
-        return;
-    }
-
-    try {
-
-        const orderRef =
-            db.collection("orders")
-                .doc(orderId);
-
-        await db.runTransaction(
-            async (transaction) => {
-
-                const orderSnap =
-                    await transaction.get(
-                        orderRef
-                    );
-
-                if (!orderSnap.exists) {
-
-                    throw new Error(
-                        "Order not found."
-                    );
-
-                }
-
-                const order =
-                    orderSnap.data();
-
-                // --------------------------
-                // ALREADY REFUNDED
-                // --------------------------
-
-                if (
-                    order.refundStatus ===
-                    "refunded"
-                ) {
-
-                    throw new Error(
-                        "This order is already refunded."
-                    );
-
-                }
-
-                // --------------------------
-                // UID CHECK
-                // --------------------------
-
-                if (!order.uid) {
-
-                    throw new Error(
-                        "Customer UID missing."
-                    );
-
-                }
-
-                // --------------------------
-                // REFUND AMOUNT
-                // --------------------------
-
-                const refundAmount =
-                    Number(
-                        order.price || 0
-                    );
-
-                if (
-                    !Number.isFinite(
-                        refundAmount
-                    ) ||
-                    refundAmount <= 0
-                ) {
-
-                    throw new Error(
-                        "Invalid refund amount."
-                    );
-
-                }
-
-                // --------------------------
-                // USER WALLET
-                // --------------------------
-
-                const userRef =
-                    db.collection("users")
-                        .doc(order.uid);
-
-                const userSnap =
-                    await transaction.get(
-                        userRef
-                    );
-
-                if (!userSnap.exists) {
-
-                    throw new Error(
-                        "Customer wallet not found."
-                    );
-
-                }
-
-                const user =
-                    userSnap.data();
-
-                const oldBalance =
-                    Number(
-                        user.walletBalance || 0
-                    );
-
-                const newBalance =
-                    oldBalance +
-                    refundAmount;
-
-                // --------------------------
-                // UPDATE WALLET
-                // --------------------------
-
-                transaction.update(
-                    userRef,
-                    {
-                        walletBalance:
-                            newBalance
-                    }
-                );
-
-                // --------------------------
-                // UPDATE ORDER
-                // --------------------------
-
-                transaction.update(
-                    orderRef,
-                    {
-
-                        status:
-                            "Delivery Failed",
-
-                        refundStatus:
-                            "refunded",
-
-                        refundAmount:
-                            refundAmount,
-
-                        refundAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp(),
-
-                        refundedBy:
-                            ADMIN_EMAIL
-
-                    }
-                );
-
-                // --------------------------
-                // WALLET TRANSACTION LOG
-                // --------------------------
-
-                const transactionRef =
-                    db.collection(
-                        "walletTransactions"
-                    ).doc();
-
-                transaction.set(
-                    transactionRef,
-                    {
-
-                        uid:
-                            order.uid,
-
-                        orderId:
-                            order.orderId ||
-                            orderId,
-
-                        type:
-                            "refund",
-
-                        amount:
-                            refundAmount,
-
-                        balanceBefore:
-                            oldBalance,
-
-                        balanceAfter:
-                            newBalance,
-
-                        reason:
-                            "Order delivery failed",
-
-                        createdAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp(),
-
-                        createdBy:
-                            ADMIN_EMAIL
-
-                    }
-                );
-
-            }
-        );
-
-        alert(
-            "✅ Delivery Failed + Wallet Refund Successful!"
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Refund Error:",
-            error
-        );
-
-        alert(
-            "❌ Refund failed: " +
-            error.message
-        );
-
-    }
-
-}
-
-// =====================================================
-// MARK DELIVERED
-// =====================================================
-
-async function markDelivered(orderId) {
-
-    const key =
-        prompt(
-            "Enter Product Key:"
-        );
-
-    if (!key || !key.trim()) {
-
-        alert(
-            "Product key required."
-        );
-
-        return;
-    }
-
-    try {
-
-        const ref =
-            db.collection("orders")
-                .doc(orderId);
-
-        const snap =
-            await ref.get();
-
-        if (!snap.exists) {
-
-            throw new Error(
-                "Order not found."
-            );
-
-        }
-
-        const order =
-            snap.data();
-
-        if (
-            order.productKey &&
-            String(order.productKey)
-                .trim() !== ""
-        ) {
-
-            throw new Error(
-                "Key already delivered."
-            );
-
-        }
-
-        if (
-            order.paymentMethod !==
-            "Wallet Balance" &&
-            order.paymentStatus !==
-            "Paid"
-        ) {
-
-            throw new Error(
-                "Payment is not approved."
-            );
-
-        }
-
-        await ref.update({
-
-            productKey:
-                key.trim(),
-
-            status:
-                "Delivered",
-
-            deliveredAt:
-                firebase.firestore
-                    .FieldValue
-                    .serverTimestamp(),
-
-            deliveredBy:
-                ADMIN_EMAIL
-
-        });
-
-        alert(
-            "✅ Product Key Delivered!"
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Delivery Error:",
-            error
-        );
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-}
-
-// =====================================================
-// CANCEL ORDER WITHOUT REFUND
-// =====================================================
-
-async function cancelOrder(orderId) {
-
-    const yes =
-        confirm(
-            "Cancel this order without wallet refund?"
-        );
-
-    if (!yes) {
-        return;
-    }
-
-    try {
-
-        await db.collection("orders")
-            .doc(orderId)
-            .update({
-
-                status:
-                    "Cancelled",
-
-                cancelledAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp(),
-
-                cancelledBy:
-                    ADMIN_EMAIL
-
-            });
-
-        alert(
-            "✅ Order Cancelled."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Cancel Error:",
-            error
-        );
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-}
-
-// =====================================================
+// ======================================================
 // LOGOUT
-// =====================================================
+// ======================================================
 
 const logoutBtn =
     document.getElementById(
@@ -826,172 +729,23 @@ if (logoutBtn) {
         "click",
         async () => {
 
-            if (
-                confirm(
-                    "Logout?"
-                )
-            ) {
+            try {
 
-                await firebase
-                    .auth()
-                    .signOut();
+                await auth.signOut();
 
                 window.location.href =
-                    "login.html";
+                    "admin-login.html";
 
-            }
+            } catch (error) {
 
-        }
-    );
-
-}
-
-// =====================================================
-// SEARCH
-// =====================================================
-
-const searchBox =
-    document.getElementById(
-        "searchBox"
-    );
-
-if (searchBox) {
-
-    searchBox.addEventListener(
-        "input",
-        (e) => {
-
-            const value =
-                e.target.value
-                    .toLowerCase()
-                    .trim();
-
-            const rows =
-                document.querySelectorAll(
-                    "#recentCustomers tr"
+                console.error(
+                    "Logout error:",
+                    error
                 );
 
-            rows.forEach((row) => {
-
-                row.style.display =
-                    row.innerText
-                        .toLowerCase()
-                        .includes(value)
-                        ? ""
-                        : "none";
-
-            });
-
-        }
-    );
-
-}
-
-// =====================================================
-// CHART
-// =====================================================
-
-const chartCanvas =
-    document.getElementById(
-        "userChart"
-    );
-
-if (
-    chartCanvas &&
-    typeof Chart !== "undefined"
-) {
-
-    new Chart(
-        chartCanvas,
-        {
-
-            type: "bar",
-
-            data: {
-
-                labels: [
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun"
-                    ],
-
-                datasets: [
-
-                    {
-
-                        label:
-                            "Customers",
-
-                        data: [
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0
-                        ],
-
-                        borderWidth: 1
-
-                    }
-
-                ]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                plugins: {
-
-                    legend: {
-                        display: true
-                    }
-
-                }
-
             }
 
         }
     );
-
-}
-
-// =====================================================
-// HTML ESCAPE
-// =====================================================
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
 
 }
