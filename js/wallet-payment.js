@@ -454,55 +454,6 @@ paidBtn.onclick = async () => {
 
 
         // ==================================================
-        // 2. CREATE TRANSACTION
-        // ==================================================
-
-        await db
-
-            .collection(
-                "balanceTransactions"
-            )
-
-            .doc(rechargeId)
-
-            .set({
-
-                rechargeId:
-                    rechargeId,
-
-                uid:
-                    user.uid,
-
-                email:
-                    user.email || "",
-
-                amount:
-                    amount,
-
-                type:
-                    "credit",
-
-                status:
-                    "Pending",
-
-                mobile:
-                    mobile,
-
-                createdAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-        console.log(
-            "Balance transaction created:",
-            rechargeId
-        );
-
-
-        // ==================================================
         // 3. SEND TELEGRAM NOTIFICATION
         // ==================================================
 
