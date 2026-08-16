@@ -1,30 +1,15 @@
-// =====================================================
-// AUTH.JS
-// VIP PANEL - LOGIN / REGISTER / GOOGLE LOGIN
-// =====================================================
+// ======================================================
+// VIP PANEL - AUTH SYSTEM
+// Email + User ID + Google Login
+// ======================================================
+
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
 
 
-// =====================================================
-// CONFIG
-// =====================================================
-
-const ADMIN_EMAIL = "kundusudip011@gmail.com";
-
-
-// =====================================================
-// HELPERS
-// =====================================================
-
-function getElement(id) {
-    return document.getElementById(id);
-}
-
-
-// =====================================================
+// ======================================================
 // LOGIN
-// =====================================================
-
-const loginForm = getElement("loginForm");
+// ======================================================
 
 if (loginForm) {
 
@@ -32,217 +17,124 @@ if (loginForm) {
 
         e.preventDefault();
 
-        const loginInput = getElement("email");
-        const passwordInput = getElement("password");
+        const loginInput =
+            document.getElementById("email").value.trim();
 
-        if (!loginInput || !passwordInput) {
-            alert("Login form is incomplete.");
-            return;
-        }
+        const password =
+            document.getElementById("password").value;
 
-        const login = loginInput.value.trim();
-        const password = passwordInput.value;
+        if (!loginInput || !password) {
 
-        if (!login || !password) {
             alert("Please enter User ID/Email and Password.");
             return;
+
         }
 
         try {
 
-            let email = "";
+            let email = loginInput;
 
-            // =================================================
-            // EMAIL LOGIN
-            // =================================================
+            // --------------------------------------------------
+            // CHECK EMAIL OR USER ID
+            // --------------------------------------------------
 
             const isEmail =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(login);
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                    .test(loginInput);
 
-            if (isEmail) {
+            if (!isEmail) {
 
-                email = login.toLowerCase();
+                // Remove @ if user enters @username
+                const username =
+                    loginInput
+                        .replace(/^@/, "")
+                        .trim()
+                        .toLowerCase();
 
-            }
+                if (!username) {
 
-            // =================================================
-            // USERNAME LOGIN
-            // =================================================
-            // Username is searched from customers collection.
-            // IMPORTANT:
-            // This requires the user to already be authenticated.
-            // Therefore username login is handled through the
-            // username mapping collection if available.
-            // =================================================
-
-            else {
-
-                const username = login
-                    .replace("@", "")
-                    .trim()
-                    .toLowerCase();
-
-                // ---------------------------------------------
-                // First try usernames collection
-                // ---------------------------------------------
-
-                let usernameDoc = null;
-
-                try {
-
-                    const usernameRef =
-                        await db.collection("usernames")
-                            .doc(username)
-                            .get();
-
-                    if (usernameRef.exists) {
-
-                        usernameDoc =
-                            usernameRef.data();
-
-                    }
-
-                } catch (error) {
-
-                    console.warn(
-                        "Username collection lookup failed:",
-                        error
-                    );
-
-                }
-
-                // ---------------------------------------------
-                // Username mapping found
-                // ---------------------------------------------
-
-                if (usernameDoc && usernameDoc.email) {
-
-                    email =
-                        String(usernameDoc.email)
-                            .trim()
-                            .toLowerCase();
-
-                }
-
-                // ---------------------------------------------
-                // Fallback to customers collection
-                // ---------------------------------------------
-
-                else {
-
-                    try {
-
-                        const snap =
-                            await db.collection("customers")
-                                .where(
-                                    "username",
-                                    "==",
-                                    username
-                                )
-                                .limit(1)
-                                .get();
-
-                        if (!snap.empty) {
-
-                            const customer =
-                                snap.docs[0].data();
-
-                            if (customer.email) {
-
-                                email =
-                                    String(customer.email)
-                                        .trim()
-                                        .toLowerCase();
-
-                            }
-
-                        }
-
-                    } catch (error) {
-
-                        console.error(
-                            "Username lookup error:",
-                            error
-                        );
-
-                    }
-
-                }
-
-                if (!email) {
-
-                    alert(
-                        "User ID not found. Please use your registered Email."
-                    );
-
+                    alert("Please enter a valid User ID.");
                     return;
+
                 }
+
+                // --------------------------------------------------
+                // FIND EMAIL FROM USERNAME INDEX
+                // --------------------------------------------------
+
+                const usernameDoc =
+                    await db
+                        .collection("usernameIndex")
+                        .doc(username)
+                        .get();
+
+                if (!usernameDoc.exists) {
+
+                    alert("User ID not found!");
+                    return;
+
+                }
+
+                const usernameData =
+                    usernameDoc.data();
+
+                if (!usernameData.email) {
+
+                    alert("This User ID has no login email.");
+                    return;
+
+                }
+
+                email =
+                    usernameData.email;
 
             }
 
-
-            // =================================================
+            // --------------------------------------------------
             // FIREBASE LOGIN
-            // =================================================
+            // --------------------------------------------------
 
             await auth.signInWithEmailAndPassword(
                 email,
                 password
             );
 
-
-            // =================================================
+            // --------------------------------------------------
             // ADMIN LOGIN
-            // =================================================
+            // --------------------------------------------------
 
-            const isAdminPage =
+            if (
                 window.location.pathname
                     .toLowerCase()
-                    .includes("admin-login.html");
-
-
-            if (isAdminPage) {
+                    .includes("admin-login")
+            ) {
 
                 if (
-                    email.toLowerCase() !==
-                    ADMIN_EMAIL.toLowerCase()
+                    email.toLowerCase()
+                    !== "kundusudip011@gmail.com"
                 ) {
 
-                    alert(
-                        "❌ Access Denied! Admin only."
-                    );
+                    alert("Access Denied! Admin only.");
 
                     await auth.signOut();
 
                     return;
+
                 }
 
                 window.location.href =
                     "dashboard.html";
 
                 return;
+
             }
 
-
-            // =================================================
+            // --------------------------------------------------
             // NORMAL USER LOGIN
-            // =================================================
+            // --------------------------------------------------
 
-            if (
-                email.toLowerCase() ===
-                ADMIN_EMAIL.toLowerCase()
-            ) {
-
-                // Admin should normally use admin-login.html
-                window.location.href =
-                    "dashboard.html";
-
-            } else {
-
-                window.location.href =
-                    "shop.html";
-
-            }
+            window.location.href =
+                "shop.html";
 
         } catch (error) {
 
@@ -256,45 +148,35 @@ if (loginForm) {
 
             switch (error.code) {
 
-                case "auth/invalid-credential":
-                    message =
-                        "❌ Invalid Email/User ID or Password.";
-                    break;
-
                 case "auth/user-not-found":
-                    message =
-                        "❌ Account not found.";
+                    message = "Account not found.";
                     break;
 
                 case "auth/wrong-password":
-                    message =
-                        "❌ Incorrect password.";
+                    message = "Incorrect password.";
+                    break;
+
+                case "auth/invalid-credential":
+                    message = "Invalid User ID/Email or password.";
                     break;
 
                 case "auth/invalid-email":
-                    message =
-                        "❌ Invalid email address.";
+                    message = "Invalid email address.";
                     break;
 
                 case "auth/too-many-requests":
                     message =
-                        "⚠️ Too many login attempts. Please try again later.";
-                    break;
-
-                case "auth/user-disabled":
-                    message =
-                        "❌ This account has been disabled.";
+                        "Too many login attempts. Please try again later.";
                     break;
 
                 case "permission-denied":
                     message =
-                        "❌ Database permission denied.";
+                        "Firestore permission denied.";
                     break;
 
                 default:
                     message =
-                        "❌ " +
-                        (error.message || "Unable to login.");
+                        error.message || message;
 
             }
 
@@ -307,355 +189,484 @@ if (loginForm) {
 }
 
 
-// =====================================================
+// ======================================================
 // REGISTER
-// =====================================================
-
-const registerForm =
-    getElement("registerForm");
+// ======================================================
 
 if (registerForm) {
 
-    registerForm.addEventListener(
-        "submit",
-        async (e) => {
+    registerForm.addEventListener("submit", async (e) => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            const nameInput =
-                getElement("name");
+        const name =
+            document.getElementById("name")
+                .value
+                .trim();
 
-            const usernameInput =
-                getElement("username");
+        const username =
+            document.getElementById("username")
+                .value
+                .trim()
+                .replace(/^@/, "")
+                .toLowerCase();
 
-            const emailInput =
-                getElement("email");
+        const email =
+            document.getElementById("email")
+                .value
+                .trim()
+                .toLowerCase();
 
-            const passwordInput =
-                getElement("password");
+        const password =
+            document.getElementById("password")
+                .value;
+
+        // --------------------------------------------------
+        // VALIDATION
+        // --------------------------------------------------
+
+        if (!name) {
+
+            alert("Please enter your name.");
+            return;
+
+        }
+
+        if (!username) {
+
+            alert("Please enter a User ID.");
+            return;
+
+        }
+
+        if (!/^[a-zA-Z0-9._-]{3,30}$/.test(username)) {
+
+            alert(
+                "User ID can contain only letters, numbers, dot, underscore and hyphen."
+            );
+
+            return;
+
+        }
+
+        if (!email) {
+
+            alert("Please enter your email.");
+            return;
+
+        }
+
+        if (password.length < 6) {
+
+            alert(
+                "Password must be at least 6 characters."
+            );
+
+            return;
+
+        }
+
+        try {
+
+            // --------------------------------------------------
+            // CHECK USERNAME
+            // --------------------------------------------------
+
+            const usernameRef =
+                db
+                    .collection("usernameIndex")
+                    .doc(username);
+
+            const usernameDoc =
+                await usernameRef.get();
+
+            if (usernameDoc.exists) {
+
+                alert("User ID already exists!");
+                return;
+
+            }
+
+            // ======================================================
+// REGISTER
+// ======================================================
+
+if (registerForm) {
+
+    registerForm.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        const name =
+            document.getElementById("name")
+                .value.trim();
+
+        const username =
+            document.getElementById("username")
+                .value.trim()
+                .replace(/^@/, "")
+                .toLowerCase();
+
+        const email =
+            document.getElementById("email")
+                .value.trim()
+                .toLowerCase();
+
+        const password =
+            document.getElementById("password")
+                .value;
+
+        // ==============================
+        // VALIDATION
+        // ==============================
+
+        if (!name) {
+            alert("Please enter your name.");
+            return;
+        }
+
+        if (!username) {
+            alert("Please enter a User ID.");
+            return;
+        }
+
+        if (!/^[a-zA-Z0-9._-]{3,30}$/.test(username)) {
+            alert(
+                "User ID must be 3-30 characters and can contain letters, numbers, dot, underscore or hyphen."
+            );
+            return;
+        }
+
+        if (!email) {
+            alert("Please enter your email.");
+            return;
+        }
+
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters.");
+            return;
+        }
+
+        try {
+
+            // ==============================
+            // CHECK USERNAME
+            // ==============================
+
+            const usernameRef =
+                db.collection("usernameIndex")
+                  .doc(username);
+
+            const usernameDoc =
+                await usernameRef.get();
+
+            if (usernameDoc.exists) {
+
+                alert("User ID already exists!");
+                return;
+
+            }
+
+            // ==============================
+            // CREATE FIREBASE AUTH ACCOUNT
+            // ==============================
+
+            const result =
+                await auth.createUserWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+            const user = result.user;
+
+            console.log(
+                "Firebase Auth created:",
+                user.uid
+            );
+
+            // ==============================
+            // UPDATE PROFILE
+            // ==============================
+
+            await user.updateProfile({
+                displayName: name
+            });
+
+            // ==============================
+            // CREATE CUSTOMER
+            // ==============================
+
+            await db
+                .collection("customers")
+                .doc(user.uid)
+                .set({
+
+                    uid: user.uid,
+
+                    name: name,
+
+                    username: username,
+
+                    email: email,
+
+                    phone: "",
+
+                    balance: 0,
+
+                    createdAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+            console.log(
+                "Customer profile created."
+            );
+
+            // ==============================
+            // CREATE USERNAME INDEX
+            // ==============================
+
+            await usernameRef.set({
+
+                username: username,
+
+                email: email,
+
+                uid: user.uid,
+
+                createdAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            });
+
+            console.log(
+                "Username index created."
+            );
+
+            // ==============================
+            // LOGOUT
+            // ==============================
+
+            await auth.signOut();
+
+            alert(
+                "Registration Successful! You can now login using your User ID."
+            );
+
+            window.location.href =
+                "login.html";
+
+        } catch (error) {
+
+            console.error(
+                "Registration Error:",
+                error
+            );
 
             if (
-                !nameInput ||
-                !usernameInput ||
-                !emailInput ||
-                !passwordInput
+                error.code ===
+                "auth/email-already-in-use"
             ) {
 
                 alert(
-                    "Registration form is incomplete."
+                    "This email is already registered."
                 );
 
-                return;
-            }
-
-
-            const name =
-                nameInput.value.trim();
-
-            const username =
-                usernameInput.value
-                    .trim()
-                    .replace("@", "")
-                    .toLowerCase();
-
-            const email =
-                emailInput.value
-                    .trim()
-                    .toLowerCase();
-
-            const password =
-                passwordInput.value;
-
-
-            // =================================================
-            // VALIDATION
-            // =================================================
-
-            if (!name) {
-
-                alert(
-                    "Please enter your name."
-                );
-
-                return;
-            }
-
-            if (!username) {
-
-                alert(
-                    "Please enter a User ID."
-                );
-
-                return;
-            }
-
-            if (!/^[a-zA-Z0-9._-]{3,30}$/.test(username)) {
-
-                alert(
-                    "User ID must contain 3-30 letters, numbers, dot, underscore or hyphen."
-                );
-
-                return;
-            }
-
-            if (
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                    .test(email)
+            } else if (
+                error.code ===
+                "auth/invalid-email"
             ) {
 
                 alert(
-                    "Please enter a valid email."
+                    "Invalid email address."
                 );
 
-                return;
-            }
-
-            if (password.length < 6) {
+            } else if (
+                error.code ===
+                "auth/weak-password"
+            ) {
 
                 alert(
                     "Password must be at least 6 characters."
                 );
 
-                return;
-            }
-
-
-            try {
-
-                // =================================================
-                // CHECK USERNAME
-                // =================================================
-
-                let usernameExists = false;
-
-
-                // First check username mapping
-
-                try {
-
-                    const usernameDoc =
-                        await db.collection("usernames")
-                            .doc(username)
-                            .get();
-
-                    if (usernameDoc.exists) {
-
-                        usernameExists = true;
-
-                    }
-
-                } catch (error) {
-
-                    console.warn(
-                        "Username mapping check failed:",
-                        error
-                    );
-
-                }
-
-
-                // Fallback customers check
-
-                if (!usernameExists) {
-
-                    const customerSnap =
-                        await db.collection("customers")
-                            .where(
-                                "username",
-                                "==",
-                                username
-                            )
-                            .limit(1)
-                            .get();
-
-                    if (!customerSnap.empty) {
-
-                        usernameExists = true;
-
-                    }
-
-                }
-
-
-                if (usernameExists) {
-
-                    alert(
-                        "❌ User ID already exists!"
-                    );
-
-                    return;
-                }
-
-
-                // =================================================
-                // CREATE FIREBASE AUTH ACCOUNT
-                // =================================================
-
-                const result =
-                    await auth.createUserWithEmailAndPassword(
-                        email,
-                        password
-                    );
-
-                const user =
-                    result.user;
-
-
-                // =================================================
-                // UPDATE DISPLAY NAME
-                // =================================================
-
-                await user.updateProfile({
-
-                    displayName:
-                        name
-
-                });
-
-
-                // =================================================
-                // CREATE CUSTOMER PROFILE
-                // =================================================
-
-                await db.collection("customers")
-                    .doc(user.uid)
-                    .set({
-
-                        uid:
-                            user.uid,
-
-                        name:
-                            name,
-
-                        username:
-                            username,
-
-                        email:
-                            email,
-
-                        phone:
-                            "",
-
-                        walletBalance:
-                            0,
-
-                        createdAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp()
-
-                    });
-
-
-                // =================================================
-                // CREATE USERNAME MAPPING
-                // =================================================
-
-                await db.collection("usernames")
-                    .doc(username)
-                    .set({
-
-                        uid:
-                            user.uid,
-
-                        username:
-                            username,
-
-                        email:
-                            email,
-
-                        createdAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp()
-
-                    });
-
-
-                // =================================================
-                // LOGOUT AFTER REGISTER
-                // =================================================
-
-                await auth.signOut();
-
+            } else if (
+                error.code ===
+                "permission-denied"
+            ) {
 
                 alert(
-                    "✅ Registration Successful!\n\nYou can now login using your Email or User ID."
+                    "Firestore permission denied. Please check Firestore Rules."
                 );
 
+            } else {
 
-                window.location.href =
-                    "login.html";
-
-
-            } catch (error) {
-
-                console.error(
-                    "Registration Error:",
-                    error
+                alert(
+                    error.message ||
+                    "Registration failed."
                 );
-
-                let message =
-                    "Registration failed.";
-
-                switch (error.code) {
-
-                    case "auth/email-already-in-use":
-
-                        message =
-                            "❌ This email is already registered.";
-
-                        break;
-
-                    case "auth/invalid-email":
-
-                        message =
-                            "❌ Invalid email address.";
-
-                        break;
-
-                    case "auth/weak-password":
-
-                        message =
-                            "❌ Password is too weak.";
-
-                        break;
-
-                    case "permission-denied":
-
-                        message =
-                            "❌ Database permission denied. Check Firestore Rules.";
-
-                        break;
-
-                    default:
-
-                        message =
-                            "❌ " +
-                            (error.message ||
-                                "Unable to register.");
-
-                }
-
-                alert(message);
 
             }
 
         }
-    );
+
+    });
+
+}
+
+            // --------------------------------------------------
+            // CREATE FIREBASE AUTH USER
+            // --------------------------------------------------
+
+            const result =
+                await auth
+                    .createUserWithEmailAndPassword(
+                        email,
+                        password
+                    );
+
+            const user =
+                result.user;
+
+            // --------------------------------------------------
+            // UPDATE DISPLAY NAME
+            // --------------------------------------------------
+
+            await user.updateProfile({
+
+                displayName: name
+
+            });
+
+            // --------------------------------------------------
+            // CREATE CUSTOMER PROFILE
+            // --------------------------------------------------
+
+            await db
+                .collection("customers")
+                .doc(user.uid)
+                .set({
+
+                    uid:
+                        user.uid,
+
+                    name:
+                        name,
+
+                    username:
+                        username,
+
+                    email:
+                        email,
+
+                    phone:
+                        "",
+
+                    balance:
+                        0,
+
+                    createdAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+            // --------------------------------------------------
+            // CREATE USERNAME INDEX
+            // --------------------------------------------------
+
+            await usernameRef.set({
+
+                username:
+                    username,
+
+                email:
+                    email,
+
+                uid:
+                    user.uid,
+
+                createdAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            });
+
+            // --------------------------------------------------
+            // LOGOUT AFTER REGISTER
+            // --------------------------------------------------
+
+            await auth.signOut();
+
+            alert(
+                "Registration Successful! You can now login using your User ID or Email."
+            );
+
+            window.location.href =
+                "login.html";
+
+        } catch (error) {
+
+            console.error(
+                "Registration Error:",
+                error
+            );
+
+            let message =
+                "Registration failed.";
+
+            switch (error.code) {
+
+                case "auth/email-already-in-use":
+                    message =
+                        "This email is already registered.";
+                    break;
+
+                case "auth/invalid-email":
+                    message =
+                        "Invalid email address.";
+                    break;
+
+                case "auth/weak-password":
+                    message =
+                        "Password is too weak.";
+                    break;
+
+                case "permission-denied":
+                    message =
+                        "Firestore permission denied.";
+                    break;
+
+                default:
+                    message =
+                        error.message || message;
+
+            }
+
+            alert(message);
+
+        }
+
+    });
 
 }
 
 
-// =====================================================
+// ======================================================
 // SHOW / HIDE PASSWORD
-// =====================================================
+// ======================================================
 
 const togglePassword =
-    getElement("togglePassword");
+    document.getElementById("togglePassword");
 
 const passwordField =
-    getElement("password");
+    document.getElementById("password");
 
 if (
     togglePassword &&
@@ -674,26 +685,22 @@ if (
                 passwordField.type =
                     "text";
 
-                togglePassword.classList.remove(
-                    "fa-eye"
-                );
+                togglePassword.classList
+                    .remove("fa-eye");
 
-                togglePassword.classList.add(
-                    "fa-eye-slash"
-                );
+                togglePassword.classList
+                    .add("fa-eye-slash");
 
             } else {
 
                 passwordField.type =
                     "password";
 
-                togglePassword.classList.remove(
-                    "fa-eye-slash"
-                );
+                togglePassword.classList
+                    .remove("fa-eye-slash");
 
-                togglePassword.classList.add(
-                    "fa-eye"
-                );
+                togglePassword.classList
+                    .add("fa-eye");
 
             }
 
@@ -703,12 +710,12 @@ if (
 }
 
 
-// =====================================================
+// ======================================================
 // GOOGLE LOGIN
-// =====================================================
+// ======================================================
 
 const googleLogin =
-    getElement("googleLogin");
+    document.getElementById("googleLogin");
 
 if (googleLogin) {
 
@@ -719,101 +726,95 @@ if (googleLogin) {
             try {
 
                 const provider =
-                    new firebase.auth.GoogleAuthProvider();
+                    new firebase.auth
+                        .GoogleAuthProvider();
 
                 const result =
-                    await auth.signInWithPopup(
-                        provider
-                    );
+                    await auth
+                        .signInWithPopup(
+                            provider
+                        );
 
                 const user =
                     result.user;
 
-
-                // =================================================
-                // ADMIN GOOGLE LOGIN
-                // =================================================
-
-                const isAdminPage =
-                    window.location.pathname
-                        .toLowerCase()
-                        .includes("admin-login.html");
-
-
-                if (isAdminPage) {
-
-                    if (
-                        user.email
-                            .toLowerCase() !==
-                        ADMIN_EMAIL
-                            .toLowerCase()
-                    ) {
-
-                        alert(
-                            "❌ Access Denied! Admin only."
-                        );
-
-                        await auth.signOut();
-
-                        return;
-                    }
-
-                    window.location.href =
-                        "dashboard.html";
-
-                    return;
-                }
-
-
-                // =================================================
-                // CREATE CUSTOMER IF NEW
-                // =================================================
+                // --------------------------------------------------
+                // CHECK CUSTOMER
+                // --------------------------------------------------
 
                 const customerRef =
-                    db.collection("customers")
+                    db
+                        .collection("customers")
                         .doc(user.uid);
 
                 const customerDoc =
                     await customerRef.get();
 
+                // --------------------------------------------------
+                // CREATE CUSTOMER IF NEW
+                // --------------------------------------------------
 
                 if (!customerDoc.exists) {
 
-                    let username =
+                    let baseUsername =
                         (
                             user.email
-                                ? user.email.split("@")[0]
-                                : "user"
+                            ? user.email
+                                .split("@")[0]
+                            : "user"
                         )
+                        .toLowerCase()
                         .replace(
-                            /[^a-zA-Z0-9._-]/g,
+                            /[^a-z0-9._-]/g,
                             ""
-                        )
-                        .toLowerCase();
+                        );
 
+                    if (
+                        baseUsername.length < 3
+                    ) {
 
-                    // Make username unique
-
-                    const usernameRef =
-                        db.collection("usernames")
-                            .doc(username);
-
-                    const usernameDoc =
-                    await usernameRef.get();
-
-
-                    if (usernameDoc.exists) {
-
-                        username =
-                            username +
-                            Math.floor(
-                                1000 +
-                                Math.random() *
-                                9000
-                            );
+                        baseUsername =
+                            "user" +
+                            Date.now()
+                                .toString()
+                                .slice(-5);
 
                     }
 
+                    let finalUsername =
+                        baseUsername;
+
+                    let counter = 1;
+
+                    // --------------------------------------------------
+                    // FIND AVAILABLE USERNAME
+                    // --------------------------------------------------
+
+                    while (true) {
+
+                        const check =
+                            await db
+                                .collection(
+                                    "usernameIndex"
+                                )
+                                .doc(finalUsername)
+                                .get();
+
+                        if (!check.exists) {
+                            break;
+                        }
+
+                        finalUsername =
+                            baseUsername +
+                            counter;
+
+                        counter++;
+
+                    }
+
+                    // --------------------------------------------------
+                    // CUSTOMER
+                    // --------------------------------------------------
 
                     await customerRef.set({
 
@@ -822,20 +823,18 @@ if (googleLogin) {
 
                         name:
                             user.displayName ||
-                            "User",
+                            "Customer",
 
                         username:
-                            username,
+                            finalUsername,
 
                         email:
-                            user.email ||
-                            "",
+                            user.email || "",
 
                         phone:
-                            user.phoneNumber ||
                             "",
 
-                        walletBalance:
+                        balance:
                             0,
 
                         createdAt:
@@ -845,20 +844,25 @@ if (googleLogin) {
 
                     });
 
+                    // --------------------------------------------------
+                    // USERNAME INDEX
+                    // --------------------------------------------------
 
-                    await db.collection("usernames")
-                        .doc(username)
+                    await db
+                        .collection(
+                            "usernameIndex"
+                        )
+                        .doc(finalUsername)
                         .set({
+
+                            username:
+                                finalUsername,
+
+                            email:
+                                user.email || "",
 
                             uid:
                                 user.uid,
-
-                            username:
-                                username,
-
-                            email:
-                                user.email ||
-                                "",
 
                             createdAt:
                                 firebase.firestore
@@ -869,14 +873,8 @@ if (googleLogin) {
 
                 }
 
-
-                // =================================================
-                // USER HOME
-                // =================================================
-
                 window.location.href =
                     "shop.html";
-
 
             } catch (error) {
 
@@ -886,11 +884,8 @@ if (googleLogin) {
                 );
 
                 alert(
-                    "❌ " +
-                    (
-                        error.message ||
-                        "Google Login failed."
-                    )
+                    error.message ||
+                    "Google login failed."
                 );
 
             }

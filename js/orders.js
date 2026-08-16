@@ -1,23 +1,31 @@
 // ==========================================================
-// VIP PANEL STORE - ADMIN ORDER.JS
-// Deliver Key + Cancel Order + Automatic Wallet Refund
+// VIP PANEL STORE - ADMIN ORDERS
+// Deliver Key + Cancel Order + Wallet Refund
 // ==========================================================
 
-const db = firebase.firestore();
+/* Firebase db is already created in firebase.js */
+
+// ==========================================================
+// STATE
+// ==========================================================
 
 let selectedOrderId = null;
 let selectedOrder = null;
+let ordersUnsubscribe = null;
 
 
 // ==========================================================
 // ELEMENTS
 // ==========================================================
 
-const orderList =
-    document.getElementById("orderList");
+const orderTable =
+    document.getElementById("orderTable");
 
 const orderModal =
     document.getElementById("orderModal");
+
+const closeModalBtn =
+    document.getElementById("closeModal");
 
 const productKeyInput =
     document.getElementById("productKey");
@@ -25,48 +33,20 @@ const productKeyInput =
 const sendKeyBtn =
     document.getElementById("sendKeyBtn");
 
+const rejectPaymentBtn =
+    document.getElementById("rejectPaymentBtn");
 
-// ==========================================================
-// CANCEL / REFUND BUTTON
-// ==========================================================
-
-let cancelOrderBtn =
+const cancelOrderBtn =
     document.getElementById("cancelOrderBtn");
 
+const searchOrder =
+    document.getElementById("searchOrder");
 
-if (!cancelOrderBtn && orderModal) {
+const statusFilter =
+    document.getElementById("statusFilter");
 
-    cancelOrderBtn =
-        document.createElement("button");
-
-    cancelOrderBtn.id =
-        "cancelOrderBtn";
-
-    cancelOrderBtn.type =
-        "button";
-
-    cancelOrderBtn.innerHTML =
-        '<i class="fa-solid fa-ban"></i> Cancel & Refund';
-
-    cancelOrderBtn.style.cssText = `
-        width:100%;
-        margin-top:10px;
-        padding:12px 14px;
-        border:0;
-        border-radius:12px;
-        background:linear-gradient(135deg,#dc2626,#ef4444);
-        color:#fff;
-        font-weight:700;
-        cursor:pointer;
-    `;
-
-    const modalContent =
-        orderModal.querySelector(".modal-content") ||
-        orderModal.firstElementChild ||
-        orderModal;
-
-    modalContent.appendChild(cancelOrderBtn);
-}
+const paymentFilter =
+    document.getElementById("paymentFilter");
 
 
 // ==========================================================
@@ -77,14 +57,12 @@ firebase.auth().onAuthStateChanged((user) => {
 
     if (!user) {
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
         return;
     }
 
     loadOrders();
-
 });
 
 
@@ -94,234 +72,143 @@ firebase.auth().onAuthStateChanged((user) => {
 
 function loadOrders() {
 
-    if (!orderList) {
+    if (!orderTable) {
 
         console.error(
-            "orderList element not found."
+            "orderTable element not found."
         );
 
         return;
     }
 
-    db.collection("orders")
+    if (ordersUnsubscribe) {
+        ordersUnsubscribe();
+    }
+
+    ordersUnsubscribe = db
+        .collection("orders")
         .orderBy("createdAt", "desc")
         .onSnapshot(
-
             (snapshot) => {
 
-                orderList.innerHTML = "";
+                orderTable.innerHTML = "";
 
                 if (snapshot.empty) {
 
-                    orderList.innerHTML = `
-                        <p style="
-                            text-align:center;
-                            padding:25px;
-                        ">
-                            No orders found.
-                        </p>
+                    orderTable.innerHTML = `
+                        <tr>
+                            <td colspan="8"
+                                style="text-align:center;padding:25px;">
+                                No Orders Found
+                            </td>
+                        </tr>
                     `;
 
                     return;
                 }
 
-
                 snapshot.forEach((doc) => {
 
-                    const order =
-                        doc.data();
+                    const order = doc.data();
 
                     const status =
-                        order.status ||
-                        "Pending";
+                        order.status || "Pending";
 
+                    const payment =
+                        order.paymentStatus || "Pending";
 
-                    let statusClass =
-                        "pending";
+                    const date =
+                        formatDate(order.createdAt);
 
+                    const row =
+                        document.createElement("tr");
 
-                    if (
-                        status ===
-                        "Delivered"
-                    ) {
+                    row.dataset.orderId = doc.id;
 
-                        statusClass =
-                            "delivered";
+                    row.innerHTML = `
 
-                    }
-
-
-                    if (
-                        status ===
-                        "Delivery Failed"
-                    ) {
-
-                        statusClass =
-                            "failed";
-
-                    }
-
-
-                    let dateText =
-                        "-";
-
-
-                    if (order.createdAt) {
-
-                        try {
-
-                            dateText =
-                                order.createdAt
-                                    .toDate()
-                                    .toLocaleString();
-
-                        } catch (e) {
-
-                            dateText =
-                                "-";
-
-                        }
-
-                    }
-
-
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    card.className =
-                        "order-card";
-
-
-                    card.innerHTML = `
-
-                        <h3>
+                        <td>
                             ${escapeHTML(
-                                order.productName ||
-                                "Product"
+                                order.orderId || doc.id
                             )}
-                        </h3>
+                        </td>
 
-
-                        <p>
-                            <b>Order ID:</b>
-                            ${escapeHTML(
-                                order.orderId ||
-                                doc.id
-                            )}
-                        </p>
-
-
-                        <p>
-                            <b>Customer:</b>
+                        <td>
                             ${escapeHTML(
                                 order.customerName ||
                                 "Customer"
                             )}
-                        </p>
 
+                            <br>
 
-                        <p>
-                            <b>Email:</b>
+                            <small>
+                                ${escapeHTML(
+                                    order.customerEmail || ""
+                                )}
+                            </small>
+                        </td>
+
+                        <td>
+
                             ${escapeHTML(
-                                order.customerEmail ||
-                                "-"
+                                order.productName ||
+                                "Product"
                             )}
-                        </p>
 
+                            <br>
 
-                        <p>
-                            <b>Plan:</b>
-                            ${escapeHTML(
-                                order.planName ||
-                                "N/A"
-                            )}
-                        </p>
+                            <small>
+                                ${escapeHTML(
+                                    order.planName || ""
+                                )}
+                            </small>
 
+                        </td>
 
-                        <p>
-                            <b>Price:</b>
+                        <td>
                             ₹${Number(
                                 order.price || 0
                             ).toFixed(2)}
-                        </p>
+                        </td>
 
+                        <td>
 
-                        <p>
-                            <b>Payment:</b>
-                            ${escapeHTML(
-                                order.paymentStatus ||
-                                "Pending"
-                            )}
-                        </p>
-
-
-                        <p>
-
-                            <b>Status:</b>
-
-                            <span
-                                class="${statusClass}"
-                            >
-                                ${escapeHTML(
-                                    status
-                                )}
+                            <span class="status-badge">
+                                ${escapeHTML(status)}
                             </span>
 
-                        </p>
+                        </td>
 
+                        <td>
+                            ${escapeHTML(payment)}
+                        </td>
 
-                        <p>
+                        <td>
+                            ${escapeHTML(date)}
+                        </td>
 
-                            <b>Date:</b>
+                        <td>
 
-                            ${escapeHTML(
-                                dateText
-                            )}
+                            <button
+                                type="button"
+                                class="view-order-btn"
+                                data-id="${doc.id}"
+                            >
 
-                        </p>
+                                <i class="fa-solid fa-eye"></i>
 
+                                Manage
 
-                        <button
-                            type="button"
-                            class="view-order-btn"
-                            data-order-id="${doc.id}"
-                        >
-                            View / Manage Order
-                        </button>
+                            </button>
 
+                        </td>
                     `;
 
-
-                    orderList.appendChild(
-                        card
-                    );
-
+                    orderTable.appendChild(row);
                 });
 
-
-                document
-                    .querySelectorAll(
-                        ".view-order-btn"
-                    )
-                    .forEach((button) => {
-
-                        button.onclick =
-                            () => {
-
-                                openOrder(
-                                    button.dataset
-                                        .orderId
-                                );
-
-                            };
-
-                    });
-
+                applyFilters();
             },
-
 
             (error) => {
 
@@ -330,24 +217,47 @@ function loadOrders() {
                     error
                 );
 
+                orderTable.innerHTML = `
+                    <tr>
+                        <td colspan="8"
+                            style="text-align:center;padding:25px;color:red;">
 
-                orderList.innerHTML = `
+                            Unable to load orders.
 
-                    <p style="
-                        text-align:center;
-                        padding:25px;
-                    ">
+                            <br>
 
-                        Unable to load orders.
+                            ${escapeHTML(error.message)}
 
-                    </p>
-
+                        </td>
+                    </tr>
                 `;
-
             }
-
         );
+}
 
+
+// ==========================================================
+// EVENT DELEGATION
+// ==========================================================
+
+if (orderTable) {
+
+    orderTable.addEventListener(
+        "click",
+        (event) => {
+
+            const button =
+                event.target.closest(
+                    ".view-order-btn"
+                );
+
+            if (!button) return;
+
+            openOrder(
+                button.dataset.id
+            );
+        }
+    );
 }
 
 
@@ -361,49 +271,35 @@ async function openOrder(orderId) {
 
         const orderRef =
             db.collection("orders")
-                .doc(orderId);
-
+              .doc(orderId);
 
         const orderDoc =
             await orderRef.get();
-
 
         if (!orderDoc.exists) {
 
             throw new Error(
                 "Order not found."
             );
-
         }
 
-
-        selectedOrderId =
-            orderId;
-
+        selectedOrderId = orderId;
 
         selectedOrder =
             orderDoc.data();
 
+        fillOrderModal(
+            selectedOrder,
+            orderId
+        );
 
-        if (productKeyInput) {
-
-            productKeyInput.value =
-                selectedOrder.productKey ||
-                "";
-
-        }
-
+        updateButtons();
 
         if (orderModal) {
 
             orderModal.style.display =
                 "flex";
-
         }
-
-
-        updateCancelButton();
-
 
     } catch (error) {
 
@@ -412,155 +308,227 @@ async function openOrder(orderId) {
             error
         );
 
-
         alert(
-            "❌ " +
-            error.message
+            "❌ " + error.message
         );
-
     }
-
 }
 
 
 // ==========================================================
-// CLOSE MODAL
+// FILL ORDER MODAL
 // ==========================================================
 
-function closeOrderModal() {
+function fillOrderModal(order, docId) {
 
-    if (orderModal) {
+    setText(
+        "orderId",
+        order.orderId || docId
+    );
 
-        orderModal.style.display =
-            "none";
+    setText(
+        "orderDate",
+        formatDate(order.createdAt)
+    );
 
-    }
+    setText(
+        "customerName",
+        order.customerName || "-"
+    );
+
+    setText(
+        "customerEmail",
+        order.customerEmail || "-"
+    );
+
+    setText(
+        "customerPhone",
+        order.customerPhone || "-"
+    );
+
+    setText(
+        "productName",
+        order.productName || "-"
+    );
+
+    setText(
+        "productPlan",
+        order.planName || "-"
+    );
+
+    setText(
+        "productPrice",
+        Number(
+            order.price || 0
+        ).toFixed(2)
+    );
+
+    setText(
+        "paymentStatus",
+        order.paymentStatus || "Pending"
+    );
+
+    setText(
+        "orderStatus",
+        order.status || "Pending"
+    );
+
+    setText(
+        "deliveredDate",
+        formatDate(order.deliveredAt)
+    );
+
+    setText(
+        "refundStatus",
+        order.refundStatus || "Not Refunded"
+    );
+
+    setText(
+        "refundAmount",
+        Number(
+            order.refundAmount || 0
+        ).toFixed(2)
+    );
 
 
-    selectedOrderId =
-        null;
-
-
-    selectedOrder =
-        null;
-
+    // Product key
 
     if (productKeyInput) {
 
         productKeyInput.value =
-            "";
-
-    }
-
-}
-
-
-window.closeOrderModal =
-    closeOrderModal;
-
-
-// ==========================================================
-// CLOSE MODAL - OUTSIDE CLICK
-// ==========================================================
-
-if (orderModal) {
-
-    orderModal.addEventListener(
-        "click",
-        (event) => {
-
-            if (
-                event.target ===
-                orderModal
-            ) {
-
-                closeOrderModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-// ==========================================================
-// UPDATE CANCEL BUTTON
-// ==========================================================
-
-function updateCancelButton() {
-
-    if (
-        !cancelOrderBtn ||
-        !selectedOrder
-    ) {
-
-        return;
-
+            order.productKey || "";
     }
 
 
-    const status =
-        selectedOrder.status ||
-        "Pending";
+    // Screenshot
 
+    const screenshotImg =
+        document.getElementById(
+            "paymentScreenshotImg"
+        );
 
-    const hasKey =
-        selectedOrder.productKey &&
-        String(
-            selectedOrder.productKey
-        ).trim() !== "";
-
+    const screenshotBtn =
+        document.getElementById(
+            "viewScreenshotBtn"
+        );
 
     if (
-        status === "Delivered" ||
-        status === "Delivery Failed" ||
-        hasKey
+        order.paymentScreenshot &&
+        screenshotImg
     ) {
 
-        cancelOrderBtn.disabled =
-            true;
+        screenshotImg.src =
+            order.paymentScreenshot;
 
+        screenshotImg.style.display =
+            "block";
 
-        cancelOrderBtn.style.opacity =
-            "0.5";
+        if (screenshotBtn) {
 
+            screenshotBtn.href =
+                order.paymentScreenshot;
 
-        if (
-            status ===
-            "Delivery Failed"
-        ) {
-
-            cancelOrderBtn.innerHTML =
-                "Already Refunded";
-
-        } else {
-
-            cancelOrderBtn.innerHTML =
-                "Order Cannot Be Cancelled";
-
+            screenshotBtn.style.display =
+                "inline-block";
         }
 
     } else {
 
-        cancelOrderBtn.disabled =
-            false;
+        if (screenshotImg) {
 
+            screenshotImg.src = "";
 
-        cancelOrderBtn.style.opacity =
-            "1";
+            screenshotImg.style.display =
+                "none";
+        }
 
+        if (screenshotBtn) {
 
-        cancelOrderBtn.innerHTML =
-            '<i class="fa-solid fa-ban"></i> Cancel & Refund';
+            screenshotBtn.href = "#";
 
+            screenshotBtn.style.display =
+                "none";
+        }
     }
-
 }
 
 
 // ==========================================================
-// SEND / DELIVER KEY
+// UPDATE BUTTONS
+// ==========================================================
+
+function updateButtons() {
+
+    if (!selectedOrder) return;
+
+    const status =
+        selectedOrder.status || "Pending";
+
+    const key =
+        String(
+            selectedOrder.productKey || ""
+        ).trim();
+
+
+    // SEND KEY
+
+    if (sendKeyBtn) {
+
+        if (
+            status === "Delivered" ||
+            status === "Delivery Failed" ||
+            key !== ""
+        ) {
+
+            sendKeyBtn.disabled = true;
+
+        } else {
+
+            sendKeyBtn.disabled = false;
+        }
+    }
+
+
+    // CANCEL / REFUND
+
+    if (cancelOrderBtn) {
+
+        if (
+            status === "Delivered" ||
+            status === "Delivery Failed" ||
+            key !== "" ||
+            selectedOrder.refundStatus === "Completed"
+        ) {
+
+            cancelOrderBtn.disabled = true;
+
+            if (
+                status === "Delivery Failed" ||
+                selectedOrder.refundStatus === "Completed"
+            ) {
+
+                cancelOrderBtn.innerHTML =
+                    '<i class="fa-solid fa-check"></i> Already Refunded';
+
+            } else {
+
+                cancelOrderBtn.innerHTML =
+                    '<i class="fa-solid fa-ban"></i> Cannot Cancel';
+            }
+
+        } else {
+
+            cancelOrderBtn.disabled = false;
+
+            cancelOrderBtn.innerHTML =
+                '<i class="fa-solid fa-ban"></i> Cancel Order & Refund';
+        }
+    }
+}
+
+
+// ==========================================================
+// SEND PRODUCT KEY
 // ==========================================================
 
 if (sendKeyBtn) {
@@ -573,138 +541,112 @@ if (sendKeyBtn) {
 
                 if (!selectedOrderId) {
 
-                    alert(
+                    throw new Error(
                         "Order not selected."
                     );
-
-                    return;
-
                 }
-
 
                 const key =
                     productKeyInput
                         ? productKeyInput.value.trim()
                         : "";
 
-
                 if (!key) {
 
-                    alert(
+                    throw new Error(
                         "Enter Product Key."
                     );
-
-                    return;
-
                 }
 
+                sendKeyBtn.disabled = true;
 
-                sendKeyBtn.disabled =
-                    true;
-
-
-                sendKeyBtn.innerText =
-                    "Delivering...";
+                sendKeyBtn.innerHTML =
+                    '<i class="fa-solid fa-spinner fa-spin"></i> Delivering...';
 
 
                 const orderRef =
                     db.collection("orders")
-                        .doc(selectedOrderId);
+                      .doc(selectedOrderId);
 
 
-                const orderDoc =
-                    await orderRef.get();
+                await db.runTransaction(
+                    async (transaction) => {
+
+                        const orderSnap =
+                            await transaction.get(
+                                orderRef
+                            );
+
+                        if (!orderSnap.exists) {
+
+                            throw new Error(
+                                "Order not found."
+                            );
+                        }
+
+                        const order =
+                            orderSnap.data();
 
 
-                if (!orderDoc.exists) {
+                        if (
+                            order.status ===
+                            "Delivery Failed"
+                        ) {
 
-                    throw new Error(
-                        "Order not found."
-                    );
-
-                }
-
-
-                const order =
-                    orderDoc.data();
+                            throw new Error(
+                                "This order has already been cancelled."
+                            );
+                        }
 
 
-                // PAYMENT CHECK
+                        if (
+                            order.status ===
+                            "Delivered"
+                        ) {
 
-                if (
-                    order.paymentMethod !==
-                    "Wallet Balance"
-                ) {
+                            throw new Error(
+                                "This order is already delivered."
+                            );
+                        }
 
-                    if (
-                        order.paymentStatus !==
-                        "Paid"
-                    ) {
 
-                        throw new Error(
-                            "Payment is not approved."
+                        if (
+                            order.productKey &&
+                            String(
+                                order.productKey
+                            ).trim() !== ""
+                        ) {
+
+                            throw new Error(
+                                "Product key already delivered."
+                            );
+                        }
+
+
+                        transaction.update(
+                            orderRef,
+                            {
+
+                                productKey: key,
+
+                                status:
+                                    "Delivered",
+
+                                deliveredAt:
+                                    firebase.firestore
+                                        .FieldValue
+                                        .serverTimestamp()
+                            }
                         );
-
                     }
-
-                }
-
-
-                // CANCELLED ORDER CHECK
-
-                if (
-                    order.status ===
-                    "Delivery Failed"
-                ) {
-
-                    throw new Error(
-                        "This order has already been cancelled/refunded."
-                    );
-
-                }
-
-
-                // ALREADY DELIVERED
-
-                if (
-                    order.productKey &&
-                    String(
-                        order.productKey
-                    ).trim() !== ""
-                ) {
-
-                    throw new Error(
-                        "Key has already been delivered."
-                    );
-
-                }
-
-
-                // SAVE KEY
-
-                await orderRef.update({
-
-                    productKey:
-                        key,
-
-                    status:
-                        "Delivered",
-
-                    deliveredAt:
-                        firebase.firestore
-                            .FieldValue
-                            .serverTimestamp()
-
-                });
-
-
-                alert(
-                    "✅ Key Delivered Successfully!"
                 );
 
 
-                closeOrderModal();
+                alert(
+                    "✅ Product key delivered successfully."
+                );
 
+                closeOrderModal();
 
             } catch (error) {
 
@@ -713,32 +655,30 @@ if (sendKeyBtn) {
                     error
                 );
 
-
                 alert(
-                    "❌ " +
-                    error.message
+                    "❌ " + error.message
                 );
-
 
             } finally {
 
-                sendKeyBtn.disabled =
-                    false;
+                if (sendKeyBtn) {
 
+                    sendKeyBtn.disabled =
+                        false;
 
-                sendKeyBtn.innerText =
-                    "Deliver Key";
+                    sendKeyBtn.innerHTML =
+                        '<i class="fa-solid fa-paper-plane"></i> Send Product Key';
+                }
 
+                updateButtons();
             }
-
         }
     );
-
 }
 
 
 // ==========================================================
-// CANCEL ORDER + WALLET REFUND
+// CANCEL ORDER + REFUND
 // ==========================================================
 
 if (cancelOrderBtn) {
@@ -751,138 +691,75 @@ if (cancelOrderBtn) {
 
                 if (!selectedOrderId) {
 
-                    alert(
+                    throw new Error(
                         "Order not selected."
                     );
-
-                    return;
-
                 }
+
+
+                const confirmed =
+                    confirm(
+                        "Cancel this order?\n\n" +
+                        "The order will become Delivery Failed.\n" +
+                        "The wallet amount will be refunded."
+                    );
+
+                if (!confirmed) return;
+
+
+                cancelOrderBtn.disabled =
+                    true;
+
+                cancelOrderBtn.innerHTML =
+                    '<i class="fa-solid fa-spinner fa-spin"></i> Refunding...';
 
 
                 const orderRef =
                     db.collection("orders")
-                        .doc(selectedOrderId);
+                      .doc(selectedOrderId);
 
 
-                const orderDoc =
+                // IMPORTANT:
+                // Customer ID is taken from
+                // the order itself.
+
+                const initialOrderSnap =
                     await orderRef.get();
 
-
-                if (!orderDoc.exists) {
+                if (!initialOrderSnap.exists) {
 
                     throw new Error(
                         "Order not found."
                     );
-
                 }
 
 
-                const order =
-                    orderDoc.data();
+                const initialOrder =
+                    initialOrderSnap.data();
 
-
-                const price =
-                    Number(
-                        order.price || 0
-                    );
-
-
-                if (price <= 0) {
-
-                    throw new Error(
-                        "Invalid refund amount."
-                    );
-
-                }
-
-
-                // DELIVERED CHECK
-
-                if (
-                    order.status ===
-                    "Delivered"
-                ) {
-
-                    throw new Error(
-                        "Delivered orders cannot be refunded."
-                    );
-
-                }
-
-
-                // ALREADY REFUNDED
-
-                if (
-                    order.status ===
-                    "Delivery Failed"
-                ) {
-
-                    throw new Error(
-                        "This order has already been cancelled/refunded."
-                    );
-
-                }
-
-
-                // PRODUCT KEY CHECK
-
-                if (
-                    order.productKey &&
-                    String(
-                        order.productKey
-                    ).trim() !== ""
-                ) {
-
-                    throw new Error(
-                        "A product key already exists. Refund is blocked."
-                    );
-
-                }
-
-
-                // WALLET PAYMENT CHECK
-
-                if (
-                    order.paymentMethod !==
-                    "Wallet Balance"
-                ) {
-
-                    throw new Error(
-                        "Automatic wallet refund is only available for Wallet Balance orders."
-                    );
-
-                }
-
-
-                // CUSTOMER ID
 
                 const customerId =
-                    order.customerId;
+                    initialOrder.customerId ||
+                    initialOrder.uid;
 
 
                 if (!customerId) {
 
                     throw new Error(
-                        "Customer ID is missing from this order."
+                        "Customer ID missing."
                     );
-
                 }
 
 
                 const customerRef =
-                    db.collection(
-                        "customers"
-                    )
-                    .doc(customerId);
+                    db.collection("customers")
+                      .doc(customerId);
 
 
-                // UNIQUE REFUND ID
-
-                const refundTransactionId =
+                const refundId =
                     "REFUND-" +
                     String(
-                        order.orderId ||
+                        initialOrder.orderId ||
                         selectedOrderId
                     )
                     .replace(
@@ -895,61 +772,23 @@ if (cancelOrderBtn) {
                     db.collection(
                         "balanceTransactions"
                     )
-                    .doc(
-                        refundTransactionId
-                    );
+                    .doc(refundId);
 
-
-                // CONFIRM
-
-                const confirmed =
-                    confirm(
-
-                        "Cancel this order?\n\n" +
-
-                        "Refund: ₹" +
-                        price.toFixed(2) +
-
-                        "\n\n" +
-
-                        "The amount will be added to the customer's wallet."
-
-                    );
-
-
-                if (!confirmed) {
-
-                    return;
-
-                }
-
-
-                cancelOrderBtn.disabled =
-                    true;
-
-
-                cancelOrderBtn.innerText =
-                    "Refunding...";
-
-
-                // ==================================================
-                // FIRESTORE TRANSACTION
-                // ==================================================
 
                 await db.runTransaction(
                     async (transaction) => {
 
-                        const freshOrderSnap =
+                        // READ EVERYTHING FIRST
+
+                        const orderSnap =
                             await transaction.get(
                                 orderRef
                             );
-
 
                         const customerSnap =
                             await transaction.get(
                                 customerRef
                             );
-
 
                         const refundSnap =
                             await transaction.get(
@@ -957,108 +796,122 @@ if (cancelOrderBtn) {
                             );
 
 
-                        if (
-                            !freshOrderSnap.exists
-                        ) {
+                        if (!orderSnap.exists) {
 
                             throw new Error(
                                 "Order not found."
                             );
-
                         }
 
 
-                        if (
-                            !customerSnap.exists
-                        ) {
+                        if (!customerSnap.exists) {
 
                             throw new Error(
-                                "Customer account not found."
+                                "Customer wallet not found."
                             );
-
                         }
 
 
-                        const freshOrder =
-                            freshOrderSnap.data();
-
-
-                        // DOUBLE REFUND PROTECTION
-
-                        if (
-                            freshOrder.status ===
-                            "Delivery Failed"
-                        ) {
-
-                            throw new Error(
-                                "This order was already refunded."
-                            );
-
-                        }
-
-
-                        // DELIVERED CHECK
-
-                        if (
-                            freshOrder.status ===
-                            "Delivered"
-                        ) {
-
-                            throw new Error(
-                                "Delivered order cannot be refunded."
-                            );
-
-                        }
-
-
-                        // KEY CHECK
-
-                        if (
-                            freshOrder.productKey &&
-                            String(
-                                freshOrder.productKey
-                            ).trim() !== ""
-                        ) {
-
-                            throw new Error(
-                                "Product key already exists."
-                            );
-
-                        }
-
-
-                        // REFUND RECORD CHECK
-
-                        if (
-                            refundSnap.exists
-                        ) {
-
-                            throw new Error(
-                                "Refund transaction already exists."
-                            );
-
-                        }
+                        const order =
+                            orderSnap.data();
 
 
                         const customer =
                             customerSnap.data();
 
 
+                        // DOUBLE REFUND PROTECTION
+
+                        if (
+                            order.status ===
+                            "Delivery Failed" ||
+                            order.refundStatus ===
+                            "Completed"
+                        ) {
+
+                            throw new Error(
+                                "This order has already been refunded."
+                            );
+                        }
+
+
+                        // DELIVERED CHECK
+
+                        if (
+                            order.status ===
+                            "Delivered"
+                        ) {
+
+                            throw new Error(
+                                "Delivered orders cannot be refunded."
+                            );
+                        }
+
+
+                        // KEY CHECK
+
+                        if (
+                            order.productKey &&
+                            String(
+                                order.productKey
+                            ).trim() !== ""
+                        ) {
+                            throw new Error(
+                                "Product key already delivered. Refund blocked."
+                            );
+                        }
+
+
+                        // WALLET PAYMENT ONLY
+
+                        if (
+                            order.paymentMethod !==
+                            "Wallet Balance"
+                        ) {
+
+                            throw new Error(
+                                "This order was not paid using wallet balance."
+                            );
+                        }
+
+
+                        // REFUND RECORD CHECK
+
+                        if (refundSnap.exists) {
+
+                            throw new Error(
+                                "Refund transaction already exists."
+                            );
+                        }
+
+
+                        const amount =
+                            Number(
+                                order.price || 0
+                            );
+
+
+                        if (amount <= 0) {
+
+                            throw new Error(
+                                "Invalid refund amount."
+                            );
+                        }
+
+
                         const oldBalance =
                             Number(
-                                customer.balance ||
-                                0
+                                customer.balance || 0
                             );
 
 
                         const newBalance =
-                            oldBalance +
-                            price;
+                            oldBalance + amount;
 
 
-                        // ==================================================
-                        // 1. ADD MONEY TO WALLET
-                        // ==================================================
+                        // ==========================================
+                        // 1. ADD REFUND TO WALLET
+                        // ==========================================
 
                         transaction.update(
                             customerRef,
@@ -1071,14 +924,13 @@ if (cancelOrderBtn) {
                                     firebase.firestore
                                         .FieldValue
                                         .serverTimestamp()
-
                             }
                         );
 
 
-                        // ==================================================
-                        // 2. UPDATE ORDER
-                        // ==================================================
+                        // ==========================================
+                        // 2. MARK ORDER DELIVERY FAILED
+                        // ==========================================
 
                         transaction.update(
                             orderRef,
@@ -1091,7 +943,7 @@ if (cancelOrderBtn) {
                                     "Refunded",
 
                                 refundAmount:
-                                    price,
+                                    amount,
 
                                 refundStatus:
                                     "Completed",
@@ -1100,26 +952,23 @@ if (cancelOrderBtn) {
                                     firebase.firestore
                                         .FieldValue
                                         .serverTimestamp()
-
                             }
                         );
 
 
-                        // ==================================================
+                        // ==========================================
                         // 3. CREATE REFUND TRANSACTION
-                        // ==================================================
+                        // ==========================================
 
                         transaction.set(
                             refundRef,
                             {
 
                                 uid:
-                                    freshOrder.uid ||
-                                    "",
+                                    order.uid || "",
 
                                 email:
-                                    freshOrder.customerEmail ||
-                                    "",
+                                    order.customerEmail || "",
 
                                 customerId:
                                     customerId,
@@ -1128,10 +977,10 @@ if (cancelOrderBtn) {
                                     "credit",
 
                                 amount:
-                                    price,
+                                    amount,
 
                                 orderId:
-                                    freshOrder.orderId ||
+                                    order.orderId ||
                                     selectedOrderId,
 
                                 status:
@@ -1143,12 +992,12 @@ if (cancelOrderBtn) {
                                 description:
                                     "Refund: " +
                                     (
-                                        freshOrder.productName ||
+                                        order.productName ||
                                         "Product"
                                     ) +
                                     " - " +
                                     (
-                                        freshOrder.planName ||
+                                        order.planName ||
                                         "Plan"
                                     ),
 
@@ -1156,7 +1005,6 @@ if (cancelOrderBtn) {
                                     firebase.firestore
                                         .FieldValue
                                         .serverTimestamp()
-
                             }
                         );
 
@@ -1164,17 +1012,13 @@ if (cancelOrderBtn) {
                 );
 
 
-                // SUCCESS
-
                 alert(
-
                     "✅ Order cancelled successfully.\n\n" +
-
                     "₹" +
-                    price.toFixed(2) +
-
-                    " has been refunded to the customer's wallet."
-
+                    Number(
+                        initialOrder.price || 0
+                    ).toFixed(2) +
+                    " has been refunded to the wallet."
                 );
 
 
@@ -1188,14 +1032,10 @@ if (cancelOrderBtn) {
                     error
                 );
 
-
                 alert(
-
                     "❌ Refund failed.\n\n" +
                     error.message
-
                 );
-
 
             } finally {
 
@@ -1204,54 +1044,349 @@ if (cancelOrderBtn) {
                     cancelOrderBtn.disabled =
                         false;
 
-
                     cancelOrderBtn.innerHTML =
-                        '<i class="fa-solid fa-ban"></i> Cancel & Refund';
-
-
-                    updateCancelButton();
-
+                        '<i class="fa-solid fa-ban"></i> Cancel Order & Refund';
                 }
 
+                updateButtons();
             }
-
         }
     );
-
 }
 
 
 // ==========================================================
-// HTML ESCAPE
+// REJECT PAYMENT
 // ==========================================================
+
+if (rejectPaymentBtn) {
+
+    rejectPaymentBtn.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                if (!selectedOrderId) {
+
+                    throw new Error(
+                        "Order not selected."
+                    );
+                }
+
+
+                const confirmed =
+                    confirm(
+                        "Reject this payment?"
+                    );
+
+                if (!confirmed) return;
+
+
+                rejectPaymentBtn.disabled =
+                    true;
+
+                rejectPaymentBtn.innerText =
+                    "Rejecting...";
+
+
+                await db
+                    .collection("orders")
+                    .doc(selectedOrderId)
+                    .update({
+
+                        paymentStatus:
+                            "Rejected",
+
+                        status:
+                            "Cancelled",
+
+                        rejectedAt:
+                            firebase.firestore
+                                .FieldValue
+                                .serverTimestamp()
+                    });
+
+
+                alert(
+                    "Payment rejected successfully."
+                );
+
+
+                closeOrderModal();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Reject Payment Error:",
+                    error
+                );
+
+                alert(
+                    "❌ " + error.message
+                );
+
+            } finally {
+
+                rejectPaymentBtn.disabled =
+                    false;
+
+                rejectPaymentBtn.innerHTML =
+                    '<i class="fa-solid fa-xmark"></i> Reject Payment';
+            }
+        }
+    );
+}
+
+
+// ==========================================================
+// CLOSE MODAL
+// ==========================================================
+
+if (closeModalBtn) {
+
+    closeModalBtn.addEventListener(
+        "click",
+        closeOrderModal
+    );
+}
+
+
+window.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            event.target ===
+            orderModal
+        ) {
+
+            closeOrderModal();
+        }
+    }
+);
+
+
+function closeOrderModal() {
+
+    if (orderModal) {
+
+        orderModal.style.display =
+            "none";
+    }
+
+    selectedOrderId = null;
+
+    selectedOrder = null;
+
+    if (productKeyInput) {
+
+        productKeyInput.value = "";
+    }
+}
+
+
+// ==========================================================
+// SEARCH + FILTER
+// ==========================================================
+
+if (searchOrder) {
+
+    searchOrder.addEventListener(
+        "input",
+        applyFilters
+    );
+}
+
+
+if (statusFilter) {
+
+    statusFilter.addEventListener(
+        "change",
+        applyFilters
+    );
+}
+
+
+if (paymentFilter) {
+
+    paymentFilter.addEventListener(
+        "change",
+        applyFilters
+    );
+}
+
+
+function applyFilters() {
+
+    if (!orderTable) return;
+
+
+    const search =
+        String(
+            searchOrder
+                ? searchOrder.value
+                : ""
+        )
+        .toLowerCase()
+        .trim();
+
+
+    const status =
+        statusFilter
+            ? statusFilter.value
+            : "All";
+
+
+    const payment =
+        paymentFilter
+            ? paymentFilter.value
+            : "All";
+
+
+    const rows =
+        orderTable.querySelectorAll("tr");
+
+
+    rows.forEach((row) => {
+
+        const text =
+            row.innerText.toLowerCase();
+
+
+        const statusText =
+            row.children[4]
+                ? row.children[4]
+                    .innerText
+                    .trim()
+                : "";
+
+
+        const paymentText =
+            row.children[5]
+                ? row.children[5]
+                    .innerText
+                    .trim()
+                : "";
+
+
+        const searchMatch =
+            !search ||
+            text.includes(search);
+
+
+        const statusMatch =
+            status === "All" ||
+            statusText.includes(status);
+
+
+        const paymentMatch =
+            payment === "All" ||
+            paymentText.includes(payment);
+
+
+        row.style.display =
+            searchMatch &&
+            statusMatch &&
+            paymentMatch
+                ? ""
+                : "none";
+    });
+}
+
+
+// ==========================================================
+// LOGOUT
+// ==========================================================
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                await firebase
+                    .auth()
+                    .signOut();
+
+                window.location.href =
+                    "login.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Logout Error:",
+                    error
+                );
+
+                alert(
+                    "Logout failed."
+                );
+            }
+        }
+    );
+}
+
+
+// ==========================================================
+// HELPERS
+// ==========================================================
+
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.innerText =
+            value ?? "-";
+    }
+}
+
+
+function formatDate(timestamp) {
+
+    if (!timestamp) {
+
+        return "-";
+    }
+
+    try {
+
+        if (
+            typeof timestamp.toDate ===
+            "function"
+        ) {
+
+            return timestamp
+                .toDate()
+                .toLocaleString();
+        }
+
+        return new Date(timestamp)
+            .toLocaleString();
+
+    } catch (error) {
+
+        return "-";
+    }
+}
+
 
 function escapeHTML(value) {
 
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }

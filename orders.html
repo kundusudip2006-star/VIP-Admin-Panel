@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Orders - VIP Admin Panel</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="css/orders.css">
+    <title>Orders - VIP Admin Panel</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/orders.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
 <div class="sidebar">
 
@@ -31,42 +38,42 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         <li>
             <a href="dashboard.html">
                 <i class="fa-solid fa-house"></i>
-                Dashboard
+                <span>Dashboard</span>
             </a>
         </li>
 
         <li>
             <a href="products.html">
                 <i class="fa-solid fa-box"></i>
-                Products
+                <span>Products</span>
             </a>
         </li>
 
         <li class="active">
-            <a href="orders.html">
+            <a href="order.html">
                 <i class="fa-solid fa-cart-shopping"></i>
-                Orders
+                <span>Orders</span>
             </a>
         </li>
 
         <li>
             <a href="customers.html">
                 <i class="fa-solid fa-users"></i>
-                Customers
+                <span>Customers</span>
             </a>
         </li>
 
         <li>
             <a href="profile.html">
                 <i class="fa-solid fa-user"></i>
-                Profile
+                <span>Profile</span>
             </a>
         </li>
 
         <li>
             <a href="settings.html">
                 <i class="fa-solid fa-gear"></i>
-                Settings
+                <span>Settings</span>
             </a>
         </li>
 
@@ -74,7 +81,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
             <i class="fa-solid fa-right-from-bracket"></i>
 
-            Logout
+            <span>Logout</span>
 
         </li>
 
@@ -82,195 +89,500 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 </div>
 
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <div class="main">
 
-<header>
+    <header>
 
-<h1>Orders Management</h1>
+        <h1>Orders Management</h1>
 
-<div class="top-bar">
+        <div class="top-bar">
 
-<input
-type="text"
-id="searchOrder"
-placeholder="Search customer, product..."
->
+            <input
+                type="text"
+                id="searchOrder"
+                placeholder="Search customer, product, order ID..."
+            >
 
-<select id="statusFilter">
+            <select id="statusFilter">
 
-<option value="All">All Status</option>
+                <option value="All">
+                    All Status
+                </option>
 
-<option value="Pending">Pending</option>
+                <option value="Pending">
+                    Pending
+                </option>
 
-<option value="Delivered">Delivered</option>
+                <option value="Delivered">
+                    Delivered
+                </option>
 
-<option value="Cancelled">Cancelled</option>
+                <option value="Delivery Failed">
+                    Delivery Failed
+                </option>
 
-</select>
+                <option value="Cancelled">
+                    Cancelled
+                </option>
 
-<select id="paymentFilter">
+            </select>
 
-<option value="All">All Payments</option>
 
-<option value="Pending">Pending</option>
+            <select id="paymentFilter">
 
-<option value="Paid">Paid</option>
+                <option value="All">
+                    All Payments
+                </option>
 
-<option value="Rejected">Rejected</option>
+                <option value="Pending">
+                    Pending
+                </option>
 
-</select>
+                <option value="Approved">
+                    Approved
+                </option>
+
+                <option value="Paid">
+                    Paid
+                </option>
+
+                <option value="Rejected">
+                    Rejected
+                </option>
+
+            </select>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         ORDERS TABLE
+    ================================================= -->
+
+    <section class="table-section">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Order ID</th>
+
+                    <th>Customer</th>
+
+                    <th>Product</th>
+
+                    <th>Price</th>
+
+                    <th>Status</th>
+
+                    <th>Payment</th>
+
+                    <th>Date</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="orderTable">
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        style="text-align:center;"
+                    >
+
+                        Loading Orders...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
 
 </div>
 
-</header>
 
-<section class="table-section">
+<!-- =====================================================
+     VIEW ORDER MODAL
+===================================================== -->
 
-<table>
-
-<thead>
-
-<tr>
-
-<th>Order ID</th>
-
-<th>Customer</th>
-
-<th>Product</th>
-
-<th>Price</th>
-
-<th>Status</th>
-
-<th>Payment</th>
-
-<th>Date</th>
-
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="orderTable">
-
-<tr>
-
-<td colspan="8" style="text-align:center">
-
-Loading Orders...
-
-</td>
-
-</tr>
-</tbody>
-
-</table>
-
-</section>
-
-<!-- View Order Modal -->
-
-<div id="orderModal" class="modal">
+<div id="orderModal"
+     class="modal">
 
     <div class="modal-content">
 
-        <span id="closeModal" class="close">&times;</span>
 
-        <h2>Order Details</h2>
+        <!-- CLOSE -->
+
+        <span id="closeModal"
+              class="close">
+
+            &times;
+
+        </span>
+
+
+        <h2>
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            Order Details
+
+        </h2>
+
 
         <hr>
 
-<p><b>Order ID :</b> <span id="orderId"></span></p>
 
-<p><b>Order Date :</b> <span id="orderDate"></span></p>
+        <!-- =================================================
+             ORDER INFORMATION
+        ================================================= -->
 
-<p><b>Customer Name :</b> <span id="customerName"></span></p>
+        <div class="order-details">
 
-<p><b>Email :</b> <span id="customerEmail"></span></p>
 
-<p><b>Phone :</b> <span id="customerPhone"></span></p>
+            <p>
 
-<p><b>Product :</b> <span id="productName"></span></p>
+                <b>Order ID:</b>
 
-<p><b>Plan :</b> <span id="productPlan"></span></p>
+                <span id="orderId">
+                    -
+                </span>
 
-<p><b>Price :</b> ₹<span id="productPrice"></span></p>
+            </p>
 
-<p><b>Payment :</b> <span id="paymentStatus"></span></p>
 
-<p><b>Status :</b> <span id="orderStatus"></span></p>
+            <p>
 
-<p><b>Delivered At :</b> <span id="deliveredDate"></span></p>
+                <b>Order Date:</b>
 
-<hr>
+                <span id="orderDate">
+                    -
+                </span>
 
-<h3>Payment Screenshot</h3>
+            </p>
 
-<img
-id="paymentScreenshotImg"
-src=""
-style="
-width:100%;
-max-height:300px;
-object-fit:contain;
-border:1px solid #ddd;
-border-radius:10px;
-display:none;
-margin-bottom:10px;
-">
 
-<br>
+            <p>
 
-<a
-id="viewScreenshotBtn"
-href="#"
-target="_blank"
-style="display:none;">
+                <b>Customer Name:</b>
 
-<button type="button">
-    <i class="fa-solid fa-image"></i>
-    View Full Screenshot
-</button>
+                <span id="customerName">
+                    -
+                </span>
 
-</a>
+            </p>
 
-<br><br>
 
-<br>
+            <p>
 
-<label><b>Product Key</b></label>
+                <b>Email:</b>
 
-<textarea
-id="productKey"
-rows="5"
-placeholder="Enter Product Key Here...">
-</textarea>
+                <span id="customerEmail">
+                    -
+                </span>
 
-<br><br>
+            </p>
 
-<button id="rejectPaymentBtn" class="cancel-btn">
-    <i class="fa-solid fa-xmark"></i>
-    Reject Payment
-</button>
 
-<br><br>
+            <p>
 
-<button
-id="sendKeyBtn"
-class="send-btn"
-disabled>
+                <b>Phone:</b>
 
-<i class="fa-solid fa-paper-plane"></i>
+                <span id="customerPhone">
+                    -
+                </span>
 
-Send Product Key
+            </p>
 
-</button>
+
+            <p>
+
+                <b>Product:</b>
+
+                <span id="productName">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Plan:</b>
+
+                <span id="productPlan">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Price:</b>
+
+                ₹<span id="productPrice">
+                    0.00
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Payment:</b>
+
+                <span id="paymentStatus">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Order Status:</b>
+
+                <span id="orderStatus">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Delivered At:</b>
+
+                <span id="deliveredDate">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Refund Status:</b>
+
+                <span id="refundStatus">
+                    Not Refunded
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <b>Refund Amount:</b>
+
+                ₹<span id="refundAmount">
+                    0.00
+                </span>
+
+            </p>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- =================================================
+             PAYMENT SCREENSHOT
+        ================================================= -->
+
+        <h3>
+
+            <i class="fa-solid fa-image"></i>
+
+            Payment Screenshot
+
+        </h3>
+
+
+        <img
+            id="paymentScreenshotImg"
+            src=""
+            alt="Payment Screenshot"
+            style="
+                width:100%;
+                max-height:300px;
+                object-fit:contain;
+                border:1px solid #ddd;
+                border-radius:10px;
+                display:none;
+                margin-bottom:10px;
+            "
+        >
+
+
+        <a
+            id="viewScreenshotBtn"
+            href="#"
+            target="_blank"
+            style="display:none;"
+        >
+
+            <button type="button">
+
+                <i class="fa-solid fa-image"></i>
+
+                View Full Screenshot
+
+            </button>
+
+        </a>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             PRODUCT KEY
+        ================================================= -->
+
+        <label>
+
+            <b>
+
+                <i class="fa-solid fa-key"></i>
+
+                Product Key
+
+            </b>
+
+        </label>
+
+
+        <textarea
+            id="productKey"
+            rows="5"
+            placeholder="Enter Product Key Here..."
+        ></textarea>
+
+
+        <br>
+
+
+        <!-- =================================================
+             SEND KEY
+        ================================================= -->
+
+        <button
+            id="sendKeyBtn"
+            class="send-btn"
+            disabled
+        >
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+            Send Product Key
+
+        </button>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             REJECT PAYMENT
+        ================================================= -->
+
+        <button
+            id="rejectPaymentBtn"
+            class="cancel-btn"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+            Reject Payment
+
+        </button>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             CANCEL / REFUND
+        ================================================= -->
+
+        <button
+            id="cancelOrderBtn"
+            class="cancel-order-btn"
+        >
+
+            <i class="fa-solid fa-ban"></i>
+
+            Cancel Order & Refund
+
+        </button>
+
+
+        <!-- =================================================
+             REFUND INFORMATION
+        ================================================= -->
+
+        <div
+            id="refundInfo"
+            style="
+                display:none;
+                margin-top:15px;
+                padding:12px;
+                border-radius:10px;
+                background:#f3fff5;
+                border:1px solid #b7ebc1;
+            "
+        >
+
+            <strong>
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                Refund Completed
+
+            </strong>
+
+            <p style="margin:6px 0 0;">
+
+                Amount refunded:
+
+                ₹<span id="refundInfoAmount">
+                    0.00
+                </span>
+
+            </p>
+
+        </div>
+
 
     </div>
 
 </div>
-<!-- Firebase -->
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 
@@ -278,15 +590,20 @@ Send Product Key
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
-<!-- Firebase Config -->
+
+<!-- =====================================================
+     FIREBASE CONFIG
+===================================================== -->
 
 <script src="js/firebase.js"></script>
 
-<!-- Orders Script -->
+
+<!-- =====================================================
+     ORDERS SCRIPT
+===================================================== -->
 
 <script src="js/orders.js"></script>
 
-</div>
 
 </body>
 
