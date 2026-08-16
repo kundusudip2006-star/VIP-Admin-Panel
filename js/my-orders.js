@@ -6,8 +6,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
     if (!user) {
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
         return;
     }
@@ -51,29 +50,44 @@ function loadOrders(user) {
 
                 snapshot.forEach((doc) => {
 
-                    const order =
-                        doc.data();
+                    const order = doc.data();
 
                     // ==========================
                     // STATUS
                     // ==========================
 
-                    let statusClass =
-                        "pending";
+                    let statusClass = "pending";
+                    let statusText = "🔑 Key Pending";
 
-                    let statusText =
-                        "🔑 Key Pending";
+                    // ==========================
+                    // REFUNDED / DELIVERY FAILED
+                    // ==========================
 
-                    if (
-                        order.status ===
-                        "Delivered" &&
+                    const isRefunded =
+                        order.refundStatus === "refunded" ||
+                        order.status === "Delivery Failed" ||
+                        order.status === "delivery_failed";
+
+                    if (isRefunded) {
+
+                        statusClass = "refunded";
+
+                        statusText =
+                            "❌ Delivery Failed • 💰 Refunded";
+
+                    }
+
+                    // ==========================
+                    // DELIVERED
+                    // ==========================
+
+                    else if (
+                        order.status === "Delivered" &&
                         order.productKey &&
-                        String(order.productKey)
-                            .trim() !== ""
+                        String(order.productKey).trim() !== ""
                     ) {
 
-                        statusClass =
-                            "delivered";
+                        statusClass = "delivered";
 
                         statusText =
                             "✅ Key Delivered";
@@ -104,17 +118,80 @@ function loadOrders(user) {
                     }
 
                     // ==========================
-                    // KEY SECTION
+                    // KEY / REFUND SECTION
                     // ==========================
 
                     let keyHTML = "";
 
-                    if (
-                        order.status ===
-                        "Delivered" &&
+                    // ==========================
+                    // REFUND MESSAGE
+                    // ==========================
+
+                    if (isRefunded) {
+
+                        keyHTML = `
+
+                            <div
+                                class="refund-box"
+                                style="
+                                    margin-top:15px;
+                                    padding:14px;
+                                    border-radius:12px;
+                                    background:rgba(255,60,60,0.10);
+                                    border:1px solid rgba(255,80,80,0.25);
+                                "
+                            >
+
+                                <strong
+                                    style="
+                                        display:block;
+                                        color:#ff6b6b;
+                                        margin-bottom:6px;
+                                    "
+                                >
+                                    ❌ Delivery Failed
+                                </strong>
+
+                                <span
+                                    style="
+                                        display:block;
+                                        color:#00e676;
+                                        font-weight:700;
+                                    "
+                                >
+                                    💰 ₹${Number(
+                                        order.refundAmount ??
+                                        order.price ??
+                                        0
+                                    ).toFixed(2)}
+                                    Refunded to Wallet
+                                </span>
+
+                                <small
+                                    style="
+                                        display:block;
+                                        margin-top:7px;
+                                        color:#9aa8bd;
+                                    "
+                                >
+                                    The order amount has been returned
+                                    to your wallet.
+                                </small>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                    // ==========================
+                    // DELIVERED KEY
+                    // ==========================
+
+                    else if (
+                        order.status === "Delivered" &&
                         order.productKey &&
-                        String(order.productKey)
-                            .trim() !== ""
+                        String(order.productKey).trim() !== ""
                     ) {
 
                         keyHTML = `
@@ -149,7 +226,13 @@ function loadOrders(user) {
 
                         `;
 
-                    } else {
+                    }
+
+                    // ==========================
+                    // KEY PENDING
+                    // ==========================
+
+                    else {
 
                         keyHTML = `
 
