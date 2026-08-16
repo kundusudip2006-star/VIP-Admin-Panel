@@ -1426,3 +1426,110 @@ body {
     }
 
 }
+/* =====================================================
+   TRANSACTION STATUS COLORS
+   ===================================================== */
+
+.transaction-card {
+    position: relative;
+    transition: 0.25s ease;
+}
+
+
+/* =========================
+   GREEN
+   Balance Recharge / Refund
+   ========================= */
+
+.transaction-card.credit,
+.transaction-card.refund {
+    border-left: 4px solid #22ff55;
+}
+
+.transaction-card.credit .transaction-icon,
+.transaction-card.refund .transaction-icon {
+    color: #22ff55;
+}
+
+.transaction-card.credit .transaction-right strong,
+.transaction-card.refund .transaction-right strong {
+    color: #22ff55;
+}
+
+.transaction-status.credit,
+.transaction-status.refund {
+    color: #22ff55;
+}
+
+
+/* =========================
+   RED
+   Purchase / Payment Failed
+   ========================= */
+
+.transaction-card.debit,
+.transaction-card.rejected {
+    border-left: 4px solid #ff3b4f;
+}
+
+.transaction-card.debit .transaction-icon,
+.transaction-card.rejected .transaction-icon {
+    color: #ff3b4f;
+}
+
+.transaction-card.debit .transaction-right strong,
+.transaction-card.rejected .transaction-right strong {
+    color: #ff3b4f;
+}
+
+.transaction-status.debit,
+.transaction-status.rejected {
+    color: #ff3b4f;
+}
+
+
+/* =========================
+   YELLOW
+   Pending
+   ========================= */
+
+.transaction-card.pending {
+    border-left: 4px solid #ffd21f;
+}
+
+.transaction-card.pending .transaction-icon {
+    color: #ffd21f;
+}
+
+.transaction-card.pending .transaction-right strong {
+    color: #ffd21f;
+}
+
+.transaction-status.pending {
+    color: #ffd21f;
+}
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+.transaction-status {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   AMOUNT
+   ========================= */
+
+.transaction-right strong.positive {
+    color: #22ff55;
+}
+
+.transaction-right strong.negative {
+    color: #ff3b4f;
+}

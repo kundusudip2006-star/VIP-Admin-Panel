@@ -1,7 +1,7 @@
 // ======================================================
 // VIP PANEL STORE
 // WALLET SYSTEM
-// COMPLETE WALLET.JS
+// TRANSACTION HISTORY
 // ======================================================
 
 
@@ -46,469 +46,7 @@ let transactionUnsubscribe = null;
 
 
 // ======================================================
-// INJECT WALLET TRANSACTION CSS
-// ======================================================
-
-(function injectWalletStyles() {
-
-    if (document.getElementById("walletTransactionStyles")) {
-        return;
-    }
-
-    const style = document.createElement("style");
-
-    style.id = "walletTransactionStyles";
-
-    style.textContent = `
-
-    /* ==================================================
-       TRANSACTION CARD
-       ================================================== */
-
-    .transaction-card {
-
-        width: 100%;
-        box-sizing: border-box;
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        gap: 15px;
-
-        padding: 18px;
-
-        margin-bottom: 14px;
-
-        border-radius: 18px;
-
-        background: rgba(25, 55, 100, 0.95);
-
-        border-left: 4px solid transparent;
-
-        box-shadow:
-            0 8px 25px rgba(0,0,0,0.18);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-
-    }
-
-
-    .transaction-card:hover {
-
-        transform: translateY(-2px);
-
-        box-shadow:
-            0 12px 30px rgba(0,0,0,0.25);
-
-    }
-
-
-    /* ==================================================
-       LEFT
-       ================================================== */
-
-    .transaction-left {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 13px;
-
-        min-width: 0;
-
-        flex: 1;
-
-    }
-
-
-    .transaction-icon {
-
-        width: 46px;
-
-        height: 46px;
-
-        min-width: 46px;
-
-        border-radius: 50%;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        font-size: 17px;
-
-    }
-
-
-    .transaction-info {
-
-        min-width: 0;
-
-    }
-
-
-    .transaction-info h3 {
-
-        margin: 0 0 5px 0;
-
-        font-size: 16px;
-
-        font-weight: 700;
-
-        color: #ffffff;
-
-    }
-
-
-    /* Description intentionally hidden */
-
-    .transaction-info p {
-
-        display: none !important;
-
-    }
-
-
-    .transaction-date {
-
-        display: block;
-
-        margin-top: 2px;
-
-        font-size: 12px;
-
-        color: rgba(255,255,255,0.68);
-
-    }
-
-
-    .transaction-reference {
-
-        display: block;
-
-        margin-top: 4px;
-
-        font-size: 11px;
-
-        color: rgba(255,255,255,0.48);
-
-        word-break: break-all;
-
-    }
-
-
-    /* ==================================================
-       RIGHT
-       ================================================== */
-
-    .transaction-right {
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: flex-end;
-
-        justify-content: center;
-
-        gap: 5px;
-
-        min-width: 95px;
-
-    }
-
-
-    .transaction-right strong {
-
-        font-size: 17px;
-
-        font-weight: 800;
-
-        white-space: nowrap;
-
-    }
-
-
-    .transaction-status {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        padding: 4px 9px;
-
-        border-radius: 20px;
-
-        font-size: 10px;
-
-        font-weight: 700;
-
-        white-space: nowrap;
-
-    }
-
-
-    /* ==================================================
-       BALANCE RECHARGE
-       ================================================== */
-
-    .transaction-card.recharge {
-
-        border-left-color: #39ff72;
-
-    }
-
-
-    .transaction-card.recharge
-    .transaction-icon {
-
-        background: rgba(57,255,114,0.14);
-
-        color: #39ff72;
-
-    }
-
-
-    .transaction-card.recharge
-    .transaction-right strong {
-
-        color: #39ff72;
-
-    }
-
-
-    /* ==================================================
-       PURCHASE
-       ================================================== */
-
-    .transaction-card.purchase {
-
-        border-left-color: #ff4d5a;
-
-    }
-
-
-    .transaction-card.purchase
-    .transaction-icon {
-
-        background: rgba(255,77,90,0.14);
-
-        color: #ff4d5a;
-
-    }
-
-
-    .transaction-card.purchase
-    .transaction-right strong {
-
-        color: #ff4d5a;
-
-    }
-
-
-    /* ==================================================
-       REFUND
-       ================================================== */
-
-    .transaction-card.refund {
-
-        border-left-color: #35b8ff;
-
-    }
-
-
-    .transaction-card.refund
-    .transaction-icon {
-
-        background: rgba(53,184,255,0.15);
-
-        color: #35b8ff;
-
-    }
-
-
-    .transaction-card.refund
-    .transaction-right strong {
-
-        color: #35b8ff;
-
-    }
-
-
-    /* ==================================================
-       PENDING
-       ================================================== */
-
-    .transaction-card.pending {
-
-        border-left-color: #ffc107;
-
-    }
-
-
-    .transaction-card.pending
-    .transaction-icon {
-
-        background: rgba(255,193,7,0.15);
-
-        color: #ffc107;
-
-    }
-
-
-    .transaction-card.pending
-    .transaction-right strong {
-
-        color: #ffc107;
-
-    }
-
-
-    /* ==================================================
-       FAILED
-       ================================================== */
-
-    .transaction-card.failed {
-
-        border-left-color: #ff3b4d;
-
-    }
-
-
-    .transaction-card.failed
-    .transaction-icon {
-
-        background: rgba(255,59,77,0.15);
-
-        color: #ff3b4d;
-
-    }
-
-
-    .transaction-card.failed
-    .transaction-right strong {
-
-        color: #ff3b4d;
-
-    }
-
-
-    /* ==================================================
-       STATUS BADGES
-       ================================================== */
-
-    .transaction-status.status-completed,
-    .transaction-status.status-approved {
-
-        color: #42ff7b;
-
-        background: rgba(66,255,123,0.12);
-
-    }
-
-
-    .transaction-status.status-pending {
-
-        color: #ffc107;
-
-        background: rgba(255,193,7,0.13);
-
-    }
-
-
-    .transaction-status.status-failed,
-    .transaction-status.status-rejected {
-
-        color: #ff5364;
-
-        background: rgba(255,83,100,0.13);
-
-    }
-
-
-    /* ==================================================
-       MOBILE
-       ================================================== */
-
-    @media (max-width: 600px) {
-
-        .transaction-card {
-
-            padding: 14px;
-
-            gap: 9px;
-
-        }
-
-
-        .transaction-icon {
-
-            width: 40px;
-
-            height: 40px;
-
-            min-width: 40px;
-
-            font-size: 14px;
-
-        }
-
-
-        .transaction-info h3 {
-
-            font-size: 14px;
-
-        }
-
-
-        .transaction-right strong {
-
-            font-size: 14px;
-
-        }
-
-
-        .transaction-status {
-
-            font-size: 9px;
-
-            padding: 3px 7px;
-
-        }
-
-
-        .transaction-date {
-
-            font-size: 10px;
-
-        }
-
-
-        .transaction-reference {
-
-            font-size: 9px;
-
-        }
-
-    }
-
-    `;
-
-    document.head.appendChild(style);
-
-})();
-
-
-// ======================================================
-// AUTH STATE
+// FIREBASE AUTH
 // ======================================================
 
 firebase.auth().onAuthStateChanged((user) => {
@@ -524,8 +62,6 @@ firebase.auth().onAuthStateChanged((user) => {
     // ==================================================
 
     if (!user) {
-
-        currentWalletUser = null;
 
         if (customerUnsubscribe) {
 
@@ -545,7 +81,9 @@ firebase.auth().onAuthStateChanged((user) => {
         }
 
 
-        window.location.replace("login.html");
+        window.location.replace(
+            "login.html"
+        );
 
         return;
 
@@ -553,7 +91,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
 
     // ==================================================
-    // SAVE USER
+    // SAVE CURRENT USER
     // ==================================================
 
     currentWalletUser = user;
@@ -575,7 +113,9 @@ firebase.auth().onAuthStateChanged((user) => {
     // LOAD WALLET
     // ==================================================
 
-    loadWallet(user.uid);
+    loadWallet(
+        user.uid
+    );
 
 });
 
@@ -620,7 +160,7 @@ function loadWallet(uid) {
 
 
     // ==================================================
-    // LOADING
+    // WALLET LOADING
     // ==================================================
 
     if (walletBalance) {
@@ -649,7 +189,8 @@ function loadWallet(uid) {
 
 
     // ==================================================
-    // CUSTOMER
+    // CUSTOMER DOCUMENT
+    // customers/{uid}
     // ==================================================
 
     const customerRef = db
@@ -663,10 +204,14 @@ function loadWallet(uid) {
             (doc) => {
 
                 console.log(
-                    "Customer wallet document:",
+                    "Customer document exists:",
                     doc.exists
                 );
 
+
+                // ======================================
+                // CUSTOMER NOT FOUND
+                // ======================================
 
                 if (!doc.exists) {
 
@@ -677,14 +222,26 @@ function loadWallet(uid) {
 
                     }
 
+                    loadTransactionHistory(
+                        uid
+                    );
+
                     return;
 
                 }
 
 
+                // ======================================
+                // CUSTOMER DATA
+                // ======================================
+
                 const data =
                     doc.data() || {};
 
+
+                // ======================================
+                // BALANCE
+                // ======================================
 
                 let balance =
                     Number(
@@ -701,6 +258,10 @@ function loadWallet(uid) {
 
                 }
 
+
+                // ======================================
+                // SHOW BALANCE
+                // ======================================
 
                 if (walletBalance) {
 
@@ -726,16 +287,41 @@ function loadWallet(uid) {
 
                 }
 
+
+                if (transactionList) {
+
+                    transactionList.innerHTML = `
+
+                        <div class="wallet-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            <h3>
+                                Wallet unavailable
+                            </h3>
+
+                            <p>
+                                Unable to load your wallet.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+
             }
 
         );
 
 
     // ==================================================
-    // TRANSACTION HISTORY
+    // LOAD TRANSACTIONS
     // ==================================================
 
-    loadTransactionHistory(uid);
+    loadTransactionHistory(
+        uid
+    );
 
 }
 
@@ -747,7 +333,9 @@ function loadWallet(uid) {
 function loadTransactionHistory(uid) {
 
     if (!uid) {
+
         return;
+
     }
 
 
@@ -770,7 +358,9 @@ function loadTransactionHistory(uid) {
 
     transactionUnsubscribe = db
 
-        .collection("balanceTransactions")
+        .collection(
+            "balanceTransactions"
+        )
 
         .where(
             "uid",
@@ -789,7 +379,7 @@ function loadTransactionHistory(uid) {
 
 
                 // ======================================
-                // EMPTY
+                // NO TRANSACTIONS
                 // ======================================
 
                 if (snapshot.empty) {
@@ -899,10 +489,6 @@ function loadTransactionHistory(uid) {
                             Please try again later.
                         </p>
 
-                        <small>
-                            ${escapeHTML(error.message)}
-                        </small>
-
                         <button
                             onclick="location.reload()"
                             class="wallet-retry-btn">
@@ -923,15 +509,19 @@ function loadTransactionHistory(uid) {
 
 
 // ======================================================
-// GET TIMESTAMP
+// TIMESTAMP
 // ======================================================
 
 function getTimestamp(value) {
 
     if (!value) {
+
         return 0;
+
     }
 
+
+    // Firestore Timestamp
 
     if (
         typeof value.toMillis ===
@@ -943,12 +533,30 @@ function getTimestamp(value) {
     }
 
 
-    if (value instanceof Date) {
+    // Firestore Timestamp object
+
+    if (
+        typeof value.toDate ===
+        "function"
+    ) {
+
+        return value.toDate().getTime();
+
+    }
+
+
+    // Date
+
+    if (
+        value instanceof Date
+    ) {
 
         return value.getTime();
 
     }
 
+
+    // Number
 
     if (
         typeof value === "number"
@@ -958,6 +566,8 @@ function getTimestamp(value) {
 
     }
 
+
+    // String
 
     const parsed =
         new Date(value).getTime();
@@ -971,65 +581,52 @@ function getTimestamp(value) {
 
 
 // ======================================================
-// DETECT TRANSACTION
+// TRANSACTION STATUS SYSTEM
 // ======================================================
 
 function getTransactionInfo(tx) {
 
-    const rawType = String(
-        tx.type ||
-        tx.transactionType ||
-        tx.category ||
-        ""
-    )
-        .trim()
-        .toLowerCase();
+    const type =
+        String(
+            tx.type || ""
+        ).toLowerCase().trim();
 
 
-    const rawStatus = String(
-        tx.status ||
-        "Pending"
-    )
-        .trim()
-        .toLowerCase();
-
-
-    const description = String(
-        tx.description ||
-        tx.productName ||
-        tx.name ||
-        ""
-    )
-        .trim()
-        .toLowerCase();
+    const rawStatus =
+        String(
+            tx.status || "Pending"
+        ).toLowerCase().trim();
 
 
     // ==================================================
-    // FAILED / REJECTED
+    // REJECTED / FAILED
     // ==================================================
 
-    const isFailed =
+    if (
         rawStatus === "rejected" ||
         rawStatus === "reject" ||
         rawStatus === "failed" ||
         rawStatus === "failure" ||
         rawStatus === "cancelled" ||
-        rawStatus === "canceled";
-
-
-    if (isFailed) {
+        rawStatus === "canceled"
+    ) {
 
         return {
 
-            kind: "failed",
+            title:
+                "Payment Failed",
 
-            title: "Payment Failed",
+            status:
+                "Payment Failed",
 
-            icon: "fa-xmark",
+            className:
+                "rejected",
 
-            statusText: "Rejected",
+            icon:
+                "fa-xmark",
 
-            statusClass: "status-rejected"
+            amountClass:
+                "negative"
 
         };
 
@@ -1040,47 +637,30 @@ function getTransactionInfo(tx) {
     // PENDING
     // ==================================================
 
-    const isPending =
+    if (
         rawStatus === "pending" ||
         rawStatus === "processing" ||
-        rawStatus === "under review" ||
-        rawStatus === "waiting";
-
-
-    // ==================================================
-    // REFUND
-    // ==================================================
-
-    const isRefund =
-        rawType === "refund" ||
-        rawType === "refunded" ||
-        description.includes("refund") ||
-        tx.refund === true;
-
-
-    if (isRefund) {
+        rawStatus === "waiting"
+    ) {
 
         return {
 
-            kind: isPending
-                ? "pending"
-                : "refund",
+            title:
+                getTransactionTitle(
+                    type
+                ),
 
-            title: isPending
-                ? "Refund Pending"
-                : "Refund",
+            status:
+                "Pending",
 
-            icon: isPending
-                ? "fa-clock"
-                : "fa-rotate-left",
+            className:
+                "pending",
 
-            statusText: isPending
-                ? "Pending"
-                : "Completed",
+            icon:
+                "fa-clock",
 
-            statusClass: isPending
-                ? "status-pending"
-                : "status-completed"
+            amountClass:
+                getAmountClass(type)
 
         };
 
@@ -1088,48 +668,30 @@ function getTransactionInfo(tx) {
 
 
     // ==================================================
-    // PURCHASE
+    // REFUND
     // ==================================================
 
-    const isPurchase =
-        rawType === "debit" ||
-        rawType === "purchase" ||
-        rawType === "order" ||
-        tx.orderId ||
-        tx.productId;
-
-
-    if (isPurchase) {
+    if (
+        type === "refund" ||
+        type === "refunded"
+    ) {
 
         return {
 
-            kind: isPending
-                ? "pending"
-                : "purchase",
+            title:
+                "Refund",
 
-            title: isPending
-                ? "Payment Pending"
-                : "Purchase",
+            status:
+                "Complete",
 
-            icon: isPending
-                ? "fa-clock"
-                : "fa-arrow-up",
+            className:
+                "refund",
 
-            statusText: isPending
-                ? "Pending"
-                : (
-                    rawStatus === "approved"
-                    ? "Approved"
-                    : "Completed"
-                ),
+            icon:
+                "fa-rotate-left",
 
-            statusClass: isPending
-                ? "status-pending"
-                : (
-                    rawStatus === "approved"
-                    ? "status-approved"
-                    : "status-completed"
-                )
+            amountClass:
+                "positive"
 
         };
 
@@ -1140,45 +702,60 @@ function getTransactionInfo(tx) {
     // BALANCE RECHARGE
     // ==================================================
 
-    const isRecharge =
-        rawType === "credit" ||
-        rawType === "recharge" ||
-        rawType === "balance recharge" ||
-        tx.rechargeId ||
-        tx.balanceAdded === true;
-
-
-    if (isRecharge) {
+    if (
+        type === "credit" ||
+        type === "recharge" ||
+        type === "balance_recharge" ||
+        type === "balance-recharge"
+    ) {
 
         return {
 
-            kind: isPending
-                ? "pending"
-                : "recharge",
+            title:
+                "Balance Recharge",
 
-            title: isPending
-                ? "Payment Pending"
-                : "Balance Recharge",
+            status:
+                "Successful",
 
-            icon: isPending
-                ? "fa-clock"
-                : "fa-arrow-down",
+            className:
+                "credit",
 
-            statusText: isPending
-                ? "Pending"
-                : (
-                    rawStatus === "approved"
-                    ? "Approved"
-                    : "Completed"
-                ),
+            icon:
+                "fa-arrow-down",
 
-            statusClass: isPending
-                ? "status-pending"
-                : (
-                    rawStatus === "approved"
-                    ? "status-approved"
-                    : "status-completed"
-                )
+            amountClass:
+                "positive"
+
+        };
+
+    }
+
+
+    // ==================================================
+    // PURCHASE
+    // ==================================================
+
+    if (
+        type === "debit" ||
+        type === "purchase"
+    ) {
+
+        return {
+
+            title:
+                "Purchase",
+
+            status:
+                "Complete",
+
+            className:
+                "debit",
+
+            icon:
+                "fa-arrow-up",
+
+            amountClass:
+                "negative"
 
         };
 
@@ -1191,27 +768,86 @@ function getTransactionInfo(tx) {
 
     return {
 
-        kind: isPending
-            ? "pending"
-            : "recharge",
+        title:
+            "Transaction",
 
-        title: isPending
-            ? "Payment Pending"
-            : "Balance Recharge",
+        status:
+            "Complete",
 
-        icon: isPending
-            ? "fa-clock"
-            : "fa-circle-check",
+        className:
+            "credit",
 
-        statusText: isPending
-            ? "Pending"
-            : "Completed",
+        icon:
+            "fa-receipt",
 
-        statusClass: isPending
-            ? "status-pending"
-            : "status-completed"
+        amountClass:
+            "positive"
 
     };
+
+}
+
+
+// ======================================================
+// TRANSACTION TITLE
+// ======================================================
+
+function getTransactionTitle(type) {
+
+    if (
+        type === "credit" ||
+        type === "recharge" ||
+        type === "balance_recharge" ||
+        type === "balance-recharge"
+    ) {
+
+        return "Balance Recharge";
+
+    }
+
+
+    if (
+        type === "debit" ||
+        type === "purchase"
+    ) {
+
+        return "Purchase";
+
+    }
+
+
+    if (
+        type === "refund" ||
+        type === "refunded"
+    ) {
+
+        return "Refund";
+
+    }
+
+
+    return "Transaction";
+
+}
+
+
+// ======================================================
+// AMOUNT CLASS
+// ======================================================
+
+function getAmountClass(type) {
+
+    if (
+        type === "debit" ||
+        type === "purchase"
+    ) {
+
+        return "negative";
+
+    }
+
+
+    return "positive";
 
 }
 
@@ -1225,7 +861,9 @@ function renderTransactions(
 ) {
 
     if (!transactionList) {
+
         return;
+
     }
 
 
@@ -1259,95 +897,57 @@ function renderTransactions(
 
     transactions.forEach((tx) => {
 
-        const amount =
-            Number(
-                tx.amount || 0
+
+        // ==========================================
+        // TRANSACTION INFO
+        // ==========================================
+
+        const info =
+            getTransactionInfo(
+                tx
             );
 
 
-        const info =
-            getTransactionInfo(tx);
-
-
-        // ==================================================
+        // ==========================================
         // AMOUNT
-        // ==================================================
+        // ==========================================
 
-        let amountText = "";
+        const amount =
+            Math.abs(
+                Number(
+                    tx.amount || 0
+                )
+            );
 
 
-        // Refund / Recharge = +
+        // ==========================================
+        // AMOUNT PREFIX
+        // ==========================================
+
+        let amountText;
+
+
         if (
-            info.kind === "recharge" ||
-            info.kind === "refund"
+            info.amountClass ===
+            "positive"
         ) {
 
             amountText =
                 "+ ₹" +
-                Math.abs(amount)
-                    .toFixed(2);
+                amount.toFixed(2);
 
-        }
-
-        // Purchase = -
-        else if (
-            info.kind === "purchase"
-        ) {
+        } else {
 
             amountText =
                 "- ₹" +
-                Math.abs(amount)
-                    .toFixed(2);
-
-        }
-
-        // Pending
-        else if (
-            info.kind === "pending"
-        ) {
-
-            // Debit pending
-            if (
-                String(
-                    tx.type || ""
-                ).toLowerCase() === "debit" ||
-                tx.orderId ||
-                tx.productId
-            ) {
-
-                amountText =
-                    "- ₹" +
-                    Math.abs(amount)
-                        .toFixed(2);
-
-            }
-
-            // Credit pending
-            else {
-
-                amountText =
-                    "+ ₹" +
-                    Math.abs(amount)
-                        .toFixed(2);
-
-            }
-
-        }
-
-        // Failed
-        else {
-
-            amountText =
-                "₹" +
-                Math.abs(amount)
-                    .toFixed(2);
+                amount.toFixed(2);
 
         }
 
 
-        // ==================================================
+        // ==========================================
         // DATE
-        // ==================================================
+        // ==========================================
 
         const dateText =
             formatDate(
@@ -1355,59 +955,33 @@ function renderTransactions(
             );
 
 
-        // ==================================================
-        // REFERENCE
-        // ==================================================
-
-        let referenceHTML = "";
-
-
-        if (tx.orderId) {
-
-            referenceHTML = `
-
-                <span class="transaction-reference">
-
-                    Order: ${escapeHTML(
-                        String(tx.orderId)
-                    )}
-
-                </span>
-
-            `;
-
-        }
-
-
-        if (tx.rechargeId) {
-
-            referenceHTML = `
-
-                <span class="transaction-reference">
-
-                    Recharge: ${escapeHTML(
-                        String(tx.rechargeId)
-                    )}
-
-                </span>
-
-            `;
-
-        }
-
-
-        // ==================================================
+        // ==========================================
         // CARD
-        // ==================================================
+        // ==========================================
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         card.className =
             "transaction-card " +
-            info.kind;
+            info.className;
 
+
+        // ==========================================
+        // ONLY:
+        //
+        // TITLE
+        // DATE
+        // AMOUNT
+        // STATUS
+        //
+        // NO DESCRIPTION
+        // NO ORDER ID
+        // NO RECHARGE ID
+        // ==========================================
 
         card.innerHTML = `
 
@@ -1437,9 +1011,6 @@ function renderTransactions(
 
                     </span>
 
-
-                    ${referenceHTML}
-
                 </div>
 
             </div>
@@ -1447,19 +1018,19 @@ function renderTransactions(
 
             <div class="transaction-right">
 
-                <strong>
+                <strong
+                    class="${info.amountClass}">
 
-                    ${escapeHTML(
-                        amountText
-                    )}
+                    ${amountText}
 
                 </strong>
 
 
-                <span class="transaction-status ${info.statusClass}">
+                <span
+                    class="transaction-status ${info.className}">
 
                     ${escapeHTML(
-                        info.statusText
+                        info.status
                     )}
 
                 </span>
@@ -1507,7 +1078,7 @@ function formatDate(timestamp) {
     }
 
 
-    // JavaScript Date
+    // Date
 
     else if (
         timestamp instanceof Date
@@ -1526,7 +1097,8 @@ function formatDate(timestamp) {
         const parsed =
             new Date(timestamp);
 
-        if (
+
+       if (
             !Number.isNaN(
                 parsed.getTime()
             )
@@ -1664,19 +1236,28 @@ if (continuePayment) {
 
     continuePayment.onclick = () => {
 
+
+        // ==========================================
+        // AMOUNT
+        // ==========================================
+
         const amount =
             Number(
                 balanceAmount.value
             );
 
 
+        // ==========================================
+        // MOBILE
+        // ==========================================
+
         const mobile =
             balanceMobile.value.trim();
 
 
-        // ==================================================
-        // AMOUNT VALIDATION
-        // ==================================================
+        // ==========================================
+        // VALIDATE AMOUNT
+        // ==========================================
 
         if (
             !amount ||
@@ -1695,9 +1276,9 @@ if (continuePayment) {
         }
 
 
-        // ==================================================
-        // MOBILE VALIDATION
-        // ==================================================
+        // ==========================================
+        // VALIDATE MOBILE
+        // ==========================================
 
         if (
             !/^[6-9]\d{9}$/.test(
@@ -1716,9 +1297,9 @@ if (continuePayment) {
         }
 
 
-        // ==================================================
-        // LOGIN CHECK
-        // ==================================================
+        // ==========================================
+        // LOGIN
+        // ==========================================
 
         const user =
             firebase.auth().currentUser;
@@ -1737,9 +1318,9 @@ if (continuePayment) {
         }
 
 
-        // ==================================================
+        // ==========================================
         // RECHARGE ID
-        // ==================================================
+        // ==========================================
 
         const rechargeId =
 
@@ -1758,9 +1339,9 @@ if (continuePayment) {
                 .toUpperCase();
 
 
-        // ==================================================
+        // ==========================================
         // SAVE RECHARGE DATA
-        // ==================================================
+        // ==========================================
 
         localStorage.setItem(
 
@@ -1782,9 +1363,9 @@ if (continuePayment) {
         );
 
 
-        // ==================================================
+        // ==========================================
         // PAYMENT PAGE
-        // ==================================================
+        // ==========================================
 
         window.location.href =
             "wallet-payment.html";
@@ -1808,36 +1389,44 @@ function showVIPAlert(
 
         success: {
 
-            title: "Success",
+            title:
+                "Success",
 
-            icon: "✓"
+            icon:
+                "✓"
 
         },
 
 
         error: {
 
-            title: "Something went wrong",
+            title:
+                "Something went wrong",
 
-            icon: "!"
+            icon:
+                "!"
 
         },
 
 
         warning: {
 
-            title: "Attention",
+            title:
+                "Attention",
 
-            icon: "!"
+            icon:
+                "!"
 
         },
 
 
         info: {
 
-            title: "Notice",
+            title:
+                "Notice",
 
-            icon: "i"
+            icon:
+                "i"
 
         }
 
@@ -1848,6 +1437,10 @@ function showVIPAlert(
         config[type] ||
         config.info;
 
+
+    // ==========================================
+    // REMOVE OLD ALERT
+    // ==========================================
 
     const oldAlert =
         document.querySelector(
@@ -1861,6 +1454,10 @@ function showVIPAlert(
 
     }
 
+
+    // ==========================================
+    // CREATE ALERT
+    // ==========================================
 
     const overlay =
         document.createElement(
@@ -1953,7 +1550,9 @@ function closeVIPAlert() {
 
 
     if (!overlay) {
+
         return;
+
     }
 
 
@@ -1981,7 +1580,9 @@ function closeVIPAlert() {
 
 function escapeHTML(value) {
 
-    return String(value ?? "")
+    return String(
+        value ?? ""
+    )
 
         .replace(
             /&/g,
