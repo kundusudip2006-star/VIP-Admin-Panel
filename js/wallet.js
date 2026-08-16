@@ -1,7 +1,9 @@
 // ======================================================
 // VIP PANEL STORE
 // WALLET SYSTEM
+// COMPLETE WALLET.JS
 // ======================================================
+
 
 // ======================================================
 // ELEMENTS
@@ -44,6 +46,468 @@ let transactionUnsubscribe = null;
 
 
 // ======================================================
+// INJECT WALLET TRANSACTION CSS
+// ======================================================
+
+(function injectWalletStyles() {
+
+    if (document.getElementById("walletTransactionStyles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+
+    style.id = "walletTransactionStyles";
+
+    style.textContent = `
+
+    /* ==================================================
+       TRANSACTION CARD
+       ================================================== */
+
+    .transaction-card {
+
+        width: 100%;
+        box-sizing: border-box;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 15px;
+
+        padding: 18px;
+
+        margin-bottom: 14px;
+
+        border-radius: 18px;
+
+        background: rgba(25, 55, 100, 0.95);
+
+        border-left: 4px solid transparent;
+
+        box-shadow:
+            0 8px 25px rgba(0,0,0,0.18);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+
+    }
+
+
+    .transaction-card:hover {
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 12px 30px rgba(0,0,0,0.25);
+
+    }
+
+
+    /* ==================================================
+       LEFT
+       ================================================== */
+
+    .transaction-left {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 13px;
+
+        min-width: 0;
+
+        flex: 1;
+
+    }
+
+
+    .transaction-icon {
+
+        width: 46px;
+
+        height: 46px;
+
+        min-width: 46px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 17px;
+
+    }
+
+
+    .transaction-info {
+
+        min-width: 0;
+
+    }
+
+
+    .transaction-info h3 {
+
+        margin: 0 0 5px 0;
+
+        font-size: 16px;
+
+        font-weight: 700;
+
+        color: #ffffff;
+
+    }
+
+
+    /* Description intentionally hidden */
+
+    .transaction-info p {
+
+        display: none !important;
+
+    }
+
+
+    .transaction-date {
+
+        display: block;
+
+        margin-top: 2px;
+
+        font-size: 12px;
+
+        color: rgba(255,255,255,0.68);
+
+    }
+
+
+    .transaction-reference {
+
+        display: block;
+
+        margin-top: 4px;
+
+        font-size: 11px;
+
+        color: rgba(255,255,255,0.48);
+
+        word-break: break-all;
+
+    }
+
+
+    /* ==================================================
+       RIGHT
+       ================================================== */
+
+    .transaction-right {
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: flex-end;
+
+        justify-content: center;
+
+        gap: 5px;
+
+        min-width: 95px;
+
+    }
+
+
+    .transaction-right strong {
+
+        font-size: 17px;
+
+        font-weight: 800;
+
+        white-space: nowrap;
+
+    }
+
+
+    .transaction-status {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 4px 9px;
+
+        border-radius: 20px;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* ==================================================
+       BALANCE RECHARGE
+       ================================================== */
+
+    .transaction-card.recharge {
+
+        border-left-color: #39ff72;
+
+    }
+
+
+    .transaction-card.recharge
+    .transaction-icon {
+
+        background: rgba(57,255,114,0.14);
+
+        color: #39ff72;
+
+    }
+
+
+    .transaction-card.recharge
+    .transaction-right strong {
+
+        color: #39ff72;
+
+    }
+
+
+    /* ==================================================
+       PURCHASE
+       ================================================== */
+
+    .transaction-card.purchase {
+
+        border-left-color: #ff4d5a;
+
+    }
+
+
+    .transaction-card.purchase
+    .transaction-icon {
+
+        background: rgba(255,77,90,0.14);
+
+        color: #ff4d5a;
+
+    }
+
+
+    .transaction-card.purchase
+    .transaction-right strong {
+
+        color: #ff4d5a;
+
+    }
+
+
+    /* ==================================================
+       REFUND
+       ================================================== */
+
+    .transaction-card.refund {
+
+        border-left-color: #35b8ff;
+
+    }
+
+
+    .transaction-card.refund
+    .transaction-icon {
+
+        background: rgba(53,184,255,0.15);
+
+        color: #35b8ff;
+
+    }
+
+
+    .transaction-card.refund
+    .transaction-right strong {
+
+        color: #35b8ff;
+
+    }
+
+
+    /* ==================================================
+       PENDING
+       ================================================== */
+
+    .transaction-card.pending {
+
+        border-left-color: #ffc107;
+
+    }
+
+
+    .transaction-card.pending
+    .transaction-icon {
+
+        background: rgba(255,193,7,0.15);
+
+        color: #ffc107;
+
+    }
+
+
+    .transaction-card.pending
+    .transaction-right strong {
+
+        color: #ffc107;
+
+    }
+
+
+    /* ==================================================
+       FAILED
+       ================================================== */
+
+    .transaction-card.failed {
+
+        border-left-color: #ff3b4d;
+
+    }
+
+
+    .transaction-card.failed
+    .transaction-icon {
+
+        background: rgba(255,59,77,0.15);
+
+        color: #ff3b4d;
+
+    }
+
+
+    .transaction-card.failed
+    .transaction-right strong {
+
+        color: #ff3b4d;
+
+    }
+
+
+    /* ==================================================
+       STATUS BADGES
+       ================================================== */
+
+    .transaction-status.status-completed,
+    .transaction-status.status-approved {
+
+        color: #42ff7b;
+
+        background: rgba(66,255,123,0.12);
+
+    }
+
+
+    .transaction-status.status-pending {
+
+        color: #ffc107;
+
+        background: rgba(255,193,7,0.13);
+
+    }
+
+
+    .transaction-status.status-failed,
+    .transaction-status.status-rejected {
+
+        color: #ff5364;
+
+        background: rgba(255,83,100,0.13);
+
+    }
+
+
+    /* ==================================================
+       MOBILE
+       ================================================== */
+
+    @media (max-width: 600px) {
+
+        .transaction-card {
+
+            padding: 14px;
+
+            gap: 9px;
+
+        }
+
+
+        .transaction-icon {
+
+            width: 40px;
+
+            height: 40px;
+
+            min-width: 40px;
+
+            font-size: 14px;
+
+        }
+
+
+        .transaction-info h3 {
+
+            font-size: 14px;
+
+        }
+
+
+        .transaction-right strong {
+
+            font-size: 14px;
+
+        }
+
+
+        .transaction-status {
+
+            font-size: 9px;
+
+            padding: 3px 7px;
+
+        }
+
+
+        .transaction-date {
+
+            font-size: 10px;
+
+        }
+
+
+        .transaction-reference {
+
+            font-size: 9px;
+
+        }
+
+    }
+
+    `;
+
+    document.head.appendChild(style);
+
+})();
+
+
+// ======================================================
 // AUTH STATE
 // ======================================================
 
@@ -56,24 +520,35 @@ firebase.auth().onAuthStateChanged((user) => {
 
 
     // ==================================================
-    // USER NOT LOGGED IN
+    // NOT LOGGED IN
     // ==================================================
 
     if (!user) {
 
+        currentWalletUser = null;
+
         if (customerUnsubscribe) {
+
             customerUnsubscribe();
+
             customerUnsubscribe = null;
+
         }
 
+
         if (transactionUnsubscribe) {
+
             transactionUnsubscribe();
+
             transactionUnsubscribe = null;
+
         }
+
 
         window.location.replace("login.html");
 
         return;
+
     }
 
 
@@ -88,6 +563,7 @@ firebase.auth().onAuthStateChanged((user) => {
         "Wallet User UID:",
         user.uid
     );
+
 
     console.log(
         "Wallet User Email:",
@@ -117,6 +593,7 @@ function loadWallet(uid) {
         );
 
         return;
+
     }
 
 
@@ -129,6 +606,7 @@ function loadWallet(uid) {
         customerUnsubscribe();
 
         customerUnsubscribe = null;
+
     }
 
 
@@ -137,11 +615,12 @@ function loadWallet(uid) {
         transactionUnsubscribe();
 
         transactionUnsubscribe = null;
+
     }
 
 
     // ==================================================
-    // SHOW LOADING
+    // LOADING
     // ==================================================
 
     if (walletBalance) {
@@ -170,9 +649,7 @@ function loadWallet(uid) {
 
 
     // ==================================================
-    // CUSTOMER DOCUMENT
-    //
-    // customers/{AUTH_UID}
+    // CUSTOMER
     // ==================================================
 
     const customerRef = db
@@ -191,10 +668,6 @@ function loadWallet(uid) {
                 );
 
 
-                // ======================================
-                // CUSTOMER NOT FOUND
-                // ======================================
-
                 if (!doc.exists) {
 
                     if (walletBalance) {
@@ -204,46 +677,20 @@ function loadWallet(uid) {
 
                     }
 
-
-                    console.warn(
-                        "Customer document not found:",
-                        uid
-                    );
-
                     return;
+
                 }
 
-
-                // ======================================
-                // CUSTOMER DATA
-                // ======================================
 
                 const data =
                     doc.data() || {};
 
-
-                console.log(
-                    "Customer wallet data:",
-                    data
-                );
-
-
-                // ======================================
-                // BALANCE
-                //
-                // MAIN SOURCE:
-                // customers/{uid}.balance
-                // ======================================
 
                 let balance =
                     Number(
                         data.balance || 0
                     );
 
-
-                // ======================================
-                // INVALID BALANCE PROTECTION
-                // ======================================
 
                 if (
                     !Number.isFinite(balance) ||
@@ -255,17 +702,12 @@ function loadWallet(uid) {
                 }
 
 
-                // ======================================
-                // SHOW BALANCE
-                // ======================================
-
                 if (walletBalance) {
 
                     walletBalance.innerText =
                         balance.toFixed(2);
 
                 }
-
 
             },
 
@@ -284,40 +726,13 @@ function loadWallet(uid) {
 
                 }
 
-
-                if (transactionList) {
-
-                    transactionList.innerHTML = `
-
-                        <div class="wallet-error">
-
-                            <i class="fa-solid fa-circle-exclamation"></i>
-
-                            <h3>
-                                Wallet unavailable
-                            </h3>
-
-                            <p>
-                                Unable to load your wallet.
-                            </p>
-
-                            <small>
-                                ${escapeHTML(error.message)}
-                            </small>
-
-                        </div>
-
-                    `;
-
-                }
-
             }
 
         );
 
 
     // ==================================================
-    // LOAD TRANSACTION HISTORY
+    // TRANSACTION HISTORY
     // ==================================================
 
     loadTransactionHistory(uid);
@@ -326,12 +741,14 @@ function loadWallet(uid) {
 
 
 // ======================================================
-// TRANSACTION HISTORY
+// LOAD TRANSACTION HISTORY
 // ======================================================
 
 function loadTransactionHistory(uid) {
 
-    if (!uid) return;
+    if (!uid) {
+        return;
+    }
 
 
     // ==================================================
@@ -348,10 +765,7 @@ function loadTransactionHistory(uid) {
 
 
     // ==================================================
-    // QUERY
-    //
-    // balanceTransactions
-    // where uid == AUTH UID
+    // FIRESTORE QUERY
     // ==================================================
 
     transactionUnsubscribe = db
@@ -375,7 +789,7 @@ function loadTransactionHistory(uid) {
 
 
                 // ======================================
-                // NO TRANSACTIONS
+                // EMPTY
                 // ======================================
 
                 if (snapshot.empty) {
@@ -404,7 +818,7 @@ function loadTransactionHistory(uid) {
 
 
                 // ======================================
-                // CONVERT SNAPSHOT TO ARRAY
+                // ARRAY
                 // ======================================
 
                 const transactions = [];
@@ -429,19 +843,24 @@ function loadTransactionHistory(uid) {
 
 
                 // ======================================
-                // SORT NEWEST FIRST
-                //
-                // No Firestore orderBy used,
-                // so composite index is NOT required.
+                // NEWEST FIRST
                 // ======================================
 
                 transactions.sort(
                     (a, b) => {
 
                         return (
-                            getTimestamp(b.createdAt)
+
+                            getTimestamp(
+                                b.createdAt
+                            )
+
                             -
-                            getTimestamp(a.createdAt)
+
+                            getTimestamp(
+                                a.createdAt
+                            )
+
                         );
 
                     }
@@ -504,7 +923,7 @@ function loadTransactionHistory(uid) {
 
 
 // ======================================================
-// TIMESTAMP HELPER
+// GET TIMESTAMP
 // ======================================================
 
 function getTimestamp(value) {
@@ -513,8 +932,6 @@ function getTimestamp(value) {
         return 0;
     }
 
-
-    // Firestore Timestamp
 
     if (
         typeof value.toMillis ===
@@ -526,16 +943,12 @@ function getTimestamp(value) {
     }
 
 
-    // JavaScript Date
-
     if (value instanceof Date) {
 
         return value.getTime();
 
     }
 
-
-    // Number
 
     if (
         typeof value === "number"
@@ -546,8 +959,6 @@ function getTimestamp(value) {
     }
 
 
-    // String date
-
     const parsed =
         new Date(value).getTime();
 
@@ -555,6 +966,252 @@ function getTimestamp(value) {
     return Number.isNaN(parsed)
         ? 0
         : parsed;
+
+}
+
+
+// ======================================================
+// DETECT TRANSACTION
+// ======================================================
+
+function getTransactionInfo(tx) {
+
+    const rawType = String(
+        tx.type ||
+        tx.transactionType ||
+        tx.category ||
+        ""
+    )
+        .trim()
+        .toLowerCase();
+
+
+    const rawStatus = String(
+        tx.status ||
+        "Pending"
+    )
+        .trim()
+        .toLowerCase();
+
+
+    const description = String(
+        tx.description ||
+        tx.productName ||
+        tx.name ||
+        ""
+    )
+        .trim()
+        .toLowerCase();
+
+
+    // ==================================================
+    // FAILED / REJECTED
+    // ==================================================
+
+    const isFailed =
+        rawStatus === "rejected" ||
+        rawStatus === "reject" ||
+        rawStatus === "failed" ||
+        rawStatus === "failure" ||
+        rawStatus === "cancelled" ||
+        rawStatus === "canceled";
+
+
+    if (isFailed) {
+
+        return {
+
+            kind: "failed",
+
+            title: "Payment Failed",
+
+            icon: "fa-xmark",
+
+            statusText: "Rejected",
+
+            statusClass: "status-rejected"
+
+        };
+
+    }
+
+
+    // ==================================================
+    // PENDING
+    // ==================================================
+
+    const isPending =
+        rawStatus === "pending" ||
+        rawStatus === "processing" ||
+        rawStatus === "under review" ||
+        rawStatus === "waiting";
+
+
+    // ==================================================
+    // REFUND
+    // ==================================================
+
+    const isRefund =
+        rawType === "refund" ||
+        rawType === "refunded" ||
+        description.includes("refund") ||
+        tx.refund === true;
+
+
+    if (isRefund) {
+
+        return {
+
+            kind: isPending
+                ? "pending"
+                : "refund",
+
+            title: isPending
+                ? "Refund Pending"
+                : "Refund",
+
+            icon: isPending
+                ? "fa-clock"
+                : "fa-rotate-left",
+
+            statusText: isPending
+                ? "Pending"
+                : "Completed",
+
+            statusClass: isPending
+                ? "status-pending"
+                : "status-completed"
+
+        };
+
+    }
+
+
+    // ==================================================
+    // PURCHASE
+    // ==================================================
+
+    const isPurchase =
+        rawType === "debit" ||
+        rawType === "purchase" ||
+        rawType === "order" ||
+        tx.orderId ||
+        tx.productId;
+
+
+    if (isPurchase) {
+
+        return {
+
+            kind: isPending
+                ? "pending"
+                : "purchase",
+
+            title: isPending
+                ? "Payment Pending"
+                : "Purchase",
+
+            icon: isPending
+                ? "fa-clock"
+                : "fa-arrow-up",
+
+            statusText: isPending
+                ? "Pending"
+                : (
+                    rawStatus === "approved"
+                    ? "Approved"
+                    : "Completed"
+                ),
+
+            statusClass: isPending
+                ? "status-pending"
+                : (
+                    rawStatus === "approved"
+                    ? "status-approved"
+                    : "status-completed"
+                )
+
+        };
+
+    }
+
+
+    // ==================================================
+    // BALANCE RECHARGE
+    // ==================================================
+
+    const isRecharge =
+        rawType === "credit" ||
+        rawType === "recharge" ||
+        rawType === "balance recharge" ||
+        tx.rechargeId ||
+        tx.balanceAdded === true;
+
+
+    if (isRecharge) {
+
+        return {
+
+            kind: isPending
+                ? "pending"
+                : "recharge",
+
+            title: isPending
+                ? "Payment Pending"
+                : "Balance Recharge",
+
+            icon: isPending
+                ? "fa-clock"
+                : "fa-arrow-down",
+
+            statusText: isPending
+                ? "Pending"
+                : (
+                    rawStatus === "approved"
+                    ? "Approved"
+                    : "Completed"
+                ),
+
+            statusClass: isPending
+                ? "status-pending"
+                : (
+                    rawStatus === "approved"
+                    ? "status-approved"
+                    : "status-completed"
+                )
+
+        };
+
+    }
+
+
+    // ==================================================
+    // DEFAULT
+    // ==================================================
+
+    return {
+
+        kind: isPending
+            ? "pending"
+            : "recharge",
+
+        title: isPending
+            ? "Payment Pending"
+            : "Balance Recharge",
+
+        icon: isPending
+            ? "fa-clock"
+            : "fa-circle-check",
+
+        statusText: isPending
+            ? "Pending"
+            : "Completed",
+
+        statusClass: isPending
+            ? "status-pending"
+            : "status-completed"
+
+    };
 
 }
 
@@ -593,6 +1250,7 @@ function renderTransactions(
         `;
 
         return;
+
     }
 
 
@@ -601,135 +1259,40 @@ function renderTransactions(
 
     transactions.forEach((tx) => {
 
-
-        // ==========================================
-        // TYPE
-        // ==========================================
-
-        const type =
-            String(
-                tx.type || ""
-            ).toLowerCase();
-
-
-        // ==========================================
-        // AMOUNT
-        // ==========================================
-
         const amount =
             Number(
                 tx.amount || 0
             );
 
 
-        // ==========================================
-        // STATUS
-        // ==========================================
-
-        const status =
-            String(
-                tx.status || "Pending"
-            );
+        const info =
+            getTransactionInfo(tx);
 
 
-        // ==========================================
-        // CREDIT / DEBIT
-        // ==========================================
+        // ==================================================
+        // AMOUNT
+        // ==================================================
 
-        const isCredit =
-            type === "credit" ||
-            type === "recharge";
+        let amountText = "";
 
 
-        const isDebit =
-            type === "debit" ||
-            type === "purchase";
-
-
-        // ==========================================
-        // TITLE
-        // ==========================================
-
-        let title =
-            "Transaction";
-
-
-        if (isCredit) {
-
-            title =
-                "Balance Recharge";
-
-        }
-
-
-        if (isDebit) {
-
-            title =
-                "Purchase";
-
-        }
-
-
-        // ==========================================
-        // DESCRIPTION
-        // ==========================================
-
-        let description =
-            tx.description || "";
-
-
-        if (!description) {
-
-            if (isCredit) {
-
-                description =
-                    "Wallet Recharge";
-
-            } else if (isDebit) {
-
-                description =
-                    "Wallet Purchase";
-
-            }
-
-        }
-
-
-        // ==========================================
-        // CLASS
-        // ==========================================
-
-        const transactionClass =
-            isCredit
-                ? "credit"
-                : "debit";
-
-
-        // ==========================================
-        // ICON
-        // ==========================================
-
-        const icon =
-            isCredit
-                ? "fa-arrow-down"
-                : "fa-arrow-up";
-
-
-        // ==========================================
-        // AMOUNT TEXT
-        // ==========================================
-
-        let amountText;
-
-
-        if (isCredit) {
+        // Refund / Recharge = +
+        if (
+            info.kind === "recharge" ||
+            info.kind === "refund"
+        ) {
 
             amountText =
                 "+ ₹" +
                 Math.abs(amount)
                     .toFixed(2);
 
-        } else {
+        }
+
+        // Purchase = -
+        else if (
+            info.kind === "purchase"
+        ) {
 
             amountText =
                 "- ₹" +
@@ -738,10 +1301,53 @@ function renderTransactions(
 
         }
 
+        // Pending
+        else if (
+            info.kind === "pending"
+        ) {
 
-        // ==========================================
+            // Debit pending
+            if (
+                String(
+                    tx.type || ""
+                ).toLowerCase() === "debit" ||
+                tx.orderId ||
+                tx.productId
+            ) {
+
+                amountText =
+                    "- ₹" +
+                    Math.abs(amount)
+                        .toFixed(2);
+
+            }
+
+            // Credit pending
+            else {
+
+                amountText =
+                    "+ ₹" +
+                    Math.abs(amount)
+                        .toFixed(2);
+
+            }
+
+        }
+
+        // Failed
+        else {
+
+            amountText =
+                "₹" +
+                Math.abs(amount)
+                    .toFixed(2);
+
+        }
+
+
+        // ==================================================
         // DATE
-        // ==========================================
+        // ==================================================
 
         const dateText =
             formatDate(
@@ -749,9 +1355,9 @@ function renderTransactions(
             );
 
 
-        // ==========================================
-        // ORDER / RECHARGE ID
-        // ==========================================
+        // ==================================================
+        // REFERENCE
+        // ==================================================
 
         let referenceHTML = "";
 
@@ -790,9 +1396,9 @@ function renderTransactions(
         }
 
 
-        // ==========================================
+        // ==================================================
         // CARD
-        // ==========================================
+        // ==================================================
 
         const card =
             document.createElement("div");
@@ -800,7 +1406,7 @@ function renderTransactions(
 
         card.className =
             "transaction-card " +
-            transactionClass;
+            info.kind;
 
 
         card.innerHTML = `
@@ -809,7 +1415,7 @@ function renderTransactions(
 
                 <div class="transaction-icon">
 
-                    <i class="fa-solid ${icon}"></i>
+                    <i class="fa-solid ${info.icon}"></i>
 
                 </div>
 
@@ -817,14 +1423,11 @@ function renderTransactions(
                 <div class="transaction-info">
 
                     <h3>
-                        ${escapeHTML(title)}
+                        ${escapeHTML(
+                            info.title
+                        )}
                     </h3>
 
-                    <p>
-                        ${escapeHTML(
-                            description
-                        )}
-                    </p>
 
                     <span class="transaction-date">
 
@@ -833,6 +1436,7 @@ function renderTransactions(
                         )}
 
                     </span>
+
 
                     ${referenceHTML}
 
@@ -845,15 +1449,17 @@ function renderTransactions(
 
                 <strong>
 
-                    ${amountText}
+                    ${escapeHTML(
+                        amountText
+                    )}
 
                 </strong>
 
 
-                <span class="transaction-status">
+                <span class="transaction-status ${info.statusClass}">
 
                     ${escapeHTML(
-                        status
+                        info.statusText
                     )}
 
                 </span>
@@ -992,9 +1598,13 @@ if (addBalanceBtn) {
         }
 
 
-        addBalanceModal.classList.add(
-            "show"
-        );
+        if (addBalanceModal) {
+
+            addBalanceModal.classList.add(
+                "show"
+            );
+
+        }
 
     };
 
@@ -1009,9 +1619,13 @@ if (closeModal) {
 
     closeModal.onclick = () => {
 
-        addBalanceModal.classList.remove(
-            "show"
-        );
+        if (addBalanceModal) {
+
+            addBalanceModal.classList.remove(
+                "show"
+            );
+
+        }
 
     };
 
@@ -1060,9 +1674,9 @@ if (continuePayment) {
             balanceMobile.value.trim();
 
 
-        // ==========================================
-        // AMOUNT
-        // ==========================================
+        // ==================================================
+        // AMOUNT VALIDATION
+        // ==================================================
 
         if (
             !amount ||
@@ -1081,9 +1695,9 @@ if (continuePayment) {
         }
 
 
-        // ==========================================
-        // MOBILE
-        // ==========================================
+        // ==================================================
+        // MOBILE VALIDATION
+        // ==================================================
 
         if (
             !/^[6-9]\d{9}$/.test(
@@ -1102,9 +1716,9 @@ if (continuePayment) {
         }
 
 
-        // ==========================================
+        // ==================================================
         // LOGIN CHECK
-        // ==========================================
+        // ==================================================
 
         const user =
             firebase.auth().currentUser;
@@ -1123,9 +1737,9 @@ if (continuePayment) {
         }
 
 
-        // ==========================================
+        // ==================================================
         // RECHARGE ID
-        // ==========================================
+        // ==================================================
 
         const rechargeId =
 
@@ -1144,9 +1758,9 @@ if (continuePayment) {
                 .toUpperCase();
 
 
-        // ==========================================
+        // ==================================================
         // SAVE RECHARGE DATA
-        // ==========================================
+        // ==================================================
 
         localStorage.setItem(
 
@@ -1168,9 +1782,9 @@ if (continuePayment) {
         );
 
 
-        // ==========================================
+        // ==================================================
         // PAYMENT PAGE
-        // ==========================================
+        // ==================================================
 
         window.location.href =
             "wallet-payment.html";
@@ -1193,23 +1807,38 @@ function showVIPAlert(
     const config = {
 
         success: {
+
             title: "Success",
+
             icon: "✓"
+
         },
+
 
         error: {
+
             title: "Something went wrong",
+
             icon: "!"
+
         },
+
 
         warning: {
+
             title: "Attention",
+
             icon: "!"
+
         },
 
+
         info: {
+
             title: "Notice",
+
             icon: "i"
+
         }
 
     };
@@ -1324,9 +1953,7 @@ function closeVIPAlert() {
 
 
     if (!overlay) {
-
         return;
-
     }
 
 
@@ -1355,22 +1982,27 @@ function closeVIPAlert() {
 function escapeHTML(value) {
 
     return String(value ?? "")
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
