@@ -452,6 +452,66 @@ paidBtn.onclick = async () => {
             rechargeId
         );
 
+// ==================================================
+// 2. CREATE TRANSACTION
+// ==================================================
+
+console.log("STEP 2: Creating balance transaction...");
+
+try {
+
+    const transactionData = {
+        rechargeId: rechargeId,
+        uid: user.uid,
+        email: user.email || "",
+        amount: amount,
+        type: "credit",
+        status: "Pending",
+        mobile: mobile,
+        paymentMethod: "UPI / Google Pay",
+        balanceAdded: false,
+        createdAt:
+            firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    console.log(
+        "Transaction data:",
+        transactionData
+    );
+
+    await db
+        .collection("balanceTransactions")
+        .doc(rechargeId)
+        .set(transactionData);
+
+    console.log(
+        "STEP 2 SUCCESS: Balance transaction created:",
+        rechargeId
+    );
+
+} catch (transactionError) {
+
+    console.error(
+        "STEP 2 FAILED: Balance transaction error:",
+        transactionError
+    );
+
+    // Recharge request already exists.
+    // Do not create a duplicate recharge request.
+
+    showVIPAlert(
+        "Your recharge request was created, but the transaction record could not be created. Please contact admin.",
+        "warning",
+        "Transaction Error"
+    );
+
+    paidBtn.disabled = false;
+
+    paidBtn.innerHTML =
+        '<i class="fa-solid fa-check"></i> I\'ve Paid';
+
+    return;
+}
 
         // ==================================================
         // 3. SEND TELEGRAM NOTIFICATION
