@@ -4,8 +4,26 @@
 // Email + User ID + Register
 // ======================================================
 
+const vipAuth = firebase.auth();
+const vipDb = firebase.firestore();
+
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
+
+
+// ======================================================
+// NORMALIZE USERNAME
+// ======================================================
+
+function normalizeUsername(value) {
+
+    return String(value || "")
+        .trim()
+        .replace(/^@/, "")
+        .toLowerCase();
+
+}
+
 
 // ======================================================
 // LOGIN
@@ -18,10 +36,11 @@ if (loginForm) {
         e.preventDefault();
 
         const loginInput =
-            document.getElementById("email")?.value.trim();
+            document.getElementById("email")?.value.trim() || "";
 
         const password =
             document.getElementById("password")?.value || "";
+
 
         if (!loginInput || !password) {
 
@@ -32,9 +51,11 @@ if (loginForm) {
             return;
         }
 
+
         try {
 
             let email = loginInput;
+
 
             // ==================================================
             // CHECK EMAIL OR USER ID
@@ -45,6 +66,7 @@ if (loginForm) {
                     loginInput
                 );
 
+
             // ==================================================
             // USER ID LOGIN
             // ==================================================
@@ -52,33 +74,87 @@ if (loginForm) {
             if (!isEmail) {
 
                 const username =
-                    loginInput
-                        .replace(/^@/, "")
-                        .trim()
-                        .toLowerCase();
+                    normalizeUsername(loginInput);
+
 
                 if (!username) {
 
-                    alert("Please enter a valid User ID.");
+                    alert(
+                        "Please enter a valid User ID."
+                    );
 
                     return;
                 }
 
-                const usernameDoc =
-                    await db
+
+                console.log(
+                    "Searching User ID:",
+                    username
+                );
+
+
+                // ==================================================
+                // 1. TRY EXACT INPUT
+                // ==================================================
+
+                let usernameDoc =
+                    await vipDb
                         .collection("usernameIndex")
-                        .doc(username)
+                        .doc(
+                            loginInput
+                                .replace(/^@/, "")
+                                .trim()
+                        )
                         .get();
+
+
+                // ==================================================
+                // 2. TRY LOWERCASE USERNAME
+                // ==================================================
 
                 if (!usernameDoc.exists) {
 
-                    alert("User ID not found!");
+                    usernameDoc =
+                        await vipDb
+                            .collection("usernameIndex")
+                            .doc(username)
+                            .get();
+
+                }
+
+
+                // ==================================================
+                // USER ID NOT FOUND
+                // ==================================================
+
+                if (!usernameDoc.exists) {
+
+                    console.error(
+                        "User ID document not found:",
+                        username
+                    );
+
+                    alert(
+                        "User ID not found!"
+                    );
 
                     return;
                 }
 
+
                 const usernameData =
                     usernameDoc.data() || {};
+
+
+                console.log(
+                    "User ID data:",
+                    usernameData
+                );
+
+
+                // ==================================================
+                // GET EMAIL
+                // ==================================================
 
                 if (!usernameData.email) {
 
@@ -89,21 +165,39 @@ if (loginForm) {
                     return;
                 }
 
+
                 email =
                     String(
                         usernameData.email
-                    ).trim();
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                console.log(
+                    "User ID matched email:",
+                    email
+                );
 
             }
+
 
             // ==================================================
             // FIREBASE EMAIL LOGIN
             // ==================================================
 
-            await auth.signInWithEmailAndPassword(
-                email,
-                password
+            await vipAuth
+                .signInWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+
+            console.log(
+                "Login successful:",
+                email
             );
+
 
             // ==================================================
             // ADMIN LOGIN
@@ -112,6 +206,7 @@ if (loginForm) {
             const currentPage =
                 window.location.pathname
                     .toLowerCase();
+
 
             if (
                 currentPage.includes(
@@ -128,16 +223,18 @@ if (loginForm) {
                         "Access Denied! Admin only."
                     );
 
-                    await auth.signOut();
+                    await vipAuth.signOut();
 
                     return;
                 }
+
 
                 window.location.href =
                     "dashboard.html";
 
                 return;
             }
+
 
             // ==================================================
             // NORMAL USER LOGIN
@@ -146,6 +243,7 @@ if (loginForm) {
             window.location.href =
                 "shop.html";
 
+
         } catch (error) {
 
             console.error(
@@ -153,8 +251,10 @@ if (loginForm) {
                 error
             );
 
+
             let message =
                 "Login failed.";
+
 
             switch (error.code) {
 
@@ -165,12 +265,14 @@ if (loginForm) {
 
                     break;
 
+
                 case "auth/wrong-password":
 
                     message =
                         "Incorrect password.";
 
                     break;
+
 
                 case "auth/invalid-credential":
 
@@ -179,12 +281,14 @@ if (loginForm) {
 
                     break;
 
+
                 case "auth/invalid-email":
 
                     message =
                         "Invalid email address.";
 
                     break;
+
 
                 case "auth/too-many-requests":
 
@@ -193,12 +297,16 @@ if (loginForm) {
 
                     break;
 
+
+                case "permission-denied":
+
                 case "permission-denied":
 
                     message =
-                        "Firestore permission denied.";
+                        "Firestore permission denied. Please check Firebase Rules.";
 
                     break;
+
 
                 default:
 
@@ -206,6 +314,7 @@ if (loginForm) {
                         error.message ||
                         message;
             }
+
 
             alert(message);
         }
@@ -225,20 +334,26 @@ if (registerForm) {
 
         e.preventDefault();
 
+
         const name =
             document.getElementById("name")
-                ?.value.trim();
+                ?.value
+                .trim() || "";
+
 
         const username =
-            document.getElementById("username")
-                ?.value.trim()
-                .replace(/^@/, "")
-                .toLowerCase();
+            normalizeUsername(
+                document.getElementById("username")
+                    ?.value || ""
+            );
+
 
         const email =
             document.getElementById("email")
-                ?.value.trim()
-                .toLowerCase();
+                ?.value
+                .trim()
+                .toLowerCase() || "";
+
 
         const password =
             document.getElementById("password")
@@ -258,6 +373,7 @@ if (registerForm) {
             return;
         }
 
+
         if (!username) {
 
             alert(
@@ -266,6 +382,7 @@ if (registerForm) {
 
             return;
         }
+
 
         if (
             !/^[a-zA-Z0-9._-]{3,30}$/
@@ -279,6 +396,7 @@ if (registerForm) {
             return;
         }
 
+
         if (!email) {
 
             alert(
@@ -287,6 +405,7 @@ if (registerForm) {
 
             return;
         }
+
 
         if (
             !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -299,6 +418,7 @@ if (registerForm) {
 
             return;
         }
+
 
         if (password.length < 6) {
 
@@ -317,12 +437,14 @@ if (registerForm) {
             // ==================================================
 
             const usernameRef =
-                db
+                vipDb
                     .collection("usernameIndex")
                     .doc(username);
 
+
             const usernameDoc =
                 await usernameRef.get();
+
 
             if (usernameDoc.exists) {
 
@@ -339,18 +461,27 @@ if (registerForm) {
             // ==================================================
 
             const result =
-                await auth
+                await vipAuth
                     .createUserWithEmailAndPassword(
                         email,
                         password
                     );
 
+
             const user =
                 result.user;
 
 
+            if (!user) {
+
+                throw new Error(
+                    "Firebase account could not be created."
+                );
+            }
+
+
             // ==================================================
-            // UPDATE FIREBASE DISPLAY NAME
+            // UPDATE DISPLAY NAME
             // ==================================================
 
             await user.updateProfile({
@@ -365,7 +496,7 @@ if (registerForm) {
             // CREATE CUSTOMER DOCUMENT
             // ==================================================
 
-            await db
+            await vipDb
                 .collection("customers")
                 .doc(user.uid)
                 .set({
@@ -419,11 +550,17 @@ if (registerForm) {
             });
 
 
+            console.log(
+                "Registration completed:",
+                username
+            );
+
+
             // ==================================================
             // LOGOUT AFTER REGISTER
             // ==================================================
 
-            await auth.signOut();
+            await vipAuth.signOut();
 
 
             alert(
@@ -442,8 +579,10 @@ if (registerForm) {
                 error
             );
 
+
             let message =
                 "Registration failed.";
+
 
             switch (error.code) {
 
@@ -454,12 +593,14 @@ if (registerForm) {
 
                     break;
 
+
                 case "auth/invalid-email":
 
                     message =
                         "Invalid email address.";
 
                     break;
+
 
                 case "auth/weak-password":
 
@@ -468,6 +609,7 @@ if (registerForm) {
 
                     break;
 
+
                 case "permission-denied":
 
                     message =
@@ -475,12 +617,14 @@ if (registerForm) {
 
                     break;
 
+
                 default:
 
                     message =
                         error.message ||
                         message;
             }
+
 
             alert(message);
         }
@@ -503,6 +647,7 @@ const togglePassword =
     document.getElementById(
         "togglePassword"
     );
+
 
 const passwordField =
     document.getElementById(
@@ -527,10 +672,12 @@ if (
                 passwordField.type =
                     "text";
 
+
                 togglePassword.classList
                     .remove(
                         "fa-eye"
                     );
+
 
                 togglePassword.classList
                     .add(
@@ -542,10 +689,12 @@ if (
                 passwordField.type =
                     "password";
 
+
                 togglePassword.classList
                     .remove(
                         "fa-eye-slash"
                     );
+
 
                 togglePassword.classList
                     .add(
@@ -592,7 +741,7 @@ if (googleLogin) {
                 // ==========================================
 
                 const result =
-                    await auth
+                    await vipAuth
                         .signInWithPopup(
                             provider
                         );
@@ -607,7 +756,6 @@ if (googleLogin) {
                     throw new Error(
                         "Google login failed."
                     );
-
                 }
 
 
@@ -616,13 +764,9 @@ if (googleLogin) {
                 // ==========================================
 
                 const customerRef =
-                    db
-                        .collection(
-                            "customers"
-                        )
-                        .doc(
-                            user.uid
-                        );
+                    vipDb
+                        .collection("customers")
+                        .doc(user.uid);
 
 
                 const customerDoc =
@@ -636,6 +780,66 @@ if (googleLogin) {
                 if (
                     customerDoc.exists
                 ) {
+
+                    const customerData =
+                        customerDoc.data() || {};
+
+
+                    // ======================================
+                    // REPAIR USERNAME INDEX IF MISSING
+                    // ======================================
+
+                    if (
+                        customerData.username &&
+                        user.email
+                    ) {
+
+                        const existingUsername =
+                            normalizeUsername(
+                                customerData.username
+                            );
+
+
+                        const usernameRef =
+                            vipDb
+                                .collection(
+                                    "usernameIndex"
+                                )
+                                .doc(
+                                    existingUsername
+                                );
+
+
+                        const usernameDoc =
+                            await usernameRef.get();
+
+
+                        if (
+                            !usernameDoc.exists
+                        ) {
+
+                            await usernameRef.set({
+
+                                username:
+                                    existingUsername,
+
+                                email:
+                                    user.email,
+
+                                uid:
+                                    user.uid,
+
+                                createdAt:
+                                    firebase.firestore
+                                        .FieldValue
+                                        .serverTimestamp()
+
+                            });
+
+                        }
+
+                    }
+
 
                     window.location.href =
                         "shop.html";
@@ -680,20 +884,25 @@ if (googleLogin) {
                 let finalUsername =
                     baseUsername;
 
-                let counter = 1;
+
+                let counter =
+                    1;
 
 
                 while (true) {
 
-                    const usernameCheck =
-                        await db
+                    const usernameRef =
+                        vipDb
                             .collection(
                                 "usernameIndex"
                             )
                             .doc(
                                 finalUsername
-                            )
-                            .get();
+                            );
+
+
+                    const usernameCheck =
+                        await usernameRef.get();
 
 
                     if (
@@ -707,6 +916,7 @@ if (googleLogin) {
                     finalUsername =
                         baseUsername +
                         counter;
+
 
                     counter++;
 
@@ -751,7 +961,7 @@ if (googleLogin) {
                 // CREATE USERNAME INDEX
                 // ==========================================
 
-                await db
+                await vipDb
                     .collection(
                         "usernameIndex"
                     )
@@ -807,12 +1017,14 @@ if (googleLogin) {
 
                         break;
 
+
                     case "auth/popup-blocked":
 
                         message =
                             "Popup was blocked by the browser.";
 
                         break;
+
 
                     case "auth/account-exists-with-different-credential":
 
@@ -821,12 +1033,14 @@ if (googleLogin) {
 
                         break;
 
+
                     case "permission-denied":
 
                         message =
-                            "Firestore permission denied. Please check your Rules.";
+                            "Firestore permission denied. Please check your Firebase Rules.";
 
                         break;
+
 
                     default:
 
@@ -845,34 +1059,3 @@ if (googleLogin) {
     );
 
 }
-
-
-// ======================================================
-// AUTH STATE DEBUG
-// ======================================================
-
-auth.onAuthStateChanged(
-    (user) => {
-
-        if (user) {
-
-            console.log(
-                "Auth user:",
-                user.uid
-            );
-
-            console.log(
-                "Auth email:",
-                user.email
-            );
-
-        } else {
-
-            console.log(
-                "No user logged in."
-            );
-
-        }
-
-    }
-);
