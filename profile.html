@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Profile - VIP Admin Panel</title>
 
     <link rel="stylesheet" href="css/profile.css">
@@ -14,82 +15,446 @@
 
 <body>
 
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="sidebar">
 
     <div class="logo">
+
         <i class="fa-solid fa-shield-halved"></i>
+
         <h2>VIP PANEL</h2>
+
     </div>
 
     <ul>
 
         <li>
             <a href="dashboard.html">
+
                 <i class="fa-solid fa-house"></i>
-                Dashboard
+
+                <span>Dashboard</span>
+
             </a>
         </li>
+
 
         <li>
             <a href="users.html">
+
                 <i class="fa-solid fa-users"></i>
-                Users
+
+                <span>Users</span>
+
             </a>
         </li>
 
-        <li class="active">
-            <a href="profile.html">
-                <i class="fa-solid fa-user"></i>
-                Profile
+
+        <li>
+            <a href="customers.html">
+
+                <i class="fa-solid fa-address-book"></i>
+
+                <span>Customers</span>
+
             </a>
         </li>
+
+
+        <li>
+            <a href="products.html">
+
+                <i class="fa-solid fa-box"></i>
+
+                <span>Products</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="orders.html">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Orders</span>
+
+            </a>
+        </li>
+
+
+        <li class="active">
+
+            <a href="profile.html">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profile</span>
+
+            </a>
+
+        </li>
+
 
         <li>
             <a href="settings.html">
+
                 <i class="fa-solid fa-gear"></i>
-                Settings
+
+                <span>Settings</span>
+
             </a>
         </li>
 
+
         <li id="logoutBtn">
+
             <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
+
+            <span>Logout</span>
+
         </li>
 
     </ul>
 
 </div>
 
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <div class="main">
 
-    <h1>My Profile</h1>
+    <!-- HEADER -->
 
-    <div class="profile-card">
+    <header>
 
-        <img id="profileImage"
-             src="https://i.pravatar.cc/200"
-             alt="Profile">
+        <div>
 
-        <h2 id="userName">Loading...</h2>
+            <h1>My Profile</h1>
 
-        <p id="userEmail">Loading...</p>
+            <p class="page-subtitle">
+                Manage your administrator profile
+            </p>
 
-        <input type="file" id="imageUpload">
+        </div>
 
-        <button id="saveProfile">
-            Update Profile
-        </button>
 
-    </div>
+        <div class="header-right">
+
+            <div class="admin-badge">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <span>Administrator</span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         PROFILE CONTENT
+    ================================================= -->
+
+    <section class="profile-container">
+
+
+        <!-- PROFILE CARD -->
+
+        <div class="profile-card">
+
+
+            <!-- PROFILE HEADER -->
+
+            <div class="profile-header">
+
+                <div class="profile-avatar">
+
+                    <img
+                        id="profileImage"
+                        src="https://i.pravatar.cc/200"
+                        alt="Profile">
+
+                    <label
+                        for="imageUpload"
+                        class="camera-btn">
+
+                        <i class="fa-solid fa-camera"></i>
+
+                    </label>
+
+                </div>
+
+
+                <div class="profile-heading">
+
+                    <h2 id="userName">
+                        Loading...
+                    </h2>
+
+                    <p id="userEmail">
+                        Loading...
+                    </p>
+
+                    <span class="admin-role">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Admin
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROFILE INFORMATION -->
+
+            <div class="profile-info">
+
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Name</span>
+
+                        <strong id="profileName">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Email</span>
+
+                        <strong id="profileEmail">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+
+                        <i class="fa-solid fa-user-shield"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Account Type</span>
+
+                        <strong>
+                            Administrator
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Status</span>
+
+                        <strong class="status-active">
+
+                            Active
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- UPDATE PROFILE -->
+
+            <div class="profile-update">
+
+
+                <div class="section-title">
+
+                    <div>
+
+                        <h3>
+
+                            <i class="fa-solid fa-pen-to-square"></i>
+
+                            Update Profile
+
+                        </h3>
+
+                        <p>
+                            Change your profile picture
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="upload-area">
+
+
+                    <div class="upload-icon">
+
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    </div>
+
+
+                    <div class="upload-text">
+
+                        <h4>
+                            Upload Profile Picture
+                        </h4>
+
+                        <p>
+                            Choose a new image for your profile
+                        </p>
+
+                    </div>
+
+
+                    <label
+                        for="imageUpload"
+                        class="choose-btn">
+
+                        <i class="fa-solid fa-image"></i>
+
+                        Choose Image
+
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="imageUpload"
+                        accept="image/*"
+                        hidden>
+
+                </div>
+
+
+                <button
+                    id="saveProfile"
+                    class="save-btn">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Update Profile
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- SECURITY CARD -->
+
+        <div class="security-card">
+
+
+            <div class="security-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+
+            <div class="security-content">
+
+                <h3>
+                    Account Security
+                </h3>
+
+                <p>
+                    Your administrator account is protected
+                    with Firebase Authentication.
+                </p>
+
+            </div>
+
+
+            <div class="security-status">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                Secure
+
+            </div>
+
+
+        </div>
+
+
+    </section>
 
 </div>
 
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
+
 <script src="js/firebase.js"></script>
+
 <script src="js/profile.js"></script>
 
+
 </body>
+
 </html>

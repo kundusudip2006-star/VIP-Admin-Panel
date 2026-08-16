@@ -1,0 +1,1036 @@
+/* =========================================================
+   VIP PANEL - COMMON ADMIN STYLE
+   Users / Customers / Products / Orders
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: #0f172a;
+    color: #fff;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 260px;
+    height: 100vh;
+
+    background: #111827;
+    padding: 22px 18px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    z-index: 1000;
+
+    border-right: 1px solid rgba(255,255,255,.05);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo i {
+    display: block;
+    font-size: 48px;
+    color: #00e5ff;
+    margin-bottom: 8px;
+}
+
+.logo h2 {
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 8px 0;
+}
+
+.sidebar ul li a,
+.sidebar ul li#logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 13px 15px;
+
+    color: #e5e7eb;
+    text-decoration: none;
+
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.sidebar ul li a i,
+.sidebar ul li#logoutBtn i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.sidebar ul li:hover a,
+.sidebar ul li:hover#logoutBtn {
+    background: rgba(0,229,255,.12);
+    color: #00e5ff;
+}
+
+.sidebar ul li.active a,
+.sidebar ul li.active {
+    background: #00e5ff;
+    color: #000;
+}
+
+.sidebar ul li.active a {
+    color: #000;
+}
+
+.sidebar ul li.active:hover a {
+    color: #000;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main {
+    margin-left: 260px;
+    min-height: 100vh;
+    padding: 28px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* =========================================================
+   SEARCH / TOP BAR
+========================================================= */
+
+.search-box,
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box input,
+.top-bar input,
+#searchCustomer,
+#searchUser,
+#searchProduct,
+#searchOrder {
+    width: 280px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #334155;
+    outline: none;
+
+    border-radius: 10px;
+
+    background: #1e293b;
+    color: #fff;
+
+    font-size: 14px;
+
+    transition: .25s;
+}
+
+.search-box input::placeholder,
+.top-bar input::placeholder,
+#searchCustomer::placeholder,
+#searchUser::placeholder,
+#searchProduct::placeholder,
+#searchOrder::placeholder {
+    color: #94a3b8;
+}
+
+.search-box input:focus,
+.top-bar input:focus,
+#searchCustomer:focus,
+#searchUser:focus,
+#searchProduct:focus,
+#searchOrder:focus {
+    border-color: #00e5ff;
+    box-shadow: 0 0 0 3px rgba(0,229,255,.08);
+}
+
+.search-box button,
+#addUserBtn,
+#addProductBtn {
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #00e5ff;
+    color: #000;
+
+    font-weight: 700;
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+.search-box button:hover,
+#addUserBtn:hover,
+#addProductBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,229,255,.18);
+}
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+select {
+    padding: 12px 14px;
+
+    border: 1px solid #334155;
+    border-radius: 10px;
+
+    background: #1e293b;
+    color: #fff;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #00e5ff;
+}
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.table-box,
+.table-section {
+    background: #1e293b;
+
+    border: 1px solid rgba(255,255,255,.04);
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+
+    overflow-x: auto;
+}
+
+.table-section {
+    margin-bottom: 25px;
+}
+
+.table-section h2 {
+    margin-bottom: 18px;
+    font-size: 20px;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+table {
+    width: 100%;
+    min-width: 700px;
+
+    border-collapse: collapse;
+}
+
+thead {
+    background: #334155;
+}
+
+th {
+    padding: 15px;
+
+    text-align: left;
+
+    color: #00e5ff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+td {
+    padding: 15px;
+
+    border-bottom: 1px solid #334155;
+
+    color: #e2e8f0;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+}
+
+tbody tr {
+    transition: .2s;
+}
+
+tbody tr:hover {
+    background: #263548;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.pending {
+    color: #facc15;
+    font-weight: 700;
+}
+
+.delivered,
+.completed,
+.approved,
+.paid {
+    color: #22c55e;
+    font-weight: 700;
+}
+
+.cancelled,
+.rejected,
+.failed {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+.active-status {
+    color: #22c55e;
+    font-weight: 700;
+}
+
+.inactive-status {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+button {
+    font-family: inherit;
+}
+
+.action-btn,
+.view-btn,
+.view,
+.edit,
+.delete,
+.send,
+.cancel,
+.paid-btn,
+.cancel-btn {
+    border: none;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: .2s;
+}
+
+.action-btn:hover,
+.view-btn:hover,
+.view:hover,
+.edit:hover,
+.delete:hover,
+.send:hover,
+.cancel:hover,
+.paid-btn:hover,
+.cancel-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* View */
+
+.view,
+.view-btn {
+    background: #38bdf8;
+    color: #000;
+}
+
+.view:hover,
+.view-btn:hover {
+    background: #0ea5e9;
+}
+
+/* Edit */
+
+.edit {
+    background: #facc15;
+    color: #000;
+}
+
+/* Delete */
+
+.delete,
+.cancel,
+.cancel-btn {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* Send */
+
+.send,
+.paid-btn {
+    background: #22c55e;
+    color: #fff;
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
+
+table img {
+    width: 48px;
+    height: 48px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    border: 1px solid #475569;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,.75);
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    z-index: 9999;
+
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    width: 500px;
+    max-width: 100%;
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #1e293b;
+
+    border: 1px solid #334155;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    position: relative;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+
+    animation: modalOpen .25s ease;
+}
+
+@keyframes modalOpen {
+    from {
+        opacity: 0;
+        transform: scale(.94) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.modal-content h3 {
+    margin: 15px 0;
+    color: #00e5ff;
+}
+
+.close {
+    position: absolute;
+
+    top: 12px;
+    right: 18px;
+
+    font-size: 28px;
+
+    color: #94a3b8;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.close:hover {
+    color: #ef4444;
+}
+
+/* =========================================================
+   MODAL INPUT
+========================================================= */
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    margin: 8px 0;
+
+    border: 1px solid #334155;
+
+    border-radius: 9px;
+
+    background: #0f172a;
+
+    color: #fff;
+
+    outline: none;
+
+    resize: vertical;
+}
+
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+    color: #64748b;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    border-color: #00e5ff;
+    box-shadow: 0 0 0 3px rgba(0,229,255,.08);
+}
+
+.modal-content button {
+    padding: 12px 16px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #00e5ff;
+
+    color: #000;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.modal-content button:hover {
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   CUSTOMER SEARCH
+========================================================= */
+
+#searchCustomer {
+    display: block;
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   CUSTOMER MODAL TEXT
+========================================================= */
+
+#customerModal .modal-content p {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #334155;
+}
+
+#customerModal .modal-content p b {
+    color: #94a3b8;
+}
+
+#customerModal .modal-content p span {
+    color: #fff;
+    text-align: right;
+    word-break: break-word;
+}
+
+/* =========================================================
+   ORDER DETAILS
+========================================================= */
+
+.order-details p {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 9px 0;
+
+    border-bottom: 1px solid #334155;
+}
+
+.order-details p b {
+    color: #94a3b8;
+}
+
+.order-details p span {
+    text-align: right;
+    word-break: break-word;
+}
+
+/* =========================================================
+   ORDER BUTTONS
+========================================================= */
+
+.send-btn,
+.cancel-order-btn,
+#rejectPaymentBtn {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.send-btn {
+    background: #22c55e;
+    color: #fff;
+}
+
+.cancel-order-btn,
+#rejectPaymentBtn {
+    background: #ef4444;
+    color: #fff;
+}
+
+.send-btn:hover,
+.cancel-order-btn:hover,
+#rejectPaymentBtn:hover {
+    transform: translateY(-1px);
+}
+
+.send-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================================================
+   PRODUCT PLANS
+========================================================= */
+
+.plan-card {
+    background: #0f172a;
+
+    border: 1px solid #334155;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+}
+
+/* =========================================================
+   HR
+========================================================= */
+
+hr {
+    border: none;
+
+    border-top: 1px solid #334155;
+
+    margin: 18px 0;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .sidebar {
+        width: 220px;
+    }
+
+    .main {
+        margin-left: 220px;
+        padding: 22px;
+    }
+
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .search-box,
+    .top-bar {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .search-box input,
+    .top-bar input {
+        flex: 1;
+        width: auto;
+    }
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        display: block;
+    }
+
+    /* Sidebar becomes top navigation */
+
+    .sidebar {
+        position: sticky;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: auto;
+        min-height: auto;
+
+        padding: 12px;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        z-index: 1000;
+    }
+
+    .logo {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 10px;
+
+        margin-bottom: 12px;
+    }
+
+    .logo i {
+        font-size: 28px;
+        margin: 0;
+    }
+
+    .logo h2 {
+        font-size: 18px;
+    }
+
+    .sidebar ul {
+        display: flex;
+
+        gap: 8px;
+
+        width: max-content;
+    }
+
+    .sidebar ul li {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .sidebar ul li a,
+    .sidebar ul li#logoutBtn {
+        width: auto;
+
+        min-width: 48px;
+
+        justify-content: center;
+
+        padding: 11px 13px;
+
+        border-radius: 10px;
+    }
+
+    .sidebar ul li a span,
+    .sidebar ul li#logoutBtn span {
+        display: none;
+    }
+
+    .sidebar ul li a i,
+    .sidebar ul li#logoutBtn i {
+        margin: 0;
+        font-size: 17px;
+    }
+
+    .main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 16px;
+    }
+
+    header {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 15px;
+
+        margin-bottom: 18px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    .search-box,
+    .top-bar {
+        width: 100%;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 9px;
+    }
+
+    .search-box input,
+    .top-bar input,
+    .search-box button,
+    .top-bar select,
+    .search-box select {
+        width: 100%;
+    }
+
+    #searchCustomer,
+    #searchUser,
+    #searchProduct,
+    #searchOrder {
+        width: 100%;
+    }
+
+    .table-box,
+    .table-section {
+        padding: 13px;
+
+        border-radius: 13px;
+    }
+
+    /*
+       Table horizontal scroll করবে,
+       পুরো page ভেঙে যাবে না
+    */
+
+    .table-box,
+    .table-section {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    th,
+    td {
+        padding: 11px 10px;
+
+        font-size: 13px;
+    }
+
+    .modal {
+        padding: 10px;
+
+        align-items: flex-start;
+
+        padding-top: 25px;
+    }
+
+    .modal-content {
+        width: 100%;
+
+        max-height: 92vh;
+
+        padding: 18px;
+
+        border-radius: 14px;
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+    }
+
+    #customerModal .modal-content p,
+    .order-details p {
+        flex-direction: column;
+
+        gap: 4px;
+
+        align-items: flex-start;
+    }
+
+    #customerModal .modal-content p span,
+    .order-details p span {
+        text-align: left;
+    }
+
+}
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .main {
+        padding: 12px;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    .logo h2 {
+        font-size: 16px;
+    }
+
+    .sidebar {
+        padding: 10px;
+    }
+
+    .sidebar ul li a,
+    .sidebar ul li#logoutBtn {
+        padding: 10px 12px;
+    }
+
+    .table-box,
+    .table-section {
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+}

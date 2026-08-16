@@ -1,50 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Settings</title>
 
-<link rel="stylesheet" href="css/settings.css">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Settings - VIP Admin Panel</title>
+
+    <link rel="stylesheet"
+          href="css/settings.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
+
 <body>
 
-<h2>Admin Settings</h2>
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
-<div class="settings-box">
+<div class="sidebar">
 
-<label>Website Name</label>
-<input type="text" id="siteName">
+    <div class="logo">
 
-<label>UPI ID</label>
-<input type="text" id="upiId">
+        <i class="fa-solid fa-shield-halved"></i>
 
-<label>WhatsApp Number</label>
-<input type="text" id="whatsapp">
+        <h2>VIP PANEL</h2>
 
-<label>Telegram ID</label>
-<input type="text" id="telegramId" placeholder="@yourusername">
+    </div>
 
-<label>Support Email</label>
-<input type="email" id="supportEmail">
 
-<label>QR Code Image URL</label>
-<input type="text" id="qrCode">
+    <ul>
 
-<br><br>
+        <li>
+            <a href="dashboard.html">
 
-<button id="saveSettings">
-    Save Settings
-</button>
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="users.html">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Users</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="customers.html">
+
+                <i class="fa-solid fa-address-book"></i>
+
+                <span>Customers</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="products.html">
+
+                <i class="fa-solid fa-box"></i>
+
+                <span>Products</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="orders.html">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Orders</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="profile.html">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profile</span>
+
+            </a>
+        </li>
+
+
+        <li class="active">
+
+            <a href="settings.html">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </li>
+
+
+        <li id="logoutBtn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>Logout</span>
+
+        </li>
+
+    </ul>
 
 </div>
 
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="main">
+
+    <header>
+
+        <div>
+
+            <h1>Settings</h1>
+
+            <p class="page-subtitle">
+                Manage your website and support information
+            </p>
+
+        </div>
+
+
+        <div class="admin-badge">
+
+            <i class="fa-solid fa-user-shield"></i>
+
+            <span>Administrator</span>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         SETTINGS CARD
+    ================================================= -->
+
+    <section class="settings-container">
+
+
+        <div class="settings-card">
+
+
+            <div class="settings-title">
+
+                <div class="settings-title-icon">
+
+                    <i class="fa-solid fa-sliders"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>General Settings</h2>
+
+                    <p>
+                        Configure your website information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="divider"></div>
+
+
+            <!-- WEBSITE NAME -->
+
+            <div class="form-group">
+
+                <label for="siteName">
+
+                    <i class="fa-solid fa-globe"></i>
+
+                    Website Name
+
+                </label>
+
+                <input
+                    type="text"
+                    id="siteName"
+                    placeholder="Enter website name">
+
+            </div>
+
+
+            <!-- UPI -->
+
+            <div class="form-group">
+
+                <label for="upiId">
+
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+
+                    UPI ID
+
+                </label>
+
+                <input
+                    type="text"
+                    id="upiId"
+                    placeholder="example@upi">
+
+            </div>
+
+
+            <!-- WHATSAPP -->
+
+            <div class="form-group">
+
+                <label for="whatsapp">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    WhatsApp Number
+
+                </label>
+
+                <input
+                    type="text"
+                    id="whatsapp"
+                    placeholder="Enter WhatsApp number">
+
+            </div>
+
+
+            <!-- TELEGRAM -->
+
+            <div class="form-group">
+
+                <label for="telegramId">
+
+                    <i class="fa-brands fa-telegram"></i>
+
+                    Telegram ID
+
+                </label>
+
+                <input
+                    type="text"
+                    id="telegramId"
+                    placeholder="@yourusername">
+
+            </div>
+
+
+            <!-- SUPPORT EMAIL -->
+
+            <div class="form-group">
+
+                <label for="supportEmail">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Support Email
+
+                </label>
+
+                <input
+                    type="email"
+                    id="supportEmail"
+                    placeholder="support@example.com">
+
+            </div>
+
+
+            <!-- QR CODE -->
+
+            <div class="form-group">
+
+                <label for="qrCode">
+
+                    <i class="fa-solid fa-qrcode"></i>
+
+                    QR Code Image URL
+
+                </label>
+
+                <input
+                    type="text"
+                    id="qrCode"
+                    placeholder="https://example.com/qr.png">
+
+                <small>
+                    Enter the public URL of your payment QR image.
+                </small>
+
+            </div>
+
+
+            <!-- QR PREVIEW -->
+
+            <div class="qr-preview">
+
+                <div class="qr-preview-header">
+
+                    <i class="fa-solid fa-image"></i>
+
+                    <span>QR Code Preview</span>
+
+                </div>
+
+
+                <div class="qr-image-box">
+
+                    <img
+                        id="qrPreview"
+                        src=""
+                        alt="QR Preview"
+                        style="display:none;">
+
+                    <div
+                        id="qrPlaceholder"
+                        class="qr-placeholder">
+
+                        <i class="fa-solid fa-qrcode"></i>
+
+                        <span>
+                            QR Code Preview
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <button
+                id="saveSettings"
+                class="save-settings-btn">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Settings
+
+            </button>
+
+
+            <div
+                id="settingsMessage"
+                class="settings-message">
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             SUPPORT CARD
+        ================================================= -->
+
+        <div class="info-card">
+
+            <div class="info-card-icon">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+            </div>
+
+            <div>
+
+                <h3>Important</h3>
+
+                <p>
+                    These settings control the payment and
+                    support information displayed to customers.
+                    Make sure all information is correct before
+                    saving.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</div>
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
 
 <script src="js/firebase.js"></script>
+
 <script src="js/settings.js"></script>
 
 </body>
+
 </html>

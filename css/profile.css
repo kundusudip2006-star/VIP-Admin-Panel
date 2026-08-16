@@ -1,142 +1,625 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",sans-serif;
+/* =====================================================
+   VIP ADMIN PANEL - PROFILE
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
-body{
-    display:flex;
-    background:#0f172a;
-    color:#fff;
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #0f172a;
+    color: #fff;
 }
 
-/* Sidebar */
 
-.sidebar{
-    width:260px;
-    min-height:100vh;
-    background:#111827;
-    padding:25px;
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: #111827;
+    padding: 25px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
 }
 
-.logo{
-    text-align:center;
-    margin-bottom:35px;
+.logo {
+    text-align: center;
+    margin-bottom: 35px;
 }
 
-.logo i{
-    font-size:55px;
-    color:#00e5ff;
+.logo i {
+    font-size: 52px;
+    color: #00e5ff;
 }
 
-.logo h2{
-    margin-top:10px;
+.logo h2 {
+    margin-top: 10px;
+    font-size: 23px;
+    letter-spacing: 1px;
 }
 
-.sidebar ul{
-    list-style:none;
+.sidebar ul {
+    list-style: none;
 }
 
-.sidebar ul li{
-    margin:12px 0;
+.sidebar ul li {
+    margin: 10px 0;
 }
 
 .sidebar ul li a,
-.sidebar ul li{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    color:#fff;
-    text-decoration:none;
-    padding:14px;
-    border-radius:10px;
-    transition:.3s;
-    cursor:pointer;
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 15px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.sidebar ul li a {
+    width: 100%;
 }
 
 .sidebar ul li:hover,
-.sidebar ul li.active{
-    background:#00e5ff;
-    color:#000;
+.sidebar ul li.active {
+    background: #00e5ff;
+    color: #000;
 }
 
-/* Main */
-
-.main{
-    flex:1;
-    padding:40px;
+.sidebar ul li:hover a,
+.sidebar ul li.active a {
+    color: #000;
 }
 
-.main h1{
-    margin-bottom:25px;
+.sidebar ul li i {
+    width: 20px;
+    text-align: center;
 }
 
-/* Profile Card */
 
-.profile-card{
-    max-width:500px;
-    margin:auto;
-    background:#1e293b;
-    padding:35px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+    flex: 1;
+    margin-left: 260px;
+    padding: 30px;
+    min-width: 0;
 }
 
-.profile-card img{
-    width:150px;
-    height:150px;
-    border-radius:50%;
-    object-fit:cover;
-    border:5px solid #00e5ff;
-    margin-bottom:20px;
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
-.profile-card h2{
-    margin-bottom:10px;
+header h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
 }
 
-.profile-card p{
-    color:#cbd5e1;
-    margin-bottom:20px;
+.page-subtitle {
+    color: #94a3b8;
+    font-size: 14px;
 }
 
-.profile-card input{
-    width:100%;
-    margin:20px 0;
-    color:#fff;
+.header-right {
+    display: flex;
+    align-items: center;
 }
 
-.profile-card button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#00e5ff;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
+.admin-badge {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #00e5ff;
+    font-size: 14px;
+    font-weight: 600;
 }
 
-.profile-card button:hover{
-    transform:scale(1.03);
+
+/* =====================================================
+   PROFILE CONTAINER
+===================================================== */
+
+.profile-container {
+    max-width: 1000px;
 }
 
-@media(max-width:768px){
 
-    body{
-        flex-direction:column;
+/* =====================================================
+   PROFILE CARD
+===================================================== */
+
+.profile-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+}
+
+
+/* =====================================================
+   PROFILE HEADER
+===================================================== */
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #334155;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-avatar img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #00e5ff;
+    background: #0f172a;
+}
+
+.camera-btn {
+    position: absolute;
+    right: 2px;
+    bottom: 3px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #00e5ff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 3px solid #1e293b;
+    transition: .2s;
+}
+
+.camera-btn:hover {
+    transform: scale(1.08);
+}
+
+.profile-heading h2 {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.profile-heading p {
+    color: #94a3b8;
+    margin-bottom: 12px;
+}
+
+.admin-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    background: rgba(0, 229, 255, .12);
+    color: #00e5ff;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   PROFILE INFO
+===================================================== */
+
+.profile-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 25px 0;
+}
+
+.info-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #172235;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.info-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 229, 255, .1);
+    color: #00e5ff;
+}
+
+.info-box span {
+    display: block;
+    color: #94a3b8;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.info-box strong {
+    display: block;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.status-active {
+    color: #22c55e;
+}
+
+
+/* =====================================================
+   UPDATE PROFILE
+===================================================== */
+
+.profile-update {
+    border-top: 1px solid #334155;
+    padding-top: 25px;
+}
+
+.section-title {
+    margin-bottom: 18px;
+}
+
+.section-title h3 {
+    font-size: 18px;
+}
+
+.section-title h3 i {
+    color: #00e5ff;
+    margin-right: 7px;
+}
+
+.section-title p {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   UPLOAD AREA
+===================================================== */
+
+.upload-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    background: #172235;
+    border: 1px dashed #475569;
+    border-radius: 12px;
+}
+
+.upload-icon {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(0, 229, 255, .1);
+    color: #00e5ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+.upload-text {
+    flex: 1;
+}
+
+.upload-text h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.upload-text p {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.choose-btn {
+    padding: 10px 15px;
+    border-radius: 9px;
+    background: #334155;
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .2s;
+    white-space: nowrap;
+}
+
+.choose-btn:hover {
+    background: #475569;
+}
+
+
+/* =====================================================
+   SAVE BUTTON
+===================================================== */
+
+.save-btn {
+    margin-top: 18px;
+    padding: 13px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #00e5ff;
+    color: #000;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(0, 229, 255, .2);
+}
+
+.save-btn i {
+    margin-right: 7px;
+}
+
+
+/* =====================================================
+   SECURITY CARD
+===================================================== */
+
+.security-card {
+    margin-top: 18px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 15px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.security-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background: rgba(34, 197, 94, .1);
+    color: #22c55e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.security-content {
+    flex: 1;
+}
+
+.security-content h3 {
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.security-content p {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.security-status {
+    color: #22c55e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 220px;
     }
 
-    .sidebar{
-        width:100%;
-        min-height:auto;
+    .main {
+        margin-left: 220px;
+        padding: 22px;
     }
 
-    .main{
-        padding:20px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    body {
+        display: block;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        min-height: auto;
+        padding: 15px;
+    }
+
+    .logo {
+        margin-bottom: 15px;
+    }
+
+    .logo i {
+        font-size: 40px;
+    }
+
+    .logo h2 {
+        font-size: 20px;
+    }
+
+    .sidebar ul {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+    }
+
+    .sidebar ul li {
+        margin: 0;
+    }
+
+    .sidebar ul li a,
+    .sidebar ul li {
+        justify-content: center;
+        padding: 11px 8px;
+        font-size: 13px;
+    }
+
+    .sidebar ul li a span {
+        display: inline;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 18px;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    .header-right {
+        width: 100%;
+    }
+
+    .admin-badge {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .profile-card {
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-heading h2 {
+        font-size: 22px;
+    }
+
+    .profile-info {
+        grid-template-columns: 1fr;
+    }
+
+    .upload-area {
+        flex-wrap: wrap;
+    }
+
+    .upload-text {
+        min-width: calc(100% - 65px);
+    }
+
+    .choose-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .save-btn {
+        width: 100%;
+    }
+
+    .security-card {
+        align-items: flex-start;
+    }
+
+    .security-status {
+        display: none;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+    .sidebar ul {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sidebar ul li a,
+    .sidebar ul li {
+        font-size: 12px;
+        padding: 10px 5px;
+    }
+
+    .sidebar ul li i {
+        width: auto;
+    }
+
+    .profile-avatar,
+    .profile-avatar img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .profile-card {
+        padding: 15px;
+    }
+
+    .info-box {
+        padding: 13px;
     }
 
 }

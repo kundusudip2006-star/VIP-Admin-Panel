@@ -97,10 +97,12 @@
 
         <div>
             <h1>Customers</h1>
+
             <p class="page-subtitle">
                 Manage customer accounts and wallet balance
             </p>
         </div>
+
 
         <div class="header-right">
 
@@ -116,8 +118,11 @@
 
             </div>
 
+
             <div class="admin-icon">
+
                 <i class="fa-solid fa-user-shield"></i>
+
             </div>
 
         </div>
@@ -134,13 +139,20 @@
         <div class="table-header">
 
             <div>
+
                 <h2>Customer List</h2>
+
                 <p>All registered customers</p>
+
             </div>
 
+
             <div class="customer-count">
+
                 <i class="fa-solid fa-users"></i>
+
                 <span id="customerCount">0</span>
+
             </div>
 
         </div>
@@ -153,23 +165,31 @@
                 <thead>
 
                     <tr>
+
                         <th>Name</th>
                         <th>Email</th>
                         <th>Wallet Balance</th>
                         <th>Total Orders</th>
                         <th>Total Spending</th>
                         <th>Action</th>
+
                     </tr>
 
                 </thead>
 
+
                 <tbody id="customerTable">
 
                     <tr>
+
                         <td colspan="6" class="loading">
+
                             <i class="fa-solid fa-spinner fa-spin"></i>
+
                             Loading customers...
+
                         </td>
+
                     </tr>
 
                 </tbody>
@@ -194,7 +214,8 @@
         <button
             id="closeCustomerModal"
             class="close-btn"
-            type="button">
+            type="button"
+        >
             &times;
         </button>
 
@@ -202,12 +223,18 @@
         <div class="modal-title">
 
             <div class="customer-avatar">
+
                 <i class="fa-solid fa-user"></i>
+
             </div>
 
+
             <div>
+
                 <h2>Customer Profile</h2>
+
                 <p>Customer account details</p>
+
             </div>
 
         </div>
@@ -218,54 +245,86 @@
         <div class="customer-info">
 
             <div class="info-item">
+
                 <span>Name</span>
+
                 <strong id="cName">-</strong>
+
             </div>
 
+
             <div class="info-item">
+
                 <span>Email</span>
+
                 <strong id="cEmail">-</strong>
+
             </div>
 
+
             <div class="info-item">
+
                 <span>Phone</span>
+
                 <strong id="cPhone">-</strong>
+
             </div>
+
 
             <div class="info-item balance-info">
+
                 <span>Wallet Balance</span>
+
                 <strong>
                     ₹<span id="cBalance">0.00</span>
                 </strong>
+
             </div>
 
+
             <div class="info-item">
+
                 <span>Total Orders</span>
+
                 <strong id="cOrders">0</strong>
+
             </div>
 
+
             <div class="info-item">
+
                 <span>Total Spending</span>
+
                 <strong>
                     ₹<span id="cSpending">0</span>
                 </strong>
+
             </div>
 
         </div>
 
 
-        <!-- ADD BALANCE -->
+        <!-- =========================
+             ADD BALANCE
+        ========================= -->
 
         <div class="section-divider"></div>
 
         <div class="balance-section">
 
             <h3>
+
                 <i class="fa-solid fa-wallet"></i>
+
                 Add Wallet Balance
+
             </h3>
 
-            <p>Add balance directly to this customer's wallet.</p>
+
+            <p>
+                Add balance directly to this customer's wallet.
+            </p>
+
 
             <div class="balance-form">
 
@@ -277,11 +336,14 @@
                     step="1"
                 >
 
+
                 <button
                     id="addBalanceAdminBtn"
-                    type="button">
+                    type="button"
+                >
 
                     <i class="fa-solid fa-plus"></i>
+
                     Add Balance
 
                 </button>
@@ -291,16 +353,22 @@
         </div>
 
 
-        <!-- ORDER HISTORY -->
+        <!-- =========================
+             ORDER HISTORY
+        ========================= -->
 
         <div class="section-divider"></div>
 
         <div class="orders-section">
 
             <h3>
+
                 <i class="fa-solid fa-cart-shopping"></i>
+
                 Order History
+
             </h3>
+
 
             <div class="order-table-wrapper">
 
@@ -309,19 +377,26 @@
                     <thead>
 
                         <tr>
+
                             <th>Product</th>
                             <th>Price</th>
                             <th>Status</th>
+
                         </tr>
 
                     </thead>
 
+
                     <tbody id="customerOrders">
 
                         <tr>
+
                             <td colspan="3" class="no-orders">
+
                                 No Orders
+
                             </td>
+
                         </tr>
 
                     </tbody>
@@ -335,8 +410,6 @@
     </div>
 
 </div>
-
-
 <!-- =========================
      FIREBASE
 ========================= -->
@@ -347,7 +420,17 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
+
+<!-- =========================
+     FIREBASE CONFIG
+========================= -->
+
 <script src="js/firebase.js"></script>
+
+
+<!-- =========================
+     CUSTOMERS SCRIPT
+========================= -->
 
 <script src="js/customers.js"></script>
 
