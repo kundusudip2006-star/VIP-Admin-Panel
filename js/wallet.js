@@ -587,15 +587,87 @@ function getTimestamp(value) {
 function getTransactionInfo(tx) {
 
     const type =
-        String(
-            tx.type || ""
-        ).toLowerCase().trim();
+        String(tx.type || "")
+            .toLowerCase()
+            .trim();
 
+    const transactionType =
+        String(tx.transactionType || "")
+            .toLowerCase()
+            .trim();
+
+    const category =
+        String(tx.category || "")
+            .toLowerCase()
+            .trim();
+
+    const reason =
+        String(tx.reason || "")
+            .toLowerCase()
+            .trim();
+
+    const description =
+        String(tx.description || "")
+            .toLowerCase()
+            .trim();
+
+    const title =
+        String(tx.title || "")
+            .toLowerCase()
+            .trim();
 
     const rawStatus =
-        String(
-            tx.status || "Pending"
-        ).toLowerCase().trim();
+        String(tx.status || "Pending")
+            .toLowerCase()
+            .trim();
+
+
+    // ==================================================
+    // REFUND DETECTION
+    // IMPORTANT:
+    // Refund must be checked BEFORE credit/recharge
+    // and BEFORE pending status.
+    // ==================================================
+
+    const isRefund =
+        type === "refund" ||
+        type === "refunded" ||
+
+        transactionType === "refund" ||
+        transactionType === "refunded" ||
+
+        category === "refund" ||
+        category === "refunded" ||
+
+        reason.includes("refund") ||
+
+        description.includes("refund") ||
+
+        title.includes("refund");
+
+
+    if (isRefund) {
+
+        return {
+
+            title:
+                "Refund",
+
+            status:
+                "Complete",
+
+            className:
+                "refund",
+
+            icon:
+                "fa-rotate-left",
+
+            amountClass:
+                "positive"
+
+        };
+
+    }
 
 
     // ==================================================
@@ -661,37 +733,6 @@ function getTransactionInfo(tx) {
 
             amountClass:
                 getAmountClass(type)
-
-        };
-
-    }
-
-
-    // ==================================================
-    // REFUND
-    // ==================================================
-
-    if (
-        type === "refund" ||
-        type === "refunded"
-    ) {
-
-        return {
-
-            title:
-                "Refund",
-
-            status:
-                "Complete",
-
-            className:
-                "refund",
-
-            icon:
-                "fa-rotate-left",
-
-            amountClass:
-                "positive"
 
         };
 
@@ -794,6 +835,22 @@ function getTransactionInfo(tx) {
 
 function getTransactionTitle(type) {
 
+    type =
+        String(type || "")
+            .toLowerCase()
+            .trim();
+
+
+    if (
+        type === "refund" ||
+        type === "refunded"
+    ) {
+
+        return "Refund";
+
+    }
+
+
     if (
         type === "credit" ||
         type === "recharge" ||
@@ -816,16 +873,6 @@ function getTransactionTitle(type) {
     }
 
 
-    if (
-        type === "refund" ||
-        type === "refunded"
-    ) {
-
-        return "Refund";
-
-    }
-
-
     return "Transaction";
 
 }
@@ -837,6 +884,12 @@ function getTransactionTitle(type) {
 
 function getAmountClass(type) {
 
+    type =
+        String(type || "")
+            .toLowerCase()
+            .trim();
+
+
     if (
         type === "debit" ||
         type === "purchase"
@@ -847,10 +900,10 @@ function getAmountClass(type) {
     }
 
 
+    // Refund is money returned to customer
     return "positive";
 
 }
-
 
 // ======================================================
 // RENDER TRANSACTIONS
