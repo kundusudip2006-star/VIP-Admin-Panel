@@ -3,185 +3,507 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Users - VIP Admin Panel</title>
+    <title>Users - VIP Admin Panel</title>
 
+    <!-- SAME CSS AS DASHBOARD -->
 <link rel="stylesheet" href="css/admin.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
+<!-- =====================================================
+     DESKTOP SIDEBAR
+===================================================== -->
+
 <div class="sidebar">
 
-<div class="logo">
+    <div class="logo">
 
-<i class="fa-solid fa-shield-halved"></i>
+        <i class="fa-solid fa-shield-halved"></i>
 
-<h2>VIP PANEL</h2>
+        <h2>VIP PANEL</h2>
+
+    </div>
+
+
+    <ul>
+
+        <li>
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+        </li>
+
+
+        <li class="active">
+            <a href="users.html">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Users</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="customers.html">
+
+                <i class="fa-solid fa-address-book"></i>
+
+                <span>Customers</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="products.html">
+
+                <i class="fa-solid fa-box"></i>
+
+                <span>Products</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="orders.html">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Orders</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="profile.html">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profile</span>
+
+            </a>
+        </li>
+
+
+        <li>
+            <a href="settings.html">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+        </li>
+
+
+        <li id="logoutBtn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>Logout</span>
+
+        </li>
+
+    </ul>
 
 </div>
 
-<ul>
 
-<li>
-<a href="dashboard.html">
-<i class="fa-solid fa-house"></i>
-Dashboard
-</a>
-</li>
 
-<li class="active">
-<a href="users.html">
-<i class="fa-solid fa-users"></i>
-Users
-</a>
-</li>
-
-<li>
-<a href="customers.html">
-<i class="fa-solid fa-address-book"></i>
-Customers
-</a>
-</li>
-
-<li>
-<a href="profile.html">
-<i class="fa-solid fa-user"></i>
-Profile
-</a>
-</li>
-
-<li>
-<a href="settings.html">
-<i class="fa-solid fa-gear"></i>
-Settings
-</a>
-</li>
-
-<li id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</li>
-
-</ul>
-
-</div>
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
 
 <div class="main">
 
-<header>
 
-<h1>User Management</h1>
+    <!-- HEADER -->
 
-<div class="search-box">
+    <header>
 
-<input
-type="text"
-id="searchUser"
-placeholder="Search User...">
+        <h1>Users</h1>
 
-<button id="addUserBtn">
 
-<i class="fa-solid fa-user-plus"></i>
-
-Add User
-
-</button>
-
-</div>
-
-</header>
-
-<div class="table-box">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Name</th>
-<th>Email</th>
-<th>Role</th>
-<th>Status</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="userTable">
-
-</tbody>
-
-</table>
-
-</div>
-<!-- Add/Edit User Modal -->
-
-<div id="userModal" class="modal">
-
-    <div class="modal-content">
-
-        <span class="close" id="closeModal">&times;</span>
-
-        <h2 id="modalTitle">Add User</h2>
-
-        <form id="userForm">
+        <div class="top-right">
 
             <input
                 type="text"
-                id="userName"
-                placeholder="Full Name"
-                required>
+                id="searchUser"
+                placeholder="Search User...">
 
-            <input
-                type="email"
-                id="userEmail"
-                placeholder="Email"
-                required>
 
-            <select id="userRole">
+            <i class="fa-solid fa-bell"></i>
 
-                <option value="Admin">Admin</option>
 
-                <option value="Manager">Manager</option>
+            <span id="notificationCount">
+                0
+            </span>
 
-                <option value="Staff">Staff</option>
 
-            </select>
+            <div
+                id="notificationBox"
+                class="notification-box">
 
-            <select id="userStatus">
+                <h3>
+                    Notifications
+                </h3>
 
-                <option value="Active">Active</option>
+                <div id="notificationList">
+                    No New Notifications
+                </div>
 
-                <option value="Inactive">Inactive</option>
+            </div>
 
-            </select>
 
-            <button type="submit" id="saveUserBtn">
-                Save User
-            </button>
+            <img
+                src="https://i.pravatar.cc/60"
+                alt="Profile">
 
-        </form>
+        </div>
+
+    </header>
+
+
+
+    <!-- =================================================
+         USER ACTION BAR
+    ================================================== -->
+
+    <div class="user-action-bar">
+
+        <input
+            type="text"
+            id="searchUserDesktop"
+            placeholder="Search User...">
+
+
+        <button
+            id="addUserBtn"
+            class="add-user-btn">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            Add User
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         USER TABLE
+    ================================================== -->
+
+    <section class="table-section">
+
+        <h2>
+            User Management
+        </h2>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Email</th>
+
+                    <th>Role</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="userTable">
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="text-align:center;">
+
+                        Loading Users...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ADD / EDIT USER MODAL
+    ================================================== -->
+
+    <div
+        id="userModal"
+        class="modal">
+
+
+        <div class="modal-content">
+
+
+            <span
+                class="close"
+                id="closeModal">
+
+                &times;
+
+            </span>
+
+
+            <h2 id="modalTitle">
+                Add User
+            </h2>
+
+
+            <form id="userForm">
+
+
+                <input
+                    type="text"
+                    id="userName"
+                    placeholder="Full Name"
+                    required>
+
+
+                <input
+                    type="email"
+                    id="userEmail"
+                    placeholder="Email"
+                    required>
+
+
+                <select id="userRole">
+
+                    <option value="Admin">
+                        Admin
+                    </option>
+
+                    <option value="Manager">
+                        Manager
+                    </option>
+
+                    <option value="Staff">
+                        Staff
+                    </option>
+
+                </select>
+
+
+                <select id="userStatus">
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    id="saveUserBtn">
+
+                    Save User
+
+                </button>
+
+
+            </form>
+
+        </div>
 
     </div>
 
 </div>
 
+
+
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+===================================================== -->
+
+<nav class="mobile-bottom-nav">
+
+
+    <a href="dashboard.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>Dashboard</span>
+
+    </a>
+
+
+    <a
+        href="users.html"
+        class="active">
+
+        <i class="fa-solid fa-users"></i>
+
+        <span>Users</span>
+
+    </a>
+
+
+    <a href="customers.html">
+
+        <i class="fa-solid fa-address-book"></i>
+
+        <span>Customers</span>
+
+    </a>
+
+
+    <a href="products.html">
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>Products</span>
+
+    </a>
+
+
+    <a href="orders.html">
+
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        <span>Orders</span>
+
+    </a>
+
+
+    <a href="profile.html">
+
+        <i class="fa-solid fa-user"></i>
+
+        <span>Profile</span>
+
+    </a>
+
+
+    <a href="settings.html">
+
+        <i class="fa-solid fa-gear"></i>
+
+        <span>Settings</span>
+
+    </a>
+
+
+    <a
+        href="#"
+        id="mobileLogoutBtn">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        <span>Logout</span>
+
+    </a>
+
+</nav>
+
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
+
 <script src="js/firebase.js"></script>
+
 <script src="js/users.js"></script>
 
+
+
+<!-- =====================================================
+     MOBILE LOGOUT
+===================================================== -->
+
+<script>
+
+const mobileLogoutBtn =
+    document.getElementById(
+        "mobileLogoutBtn"
+    );
+
+
+if (mobileLogoutBtn) {
+
+    mobileLogoutBtn.addEventListener(
+        "click",
+        async function(e) {
+
+            e.preventDefault();
+
+            try {
+
+                await auth.signOut();
+
+                window.location.href =
+                    "admin-login.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
+
 </body>
+
 </html>

@@ -1067,3 +1067,371 @@ button:active {
         font-size: 15px;
     }
 }
+/* =====================================================
+   COMMON USER ACTION BAR
+===================================================== */
+
+.user-action-bar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.user-action-bar input {
+
+    flex: 1;
+
+    height: 54px;
+
+    padding: 0 18px;
+
+    border-radius: 16px;
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    background: #111f34;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    outline: none;
+
+}
+
+
+.user-action-bar input::placeholder {
+
+    color: #718096;
+
+}
+
+
+.add-user-btn {
+
+    height: 54px;
+
+    padding: 0 24px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background: #19c9e8;
+
+    color: #06111f;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.add-user-btn i {
+
+    margin-right: 7px;
+
+}
+
+
+
+/* =====================================================
+   MOBILE BOTTOM NAV
+===================================================== */
+
+.mobile-bottom-nav {
+
+    display: none;
+
+}
+
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+
+    body {
+
+        padding-bottom: 82px;
+
+    }
+
+
+    .sidebar {
+
+        display: none !important;
+
+    }
+
+
+    .main {
+
+        width: 100% !important;
+
+        margin-left: 0 !important;
+
+        padding: 18px !important;
+
+    }
+
+
+    header {
+
+        display: block !important;
+
+        margin-bottom: 18px;
+
+    }
+
+
+    header h1 {
+
+        font-size: 34px;
+
+        margin-bottom: 18px;
+
+    }
+
+
+    .top-right {
+
+        display: flex !important;
+
+        width: 100%;
+
+        gap: 10px;
+
+    }
+
+
+    .top-right input {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .top-right img {
+
+        display: none;
+
+    }
+
+
+    .user-action-bar {
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 12px;
+
+    }
+
+
+    .user-action-bar input {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .add-user-btn {
+
+        width: 100%;
+
+    }
+
+
+    .table-section {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .table-section table {
+
+        min-width: 700px;
+
+    }
+
+
+    /* ===============================================
+       FIX BOTTOM NAV
+    =============================================== */
+
+    .mobile-bottom-nav {
+
+        position: fixed;
+
+        left: 0;
+
+        right: 0;
+
+        bottom: 0;
+
+        height: 74px;
+
+        background: #071224;
+
+        border-top: 1px solid rgba(255,255,255,0.10);
+
+        display: flex;
+
+        align-items: stretch;
+
+        justify-content: space-around;
+
+        z-index: 9999;
+
+        overflow-x: auto;
+
+    }
+
+
+    .mobile-bottom-nav a {
+
+        flex: 1;
+
+        min-width: 70px;
+
+        max-width: 100px;
+
+        text-decoration: none;
+
+        color: #8d9bb0;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 5px;
+
+        font-size: 10px;
+
+        font-weight: 600;
+
+    }
+
+
+    .mobile-bottom-nav a i {
+
+        font-size: 20px;
+
+    }
+
+
+    .mobile-bottom-nav a.active {
+
+        color: #19c9e8;
+
+    }
+
+
+    .mobile-bottom-nav a.active i {
+
+        transform: translateY(-1px);
+
+    }
+
+
+    .mobile-bottom-nav a:last-child {
+
+        color: #ff6975;
+
+    }
+
+
+    /* ===============================================
+       MODAL
+    =============================================== */
+
+    .modal {
+
+        padding: 18px;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .modal-content {
+
+        width: 100%;
+
+        max-width: 420px;
+
+        box-sizing: border-box;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 430px) {
+
+
+    .mobile-bottom-nav {
+
+        height: 72px;
+
+    }
+
+
+    .mobile-bottom-nav a {
+
+        min-width: 62px;
+
+        font-size: 9px;
+
+    }
+
+
+    .mobile-bottom-nav a i {
+
+        font-size: 18px;
+
+    }
+
+
+    header h1 {
+
+        font-size: 30px;
+
+    }
+
+}

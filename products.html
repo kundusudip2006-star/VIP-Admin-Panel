@@ -3,221 +3,591 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Products - VIP Admin Panel</title>
+    <title>Products - VIP Admin Panel</title>
 
-<link rel="stylesheet" href="css/admin.css">
+    <!-- MAIN ADMIN UI -->
+    <link rel="stylesheet" href="css/admin.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="sidebar">
 
-<div class="logo">
+    <div class="logo">
 
-<i class="fa-solid fa-shield-halved"></i>
+        <i class="fa-solid fa-shield-halved"></i>
 
-<h2>VIP PANEL</h2>
+        <h2>VIP PANEL</h2>
+
+    </div>
+
+
+    <ul>
+
+        <!-- DASHBOARD -->
+
+        <li>
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- USERS -->
+
+        <li>
+
+            <a href="users.html">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Users</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- CUSTOMERS -->
+
+        <li>
+
+            <a href="customers.html">
+
+                <i class="fa-solid fa-address-book"></i>
+
+                <span>Customers</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- PRODUCTS -->
+
+        <li class="active">
+
+            <a href="products.html">
+
+                <i class="fa-solid fa-box"></i>
+
+                <span>Products</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- ORDERS -->
+
+        <li>
+
+            <a href="orders.html">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Orders</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- PROFILE -->
+
+        <li>
+
+            <a href="profile.html">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profile</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- SETTINGS -->
+
+        <li>
+
+            <a href="settings.html">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </li>
+
+
+        <!-- LOGOUT -->
+
+        <li id="logoutBtn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>Logout</span>
+
+        </li>
+
+    </ul>
 
 </div>
 
-<ul>
 
-<li>
-<a href="dashboard.html">
-<i class="fa-solid fa-house"></i>
-Dashboard
-</a>
-</li>
 
-<li>
-<a href="users.html">
-<i class="fa-solid fa-users"></i>
-Users
-</a>
-</li>
-
-<li>
-<a href="customers.html">
-<i class="fa-solid fa-address-book"></i>
-Customers
-</a>
-</li>
-
-<li class="active">
-<a href="products.html">
-<i class="fa-solid fa-box"></i>
-Products
-</a>
-</li>
-
-<li>
-<a href="orders.html">
-<i class="fa-solid fa-cart-shopping"></i>
-Orders
-</a>
-</li>
-
-<li id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</li>
-
-</ul>
-
-</div>
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <div class="main">
 
-<header>
 
-<h1>Product Management</h1>
+    <!-- =================================================
+         HEADER
+    ================================================== -->
 
-<div class="search-box">
+    <header>
 
-<input
-type="text"
-id="searchProduct"
-placeholder="Search Product...">
+        <div>
 
-<button id="addProductBtn">
+            <h1>Products</h1>
 
-<i class="fa-solid fa-plus"></i>
+            <p class="page-subtitle">
+                Manage products, plans and stock
+            </p>
 
-Add Product
+        </div>
 
-</button>
+
+        <div class="header-right">
+
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="Search Product..."
+                >
+
+            </div>
+
+
+            <!-- ADD PRODUCT -->
+
+            <button
+                id="addProductBtn"
+                class="add-btn"
+                type="button"
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Product
+
+            </button>
+
+
+            <!-- ADMIN ICON -->
+
+            <div class="admin-icon">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =================================================
+         PRODUCT TABLE
+    ================================================== -->
+
+    <section class="table-box">
+
+
+        <div class="table-header">
+
+            <div>
+
+                <h2>Product List</h2>
+
+                <p>
+                    Manage all available products and plans
+                </p>
+
+            </div>
+
+
+            <div class="customer-count">
+
+                <i class="fa-solid fa-box"></i>
+
+                <span id="productCount">0</span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Image</th>
+
+                        <th>Product</th>
+
+                        <th>Plans & Prices</th>
+
+                        <th>Stock</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="productTable">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="loading"
+                        >
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            Loading products...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
 
 </div>
 
-</header>
 
-<div class="table-box">
 
-<table>
-
-<thead>
-
-<tr>
-
-<th>Image</th>
-<th>Product</th>
-<th>Plans & Prices</th>
-<th>Stock</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="productTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-<!-- Add Product Modal -->
+<!-- =====================================================
+     ADD PRODUCT MODAL
+===================================================== -->
 
 <div id="productModal" class="modal">
 
+
     <div class="modal-content">
 
-        <span class="close" id="closeModal">&times;</span>
 
-        <h2>Add Product</h2>
+        <!-- CLOSE -->
 
-<form id="productForm">
+        <button
+            id="closeModal"
+            class="close-btn"
+            type="button"
+        >
 
-<input
-type="text"
-id="productName"
-placeholder="Product Name"
-required>
+            &times;
 
-<input
-type="text"
-id="productImage"
-placeholder="Image URL">
+        </button>
 
-<textarea
-id="productDescription"
-placeholder="Product Description"
-rows="4"></textarea>
 
-<hr>
+        <!-- TITLE -->
 
-<h3>Plans</h3>
+        <div class="modal-title">
 
-<div id="plansContainer">
+            <div class="customer-avatar">
 
-<div class="plan-card">
+                <i class="fa-solid fa-box"></i>
 
-<input
-type="text"
-class="planName"
-placeholder="Plan Name (Example: 7 Days)"
-required>
+            </div>
 
-<input
-type="number"
-class="planPrice"
-placeholder="Price ₹"
-required>
 
-<input
-type="number"
-class="planStock"
-placeholder="Stock"
-required>
+            <div>
 
-<textarea
-class="planKeys"
-rows="5"
-placeholder="One Key Per Line&#10;Example:&#10;ABC123&#10;XYZ456"></textarea>
+                <h2>Add Product</h2>
 
-</div>
+                <p>
+                    Create a new product and plans
+                </p>
 
-</div>
+            </div>
 
-<button
-type="button"
-id="addPlanBtn">
+        </div>
 
-<i class="fa-solid fa-plus"></i>
 
-Add Another Plan
 
-</button>
+        <!-- =================================================
+             PRODUCT FORM
+        ================================================== -->
 
-<br><br>
+        <form id="productForm">
 
-<button type="submit">
 
-Save Product
+            <!-- PRODUCT NAME -->
 
-</button>
+            <div class="form-group">
 
-</form>
+                <label for="productName">
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Product Name"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- IMAGE -->
+
+            <div class="form-group">
+
+                <label for="productImage">
+                    Product Image URL
+                </label>
+
+                <input
+                    type="text"
+                    id="productImage"
+                    placeholder="Image URL"
+                >
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="productDescription">
+                    Product Description
+                </label>
+
+                <textarea
+                    id="productDescription"
+                    placeholder="Product Description"
+                    rows="4"
+                ></textarea>
+
+            </div>
+
+
+
+            <div class="section-divider"></div>
+
+
+
+            <!-- PLANS -->
+
+            <div class="plans-section">
+
+                <h3>
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    Product Plans
+
+                </h3>
+
+
+                <p>
+                    Add pricing, stock and keys for each plan.
+                </p>
+
+
+                <div id="plansContainer">
+
+
+                    <!-- DEFAULT PLAN -->
+
+                    <div class="plan-card">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Plan Name
+                            </label>
+
+                            <input
+                                type="text"
+                                class="planName"
+                                placeholder="Plan Name (Example: 7 Days)"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Price
+                            </label>
+
+                            <input
+                                type="number"
+                                class="planPrice"
+                                placeholder="Price ₹"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Stock
+                            </label>
+
+                            <input
+                                type="number"
+                                class="planStock"
+                                placeholder="Stock"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Product Keys
+                            </label>
+
+                            <textarea
+                                class="planKeys"
+                                rows="5"
+                                placeholder="One Key Per Line&#10;&#10;Example:&#10;ABC123&#10;XYZ456"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ADD PLAN -->
+
+                <button
+                    type="button"
+                    id="addPlanBtn"
+                    class="secondary-btn"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Another Plan
+
+                </button>
+
+            </div>
+
+
+
+            <div class="section-divider"></div>
+
+
+
+            <!-- SAVE -->
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Product
+
+            </button>
+
+
+        </form>
 
     </div>
 
 </div>
 
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
+
+
+<!-- FIREBASE CONFIG -->
+
 <script src="js/firebase.js"></script>
+
+
+<!-- PRODUCTS JS -->
+
 <script src="js/products.js"></script>
 
+
 </body>
+
 </html>
