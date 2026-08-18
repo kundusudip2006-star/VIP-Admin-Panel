@@ -7,85 +7,157 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Users - VIP Admin Panel</title>
 
-    <!-- SAME CSS AS DASHBOARD -->
-<link rel="stylesheet" href="css/admin.css">
+    <!-- COMMON ADMIN CSS -->
+    <link rel="stylesheet" href="css/admin.css">
 
+    <!-- FONT AWESOME -->
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
 
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
      DESKTOP SIDEBAR
+     MOBILE = BOTTOM NAVIGATION
 ===================================================== -->
+
 <div class="sidebar">
 
     <div class="logo">
+
         <i class="fa-solid fa-shield-halved"></i>
+
         <h2>VIP PANEL</h2>
+
     </div>
+
 
     <ul>
 
+        <!-- Dashboard -->
+
         <li>
+
             <a href="dashboard.html">
+
                 <i class="fa-solid fa-house"></i>
+
                 <span>Dashboard</span>
+
             </a>
+
         </li>
+
+
+        <!-- Users -->
 
         <li class="active">
+
             <a href="users.html">
+
                 <i class="fa-solid fa-users"></i>
+
                 <span>Users</span>
+
             </a>
+
         </li>
 
+
+        <!-- Customers -->
+
         <li>
+
             <a href="customers.html">
+
                 <i class="fa-solid fa-address-book"></i>
+
                 <span>Customers</span>
+
             </a>
+
         </li>
 
+
+        <!-- Products -->
+
         <li>
+
             <a href="products.html">
+
                 <i class="fa-solid fa-box"></i>
+
                 <span>Products</span>
+
             </a>
+
         </li>
 
+
+        <!-- Orders -->
+
         <li>
+
             <a href="orders.html">
+
                 <i class="fa-solid fa-cart-shopping"></i>
+
                 <span>Orders</span>
+
             </a>
+
         </li>
 
+
+        <!-- Profile -->
+
         <li>
+
             <a href="profile.html">
+
                 <i class="fa-solid fa-user"></i>
+
                 <span>Profile</span>
+
             </a>
+
         </li>
 
+
+        <!-- Settings -->
+
         <li>
+
             <a href="settings.html">
+
                 <i class="fa-solid fa-gear"></i>
+
                 <span>Settings</span>
+
             </a>
+
         </li>
+
+
+        <!-- Logout -->
 
         <li id="logoutBtn">
+
             <i class="fa-solid fa-right-from-bracket"></i>
+
             <span>Logout</span>
+
         </li>
 
     </ul>
@@ -101,11 +173,21 @@
 <div class="main">
 
 
-    <!-- HEADER -->
+    <!-- =================================================
+         HEADER
+    ================================================== -->
 
     <header>
 
-        <h1>Users</h1>
+        <div>
+
+            <h1>Users</h1>
+
+            <p class="page-subtitle">
+                Manage admin panel users
+            </p>
+
+        </div>
 
 
         <div class="top-right">
@@ -113,27 +195,32 @@
             <input
                 type="text"
                 id="searchUser"
-                placeholder="Search User...">
+                placeholder="Search User..."
+            >
 
 
-            <i class="fa-solid fa-bell"></i>
+            <div class="notification-wrapper">
+
+                <i class="fa-solid fa-bell"></i>
+
+                <span id="notificationCount">
+                    0
+                </span>
 
 
-            <span id="notificationCount">
-                0
-            </span>
+                <div
+                    id="notificationBox"
+                    class="notification-box"
+                >
 
+                    <h3>
+                        Notifications
+                    </h3>
 
-            <div
-                id="notificationBox"
-                class="notification-box">
+                    <div id="notificationList">
+                        No New Notifications
+                    </div>
 
-                <h3>
-                    Notifications
-                </h3>
-
-                <div id="notificationList">
-                    No New Notifications
                 </div>
 
             </div>
@@ -141,7 +228,8 @@
 
             <img
                 src="https://i.pravatar.cc/60"
-                alt="Profile">
+                alt="Profile"
+            >
 
         </div>
 
@@ -158,16 +246,19 @@
         <input
             type="text"
             id="searchUserDesktop"
-            placeholder="Search User...">
+            placeholder="Search User..."
+        >
 
 
         <button
+            type="button"
             id="addUserBtn"
-            class="add-user-btn">
+            class="add-user-btn"
+        >
 
             <i class="fa-solid fa-user-plus"></i>
 
-            Add User
+            <span>Add User</span>
 
         </button>
 
@@ -186,44 +277,47 @@
         </h2>
 
 
-        <table>
+        <div class="table-wrapper">
 
-            <thead>
+            <table>
 
-                <tr>
+                <thead>
 
-                    <th>Name</th>
+                    <tr>
 
-                    <th>Email</th>
+                        <th>Name</th>
 
-                    <th>Role</th>
+                        <th>Email</th>
 
-                    <th>Status</th>
+                        <th>Role</th>
 
-                    <th>Action</th>
+                        <th>Status</th>
 
-                </tr>
+                        <th>Action</th>
 
-            </thead>
+                    </tr>
+
+                </thead>
 
 
-            <tbody id="userTable">
+                <tbody id="userTable">
 
-                <tr>
+                    <tr>
 
-                    <td
-                        colspan="5"
-                        style="text-align:center;">
+                        <td
+                            colspan="5"
+                            class="loading"
+                        >
+                            Loading Users...
+                        </td>
 
-                        Loading Users...
+                    </tr>
 
-                    </td>
+                </tbody>
 
-                </tr>
+            </table>
 
-            </tbody>
-
-        </table>
+        </div>
 
     </section>
 
@@ -235,42 +329,55 @@
 
     <div
         id="userModal"
-        class="modal">
-
+        class="modal"
+    >
 
         <div class="modal-content">
 
 
+            <!-- Close -->
+
             <span
                 class="close"
-                id="closeModal">
-
+                id="closeModal"
+            >
                 &times;
-
             </span>
 
+
+            <!-- Modal Title -->
 
             <h2 id="modalTitle">
                 Add User
             </h2>
 
 
+            <!-- User Form -->
+
             <form id="userForm">
 
+
+                <!-- Name -->
 
                 <input
                     type="text"
                     id="userName"
                     placeholder="Full Name"
-                    required>
+                    required
+                >
 
+
+                <!-- Email -->
 
                 <input
                     type="email"
                     id="userEmail"
                     placeholder="Email"
-                    required>
+                    required
+                >
 
+
+                <!-- Role -->
 
                 <select id="userRole">
 
@@ -289,6 +396,8 @@
                 </select>
 
 
+                <!-- Status -->
+
                 <select id="userStatus">
 
                     <option value="Active">
@@ -302,14 +411,14 @@
                 </select>
 
 
+                <!-- Save -->
+
                 <button
                     type="submit"
-                    id="saveUserBtn">
-
+                    id="saveUserBtn"
+                >
                     Save User
-
                 </button>
-
 
             </form>
 
@@ -317,93 +426,8 @@
 
     </div>
 
+
 </div>
-
-
-
-<!-- =====================================================
-     MOBILE BOTTOM NAVIGATION
-===================================================== -->
-
-<nav class="mobile-bottom-nav">
-
-
-    <a href="dashboard.html">
-
-        <i class="fa-solid fa-house"></i>
-
-        <span>Dashboard</span>
-
-    </a>
-
-
-    <a
-        href="users.html"
-        class="active">
-
-        <i class="fa-solid fa-users"></i>
-
-        <span>Users</span>
-
-    </a>
-
-
-    <a href="customers.html">
-
-        <i class="fa-solid fa-address-book"></i>
-
-        <span>Customers</span>
-
-    </a>
-
-
-    <a href="products.html">
-
-        <i class="fa-solid fa-box"></i>
-
-        <span>Products</span>
-
-    </a>
-
-
-    <a href="orders.html">
-
-        <i class="fa-solid fa-cart-shopping"></i>
-
-        <span>Orders</span>
-
-    </a>
-
-
-    <a href="profile.html">
-
-        <i class="fa-solid fa-user"></i>
-
-        <span>Profile</span>
-
-    </a>
-
-
-    <a href="settings.html">
-
-        <i class="fa-solid fa-gear"></i>
-
-        <span>Settings</span>
-
-    </a>
-
-
-    <a
-        href="#"
-        id="mobileLogoutBtn">
-
-        <i class="fa-solid fa-right-from-bracket"></i>
-
-        <span>Logout</span>
-
-    </a>
-
-</nav>
 
 
 
@@ -418,50 +442,61 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
 
+<!-- FIREBASE CONFIG -->
+
 <script src="js/firebase.js"></script>
+
+
+<!-- USERS JS -->
 
 <script src="js/users.js"></script>
 
 
 
 <!-- =====================================================
-     MOBILE LOGOUT
+     SIDEBAR LOGOUT
 ===================================================== -->
 
 <script>
 
-const mobileLogoutBtn =
-    document.getElementById(
-        "mobileLogoutBtn"
-    );
+const logoutBtn = document.getElementById("logoutBtn");
 
 
-if (mobileLogoutBtn) {
+if (logoutBtn) {
 
-    mobileLogoutBtn.addEventListener(
-        "click",
-        async function(e) {
+    logoutBtn.addEventListener("click", async function () {
 
-            e.preventDefault();
+        const confirmLogout =
+            confirm("Are you sure you want to logout?");
 
-            try {
 
-                await auth.signOut();
+        if (!confirmLogout) {
+            return;
+        }
 
-                window.location.href =
-                    "admin-login.html";
 
-            } catch (error) {
+        try {
 
-                console.error(
-                    "Logout error:",
-                    error
-                );
+            await auth.signOut();
 
-            }
+            window.location.href = "admin-login.html";
 
         }
-    );
+
+        catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+            alert(
+                "Logout failed. Please try again."
+            );
+
+        }
+
+    });
 
 }
 

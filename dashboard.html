@@ -3,20 +3,31 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>VIP Admin Dashboard</title>
+    <title>VIP Admin Dashboard</title>
 
-<link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
 
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     DESKTOP SIDEBAR
+===================================================== -->
 
 <div class="sidebar">
 
@@ -28,6 +39,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
     </div>
 
+
     <ul>
 
         <li class="active">
@@ -37,6 +49,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             </a>
         </li>
 
+
         <li>
             <a href="users.html">
                 <i class="fa-solid fa-users"></i>
@@ -44,18 +57,22 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             </a>
         </li>
 
+
         <li>
             <a href="customers.html">
                 <i class="fa-solid fa-address-book"></i>
                 <span>Customers</span>
             </a>
         </li>
+
+
         <li>
             <a href="products.html">
                 <i class="fa-solid fa-box"></i>
                 <span>Products</span>
             </a>
         </li>
+
 
         <li>
             <a href="orders.html">
@@ -64,12 +81,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             </a>
         </li>
 
+
         <li>
             <a href="profile.html">
                 <i class="fa-solid fa-user"></i>
                 <span>Profile</span>
             </a>
         </li>
+
 
         <li>
             <a href="settings.html">
@@ -78,147 +97,495 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             </a>
         </li>
 
+
         <li id="logoutBtn">
+
             <i class="fa-solid fa-right-from-bracket"></i>
+
             <span>Logout</span>
+
         </li>
 
     </ul>
 
 </div>
 
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <div class="main">
 
-<header>
 
-<h1>Dashboard</h1>
+    <!-- HEADER -->
 
-<div class="top-right">
+    <header>
 
-<input type="text" id="searchBox" placeholder="Search...">
+        <h1>Dashboard</h1>
 
-<i class="fa-solid fa-bell"></i>
-<span id="notificationCount">0</span>
 
-<div id="notificationBox" class="notification-box">
+        <div class="top-right">
 
-    <h3>New Orders</h3>
+            <input
+                type="text"
+                id="searchBox"
+                placeholder="Search..."
+            >
 
-    <div id="notificationList">
-        No New Orders
+
+            <div class="notification-wrapper">
+
+                <i
+                    class="fa-solid fa-bell"
+                    id="notificationBell"
+                ></i>
+
+                <span id="notificationCount">
+                    0
+                </span>
+
+
+                <div
+                    id="notificationBox"
+                    class="notification-box"
+                >
+
+                    <h3>
+                        New Orders
+                    </h3>
+
+                    <div id="notificationList">
+                        No New Orders
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <img
+                src="https://i.pravatar.cc/60"
+                alt="Profile"
+            >
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =================================================
+         DASHBOARD CARDS
+    ================================================== -->
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <h3>Total Users</h3>
+
+            <h1 id="totalUsers">
+                0
+            </h1>
+
+            <p>Firebase Users</p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <h3>Total Customers</h3>
+
+            <h1 id="totalCustomers">
+                0
+            </h1>
+
+            <p>Live Database</p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <h3>Total Revenue</h3>
+
+            <h1 id="totalRevenue">
+                ₹0
+            </h1>
+
+            <p>This Month</p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <h3>Total Orders</h3>
+
+            <h1 id="totalOrders">
+                0
+            </h1>
+
+            <p>Completed</p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <h3>Pending Payments</h3>
+
+            <h1 id="pendingPayments">
+                0
+            </h1>
+
+            <p>Waiting for Approval</p>
+
+        </div>
+
     </div>
 
+
+
+    <!-- =================================================
+         WALLET PAYMENT VERIFICATION
+    ================================================== -->
+
+    <section class="table-section wallet-verification-section">
+
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Wallet Payment Verification
+                </h2>
+
+                <p>
+                    Approve or reject customer wallet recharge requests.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="refreshWalletPayments"
+                class="refresh-wallet-btn"
+            >
+
+                <i class="fa-solid fa-rotate"></i>
+
+                Refresh
+
+            </button>
+
+        </div>
+
+
+
+        <!-- Loading -->
+
+        <div
+            id="walletVerificationLoading"
+            class="wallet-verification-loading"
+        >
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            <p>
+                Loading wallet payments...
+            </p>
+
+        </div>
+
+
+
+        <!-- Empty -->
+
+        <div
+            id="walletVerificationEmpty"
+            class="wallet-verification-empty"
+            style="display:none;"
+        >
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <h3>
+                No Pending Payments
+            </h3>
+
+            <p>
+                There are no wallet recharge requests waiting for approval.
+            </p>
+
+        </div>
+
+
+
+        <!-- Payment List -->
+
+        <div
+            id="walletVerificationList"
+            class="wallet-verification-list"
+        ></div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         MONTHLY ANALYTICS
+    ================================================== -->
+
+    <section class="table-section">
+
+        <h2>
+            Monthly Analytics
+        </h2>
+
+
+        <div style="position:relative;height:320px;">
+
+            <canvas id="userChart"></canvas>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         RECENT CUSTOMERS
+    ================================================== -->
+
+    <section class="table-section">
+
+        <h2>
+            Recent Customers
+        </h2>
+
+
+        <div class="dashboard-table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+
+                        <th>Phone</th>
+
+                        <th>Email</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="recentCustomers">
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            style="text-align:center;"
+                        >
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            Loading...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
 </div>
 
-<img src="https://i.pravatar.cc/60" alt="Profile">
 
-</div>
 
-</header>
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+===================================================== -->
 
-<div class="cards">
+<nav class="mobile-bottom-nav">
 
-<div class="card">
 
-<h3>Total Users</h3>
+    <a
+        href="dashboard.html"
+        class="active"
+    >
 
-<h1 id="totalUsers">0</h1>
+        <i class="fa-solid fa-house"></i>
 
-<p>Firebase Users</p>
+        <span>Dashboard</span>
 
-</div>
+    </a>
 
-<div class="card">
 
-<h3>Total Customers</h3>
+    <a href="users.html">
 
-<h1 id="totalCustomers">0</h1>
+        <i class="fa-solid fa-users"></i>
 
-<p>Live Database</p>
+        <span>Users</span>
 
-</div>
+    </a>
 
-<div class="card">
 
-<h3>Total Revenue</h3>
+    <a href="customers.html">
 
-<h1 id="totalRevenue">₹0</h1>
+        <i class="fa-solid fa-address-book"></i>
 
-<p>This Month</p>
+        <span>Customers</span>
 
-</div>
+    </a>
 
-<div class="card">
-    <h3>Total Orders</h3>
-    <h1 id="totalOrders">0</h1>
-    <p>Completed</p>
-</div>
 
-<div class="card">
-    <h3>Pending Payments</h3>
-    <h1 id="pendingPayments">0</h1>
-    <p>Waiting for Approval</p>
-</div>
+    <a href="products.html">
 
-</div>
-<!-- Analytics -->
+        <i class="fa-solid fa-box"></i>
 
-<section class="table-section">
+        <span>Products</span>
 
-    <h2>Monthly Analytics</h2>
+    </a>
 
-    <canvas id="userChart" height="100"></canvas>
 
-</section>
+    <a href="orders.html">
 
-<!-- Recent Customers -->
+        <i class="fa-solid fa-cart-shopping"></i>
 
-<section class="table-section">
+        <span>Orders</span>
 
-    <h2>Recent Customers</h2>
+    </a>
 
-    <table>
 
-        <thead>
+    <a href="profile.html">
 
-            <tr>
+        <i class="fa-solid fa-user"></i>
 
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Status</th>
+        <span>Profile</span>
 
-            </tr>
+    </a>
 
-        </thead>
 
-        <tbody id="recentCustomers">
+    <a href="settings.html">
 
-            <tr>
+        <i class="fa-solid fa-gear"></i>
 
-                <td colspan="4" style="text-align:center;">
-                    Loading...
-                </td>
+        <span>Settings</span>
 
-            </tr>
+    </a>
 
-        </tbody>
 
-    </table>
+    <a
+        href="#"
+        id="mobileLogoutBtn"
+    >
 
-</section>
+        <i class="fa-solid fa-right-from-bracket"></i>
 
-</div>
+        <span>Logout</span>
+
+    </a>
+
+</nav>
+
+
+
+<!-- =====================================================
+     CHART.JS
+===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
 
 <script src="js/firebase.js"></script>
 
+
+<!-- =====================================================
+     DASHBOARD JS
+===================================================== -->
+
 <script src="js/dashboard.js"></script>
+
+
+
+<!-- =====================================================
+     MOBILE LOGOUT
+===================================================== -->
+
+<script>
+
+const mobileLogoutBtn =
+    document.getElementById("mobileLogoutBtn");
+
+
+if (mobileLogoutBtn) {
+
+    mobileLogoutBtn.addEventListener(
+        "click",
+        async function(e) {
+
+            e.preventDefault();
+
+            try {
+
+                await auth.signOut();
+
+                window.location.href =
+                    "admin-login.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Mobile logout error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
 
 </body>
 
